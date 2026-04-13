@@ -87,9 +87,12 @@ def send_otp_email(to_email, otp_code, user_name="there"):
         print(f"[EMAIL] OTP sent to {to_email} via Gmail SMTP")
         return True
     except Exception as e:
-        print(f"[EMAIL ERROR] Failed to send OTP to {to_email}: {str(e)}")
-        # Fallback: log OTP to console for development
-        print(f"[FALLBACK] OTP for {to_email}: {otp_code}")
+        print(f"\n[EMAIL ERROR] ❌ Failed to send OTP to {to_email}: {str(e)}")
+        print("\n" + "="*60)
+        print(f"  [DEVELOPMENT OTP FALLBACK]")
+        print(f"  Email: {to_email}")
+        print(f"  Verification Code: {otp_code}")
+        print("="*60 + "\n")
         return False
 
 

@@ -2,6 +2,7 @@
 
 import random
 import secrets
+import threading
 from datetime import datetime, timezone
 from bson import ObjectId
 from flask import Blueprint, request, jsonify, current_app
@@ -78,8 +79,14 @@ def register():
 
     result = db.users.insert_one(user_doc)
 
-    # Send OTP email
-    email_sent = send_otp_email(email, otp_code, name.split()[0])
+    # Send OTP email in background
+    threading.Thread(
+        target=send_otp_email, 
+        args=(email, otp_code, name.split()[0])
+    ).start()
+    
+    # We set email_sent to True for the response, since failures will be logged in background
+    email_sent = True
 
     # Also log to console as fallback
     print(f"[OTP] Registration OTP for {email}: {otp_code}")
@@ -214,8 +221,16 @@ def resend_otp():
     )
 
     name = user.get("name", "").split()[0] or "there"
-    email_sent = send_otp_email(email, otp_code, name)
+    
+    # Send OTP email in background
+    threading.Thread(
+        target=send_otp_email, 
+        args=(email, otp_code, name)
+    ).start()
+    
     print(f"[OTP] Resent OTP for {email}: {otp_code}")
+    
+    email_sent = True
 
     return jsonify({
         "message": "New verification code sent",
@@ -260,12 +275,15 @@ def login():
             "locked": True,
         }), 429
 
-    # Check if user registered via Google
+    # Check if user registered via Google and hasn't set a password
     if user.get("auth_provider") == "google" and not user.get("password_hash"):
-        return jsonify({
-            "error": "This account uses Google sign-in. Please use the Google button to log in.",
-            "use_google": True,
-        }), 400
+        # Double check if password_hash is really missing/empty
+        pass_hash = user.get("password_hash")
+        if not pass_hash or pass_hash == "":
+            return jsonify({
+                "error": "This account uses Google sign-in. Please use the Google button to log in.",
+                "use_google": True,
+            }), 400
 
     # Verify password
     if not verify_password(password, user.get("password_hash", "")):
@@ -302,8 +320,15 @@ def login():
             },
         )
         name = user.get("name", "").split()[0] or "there"
-        email_sent = send_otp_email(email, otp_code, name)
+        
+        # Send OTP email in background
+        threading.Thread(
+            target=send_otp_email, 
+            args=(email, otp_code, name)
+        ).start()
+        
         print(f"[OTP] Login verification OTP for {email}: {otp_code}")
+        email_sent = True
 
         message = "Please verify your email first. A new code has been sent."
         if not email_sent:
