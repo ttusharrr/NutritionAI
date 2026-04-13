@@ -1,4 +1,5 @@
 """Authentication routes — all auth endpoints."""
+import os
 
 import random
 import secrets
@@ -31,6 +32,20 @@ auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 def get_db():
     """Get MongoDB database instance."""
     return current_app.config["db"]
+
+
+def send_email_async_aware(target_func, *args):
+    """
+    Send email synchronously on Vercel, and asynchronously elsewhere.
+    Vercel freezes serverless functions after response is sent, so threads fail.
+    """
+    if os.environ.get("VERCEL") or os.environ.get("VERCEL_ENV"):
+        # On Vercel, send synchronously to ensure completion
+        print(f"[EMAIL] Running synchronously on Vercel...")
+        target_func(*args)
+    else:
+        # On Local/Render, use a thread for speed
+        threading.Thread(target=target_func, args=args).start()
 
 
 # ─────────────────────────────────────────────────────────────────
@@ -79,13 +94,9 @@ def register():
 
     result = db.users.insert_one(user_doc)
 
-    # Send OTP email in background
-    threading.Thread(
-        target=send_otp_email, 
-        args=(email, otp_code, name.split()[0])
-    ).start()
+    # Send OTP email using environment-aware helper
+    send_email_async_aware(send_otp_email, email, otp_code, name.split()[0])
     
-    # We set email_sent to True for the response, since failures will be logged in background
     email_sent = True
 
     # Also log to console as fallback
@@ -222,11 +233,8 @@ def resend_otp():
 
     name = user.get("name", "").split()[0] or "there"
     
-    # Send OTP email in background
-    threading.Thread(
-        target=send_otp_email, 
-        args=(email, otp_code, name)
-    ).start()
+    # Send OTP email using environment-aware helper
+    send_email_async_aware(send_otp_email, email, otp_code, name)
     
     print(f"[OTP] Resent OTP for {email}: {otp_code}")
     
@@ -321,11 +329,8 @@ def login():
         )
         name = user.get("name", "").split()[0] or "there"
         
-        # Send OTP email in background
-        threading.Thread(
-            target=send_otp_email, 
-            args=(email, otp_code, name)
-        ).start()
+        # Send OTP email using environment-aware helper
+        send_email_async_aware(send_otp_email, email, otp_code, name)
         
         print(f"[OTP] Login verification OTP for {email}: {otp_code}")
         email_sent = True
@@ -493,7 +498,9 @@ def forgot_password():
 
     reset_link = f"{Config.FRONTEND_URL}/auth/reset-password?token={reset_token}&email={email}"
     name = user.get("name", "").split()[0] or "there"
-    email_sent = send_password_reset_email(email, reset_link, name)
+    
+    # Send password reset email using environment-aware helper
+    send_email_async_aware(send_password_reset_email, email, reset_link, name)
 
     print(f"[RESET] Password reset token for {email}: {reset_token}")
     print(f"[RESET] Reset link: {reset_link}")

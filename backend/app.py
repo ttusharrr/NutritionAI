@@ -34,6 +34,7 @@ def create_app():
                 "http://127.0.0.1:5173",
                 "http://10.253.8.168:5173",
                 "http://localhost:3000",
+                "http://192.168.29.178:5173",
                 # Allow all vercel.app and onrender.com domains for easier deployment
                 r"https://.*\.vercel\.app",
                 r"http://.*\.vercel\.app",
