@@ -35,6 +35,7 @@ def create_app():
                 "http://10.253.8.168:5173",
                 "http://localhost:3000",
                 "http://192.168.29.178:5173",
+                "https://nutrition-ai-nine.vercel.app",
                 # Allow all vercel.app and onrender.com domains for easier deployment
                 r"https://.*\.vercel\.app",
                 r"http://.*\.vercel\.app",

@@ -25,7 +25,7 @@ class Config:
     SENDER_EMAIL = os.getenv("SENDER_EMAIL", "tushar427sharma@gmail.com")
     EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
     SMTP_SERVER = "smtp.gmail.com"
-    SMTP_PORT = 465  # SSL
+    SMTP_PORT = 587  # TLS (STARTTLS)
 
     # Google OAuth
     GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
