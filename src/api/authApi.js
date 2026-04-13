@@ -74,10 +74,30 @@ class AuthAPI {
         }
       }
 
-      const data = await response.json();
+      // Try to parse as JSON, but handle errors if not JSON
+      let data = {};
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        // Handle non-JSON response (like HTML error pages or rate limit messages)
+        const text = await response.text();
+        data = { error: text || `Server returned ${response.status}` };
+      }
 
       if (!response.ok) {
-        const error = new Error(data.error || 'Request failed');
+        // Specific handling for common status codes
+        let errorMessage = data.error || data.message || 'Request failed';
+        
+        if (response.status === 429) {
+          errorMessage = 'Too many requests. Please wait a moment before trying again.';
+        } else if (response.status === 500) {
+          errorMessage = 'Server error. Our team has been notified. Please try again later.';
+        } else if (response.status === 404) {
+          errorMessage = 'API endpoint not found. Please check your configuration.';
+        }
+
+        const error = new Error(errorMessage);
         error.status = response.status;
         error.data = data;
         throw error;
@@ -85,8 +105,12 @@ class AuthAPI {
 
       return data;
     } catch (error) {
+      // If it's already an error with a status, it's a server error we already handled
       if (error.status) throw error;
-      throw new Error('Network error. Please check your connection.');
+      
+      // Actual fetch failure (DNS, connection refused, CORS)
+      console.error('[API Network Error]', error);
+      throw new Error('Could not connect to the server. Please check your internet or API URL.');
     }
   }
 

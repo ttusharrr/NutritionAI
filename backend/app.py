@@ -31,8 +31,12 @@ def create_app():
             "origins": [
                 Config.FRONTEND_URL, 
                 "http://localhost:5173", 
+                "http://127.0.0.1:5173",
                 "http://10.253.8.168:5173",
-                "http://localhost:3000"
+                "http://localhost:3000",
+                # Allow all vercel.app domains for easier deployment
+                r"https://.*\.vercel\.app",
+                r"http://.*\.vercel\.app"
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
@@ -96,12 +100,21 @@ def create_app():
     def missing_token_callback(error):
         return jsonify({"error": "Authorization required", "code": "missing_token"}), 401
 
+    # Error handlers for Limiter
+    @app.errorhandler(429)
+    def ratelimit_handler(e):
+        return jsonify({
+            "error": "Too many requests. Please try again later.",
+            "code": "rate_limit_exceeded",
+            "description": str(e.description)
+        }), 429
+
     # Register blueprints
     from routes.auth_routes import auth_bp
     app.register_blueprint(auth_bp)
 
-    # Apply rate limits to sensitive endpoints
-    limiter.limit("5 per minute")(auth_bp)
+    # Apply rate limits to sensitive endpoints (Relaxed for development)
+    limiter.limit("20 per minute")(auth_bp)
 
     @app.route("/", methods=["GET"])
     def index():
