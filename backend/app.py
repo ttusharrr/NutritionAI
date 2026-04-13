@@ -103,7 +103,14 @@ def create_app():
     # Apply rate limits to sensitive endpoints
     limiter.limit("5 per minute")(auth_bp)
 
-    # Health check
+    @app.route("/", methods=["GET"])
+    def index():
+        return jsonify({
+            "message": "NutriAI API is running!",
+            "status": "online",
+            "version": "1.0.0"
+        }), 200
+
     @app.route("/api/health", methods=["GET"])
     def health():
         return jsonify({"status": "healthy", "service": "NutriAI Auth"}), 200
