@@ -113,7 +113,9 @@ def create_app():
 
     # Register blueprints
     from routes.auth_routes import auth_bp
+    from routes.diag_routes import diag_bp
     app.register_blueprint(auth_bp)
+    app.register_blueprint(diag_bp)
 
     # Apply rate limits to sensitive endpoints (Relaxed for development)
     limiter.limit("20 per minute")(auth_bp)
