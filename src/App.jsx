@@ -5,6 +5,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from './context/AuthContext';
+import { Analytics } from '@vercel/analytics/react';
 
 // Layouts
 import AuthLayout from './components/auth/AuthLayout';
@@ -28,6 +29,7 @@ export default function App() {
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <BrowserRouter>
         <AuthProvider>
+          <Analytics />
           <Routes>
             {/* Auth Routes */}
             <Route path="/auth/login" element={
