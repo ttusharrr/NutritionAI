@@ -268,6 +268,23 @@ class AuthAPI {
   }
 
   /**
+   * Update user's selected region.
+   */
+  async updateRegion(region) {
+    const data = await this.request('/auth/update-region', {
+      method: 'POST',
+      body: JSON.stringify({ region }),
+    });
+
+    if (data.user) {
+      localStorage.setItem('nutriai_user', JSON.stringify(data.user));
+    }
+
+    return data;
+  }
+
+
+  /**
    * Logout.
    */
   async logout() {

@@ -634,9 +634,11 @@ def profile_setup():
         "profile.height": data.get("height"),
         "profile.activity_level": data.get("activity_level"),
         "profile.dietary_goal": data.get("dietary_goal"),
+        "profile.region": data.get("region", "Global"),
         "profile.restrictions": data.get("restrictions", []),
         "profile_completed": True,
         "updated_at": datetime.now(timezone.utc),
+
     }
 
     # Remove None values
@@ -650,6 +652,39 @@ def profile_setup():
         "message": "Profile setup complete",
         "user": sanitize_user(updated_user),
     }), 200
+
+# ─────────────────────────────────────────────────────────────────
+# UPDATE REGION
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/update-region", methods=["POST"])
+@jwt_required()
+def update_region():
+    """Update user's selected region."""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data or "region" not in data:
+        return jsonify({"error": "Region is required"}), 400
+
+    db = get_db()
+    
+    db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {
+            "$set": {
+                "profile.region": data.get("region"),
+                "updated_at": datetime.now(timezone.utc)
+            }
+        }
+    )
+
+    updated_user = db.users.find_one({"_id": ObjectId(user_id)})
+    
+    return jsonify({
+        "message": "Region updated successfully",
+        "user": sanitize_user(updated_user)
+    }), 200
+
 
 
 # ─────────────────────────────────────────────────────────────────

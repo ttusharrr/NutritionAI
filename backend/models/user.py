@@ -2,6 +2,7 @@
 
 import bcrypt
 from datetime import datetime, timezone
+from utils.nutrition_calc import calculate_daily_requirements
 
 
 def create_user_document(name, email, password_hash, auth_provider="local"):
@@ -23,8 +24,10 @@ def create_user_document(name, email, password_hash, auth_provider="local"):
             "height": None,
             "activity_level": None,
             "dietary_goal": None,
+            "region": "Punjab",
             "restrictions": [],
         },
+
         "security": {
             "failed_login_attempts": 0,
             "lockout_until": None,
@@ -59,6 +62,9 @@ def sanitize_user(user):
     """Remove sensitive fields from user document for API responses."""
     if user is None:
         return None
+    profile = user.get("profile", {})
+    nutrition = calculate_daily_requirements(profile) if user.get("profile_completed") else None
+
     return {
         "id": str(user["_id"]),
         "name": user.get("name", ""),
@@ -67,6 +73,8 @@ def sanitize_user(user):
         "auth_provider": user.get("auth_provider", "local"),
         "is_verified": user.get("is_verified", False),
         "profile_completed": user.get("profile_completed", False),
-        "profile": user.get("profile", {}),
+        "profile": profile,
+        "daily_nutrition": nutrition,
         "created_at": user.get("created_at", ""),
     }
+
