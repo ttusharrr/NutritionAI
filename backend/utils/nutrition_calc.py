@@ -74,11 +74,28 @@ def calculate_daily_requirements(profile):
     carbs_g = int((daily_calories * c_ratio) / 4)
     fat_g = int((daily_calories * f_ratio) / 9)
 
+    # 5. Calculate BMI
+    bmi = weight / ((height / 100) ** 2)
+    bmi_status = "Normal"
+    if bmi < 18.5:
+        bmi_status = "Underweight"
+    elif bmi < 25:
+        bmi_status = "Normal"
+    elif bmi < 30:
+        bmi_status = "Overweight"
+    else:
+        bmi_status = "Obese"
+
     return {
         "daily_calories": daily_calories,
         "macros": {
             "protein": protein_g,
             "carbs": carbs_g,
             "fat": fat_g
+        },
+        "bmi_data": {
+            "value": round(bmi, 1),
+            "status": bmi_status
         }
     }
+

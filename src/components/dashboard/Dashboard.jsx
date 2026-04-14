@@ -71,12 +71,22 @@ export default function Dashboard() {
 
   const nutrition = user?.daily_nutrition || {
     daily_calories: 0,
-    macros: { protein: 0, carbs: 0, fat: 0 }
+    macros: { protein: 0, carbs: 0, fat: 0 },
+    bmi_data: { value: 0, status: 'N/A' }
+  };
+
+  const getBMIColor = (status) => {
+    switch (status) {
+      case 'Underweight': return 'var(--accent-amber)';
+      case 'Normal': return 'var(--success)';
+      case 'Overweight': return 'var(--accent-pink)';
+      case 'Obese': return 'var(--error)';
+      default: return 'var(--text-tertiary)';
+    }
   };
 
   return (
     <div className="dashboard-scene">
-      {/* Premium Navigation */}
       <nav className="dashboard-nav">
         <div className="nav-container">
           <motion.div 
@@ -213,7 +223,47 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Health Insights (BMI) Row */}
+        <motion.div 
+          className="health-insights-row"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="bmi-strip">
+            <div className="bmi-info">
+              <span className="bmi-label">Body Mass Index (BMI)</span>
+              <div className="bmi-val-group">
+                <span className="bmi-value">{nutrition.bmi_data?.value || '0.0'}</span>
+                <span className="bmi-tag" style={{ 
+                  background: `${getBMIColor(nutrition.bmi_data?.status)}20`,
+                  color: getBMIColor(nutrition.bmi_data?.status),
+                  borderColor: `${getBMIColor(nutrition.bmi_data?.status)}40`
+                }}>
+                  {nutrition.bmi_data?.status || 'Calculating'}
+                </span>
+              </div>
+            </div>
+            
+            <div className="bmi-visual-meter">
+              <div className="meter-segments">
+                <div className="segment under" title="Underweight" />
+                <div className="segment normal" title="Normal" />
+                <div className="segment over" title="Overweight" />
+                <div className="segment obese" title="Obese" />
+              </div>
+              <motion.div 
+                className="meter-pointer" 
+                initial={{ left: '0%' }}
+                animate={{ left: `${Math.min(Math.max((nutrition.bmi_data?.value - 15) / 20 * 100, 5), 95)}%` }}
+                transition={{ duration: 1.5, type: 'spring' }}
+              />
+            </div>
+          </div>
+        </motion.div>
+
         {/* Diet Plan Section (Static/Dummy for now) */}
+
         <section className="diet-section">
           <div className="section-header">
             <h2 className="section-title">
