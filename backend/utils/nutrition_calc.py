@@ -23,8 +23,13 @@ def calculate_daily_requirements(profile):
                 "protein": 125,
                 "carbs": 225,
                 "fat": 67
+            },
+            "bmi_data": {
+                "value": 0,
+                "status": "Incomplete Profile"
             }
         }
+
 
     # 1. Calculate BMR
     if gender == "female":
