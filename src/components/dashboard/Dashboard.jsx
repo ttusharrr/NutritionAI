@@ -247,18 +247,26 @@ export default function Dashboard() {
             
             <div className="bmi-visual-meter">
               <div className="meter-segments">
-                <div className="segment under" title="Underweight" />
-                <div className="segment normal" title="Normal" />
-                <div className="segment over" title="Overweight" />
-                <div className="segment obese" title="Obese" />
+                <div className="segment under" />
+                <div className="segment normal" />
+                <div className="segment over" />
+                <div className="segment obese" />
               </div>
               <motion.div 
                 className="meter-pointer" 
                 initial={{ left: '0%' }}
-                animate={{ left: `${Math.min(Math.max((nutrition.bmi_data?.value - 15) / 20 * 100, 5), 95)}%` }}
+                animate={{ left: `${Math.min(Math.max((nutrition.bmi_data?.value - 15) / 25 * 100, 2), 98)}%` }}
                 transition={{ duration: 1.5, type: 'spring' }}
               />
+              <div className="meter-labels">
+                <span style={{ left: '0%' }}>15</span>
+                <span style={{ left: '16%' }}>18.5</span>
+                <span style={{ left: '40%' }}>25</span>
+                <span style={{ left: '60%' }}>30</span>
+                <span style={{ left: '100%' }}>40+</span>
+              </div>
             </div>
+
           </div>
         </motion.div>
 
