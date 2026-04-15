@@ -291,6 +291,7 @@ class AuthAPI {
   }
 
 
+
   /**
    * Logout.
    */

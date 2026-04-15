@@ -64,7 +64,6 @@ export default function Dashboard() {
     try {
       const data = await authApi.updateRegion(region);
       updateUser(data.user);
-      // fetchRecommendations is triggered by useEffect dependency
     } catch (err) {
       console.error('Failed to update region:', err);
     } finally {
@@ -86,8 +85,6 @@ export default function Dashboard() {
     { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
     { id: 'International', label: 'International', icon: '🌍' },
   ];
-
-
 
   const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region || 'Punjab')) || REGIONS[0];
 
@@ -236,7 +233,7 @@ export default function Dashboard() {
                     className="macro-progress-fill" 
                     style={{ background: macro.color }}
                     initial={{ width: 0 }}
-                    animate={{ width: '65%' }} // Fixed visual for dashboard "cleanliness"
+                    animate={{ width: '65%' }}
                     transition={{ duration: 1, delay: 0.5 + idx * 0.1 }}
                   />
                 </div>
@@ -292,8 +289,7 @@ export default function Dashboard() {
           </div>
         </motion.div>
 
-        {/* Diet Plan Section (Static/Dummy for now) */}
-
+        {/* Regional Recommendations Section */}
         <section className="diet-section">
           <div className="section-header">
             <h2 className="section-title">
@@ -338,9 +334,6 @@ export default function Dashboard() {
                       <div className="ingredient-count">
                         {meal.ingredients.length} Ingredients
                       </div>
-                      <button className="grocery-btn">
-                        Grocery List
-                      </button>
                     </div>
                   </motion.div>
                 ))}
@@ -364,4 +357,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
