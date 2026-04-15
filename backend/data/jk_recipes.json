@@ -219,5 +219,234 @@
     "tags": ["High Fat", "Keto Friendly", "Wazwan Special"],
     "seasonality": "All",
     "price_index": 3
+  },
+  {
+    "id": "jk_rec_011",
+    "name": "Ambal (Dogri Pumpkin Curry)",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 180,
+      "protein": 3,
+      "carbs": 28,
+      "fats": 7,
+      "fiber": 4
+    },
+    "ingredients": [
+      {"item": "Pumpkin (Kaddu)", "qty": "250g"},
+      {"item": "Tamarind Paste", "qty": "1 tbsp"},
+      {"item": "Jaggery", "qty": "1 tbsp"},
+      {"item": "Mustard Seeds", "qty": "1 tsp"},
+      {"item": "Fenugreek Seeds", "qty": "1/2 tsp"}
+    ],
+    "tags": ["Sweet & Sour", "Light", "Everyday Dogri"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_012",
+    "name": "Dogri Maa Ki Dal",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 320,
+      "protein": 16,
+      "carbs": 42,
+      "fats": 10,
+      "fiber": 10
+    },
+    "ingredients": [
+      {"item": "Whole Black Urad Dal", "qty": "100g"},
+      {"item": "Ghee", "qty": "2 tbsp"},
+      {"item": "Cream", "qty": "50ml"},
+      {"item": "Tomato", "qty": "2 pcs"},
+      {"item": "Ginger-Garlic Paste", "qty": "1 tbsp"}
+    ],
+    "tags": ["Protein Rich", "Comfort Food", "Slow Cooked"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_013",
+    "name": "Auriya Kadhi (Dogri Kadhi)",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 210,
+      "protein": 8,
+      "carbs": 18,
+      "fats": 12,
+      "fiber": 2
+    },
+    "ingredients": [
+      {"item": "Besan (Gram Flour)", "qty": "50g"},
+      {"item": "Yogurt", "qty": "200ml"},
+      {"item": "Turmeric", "qty": "1 tsp"},
+      {"item": "Ghee", "qty": "1 tbsp"},
+      {"item": "Dry Red Chili", "qty": "2 pcs"}
+    ],
+    "tags": ["Probiotic", "Light Meal", "Traditional"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_014",
+    "name": "Dogri Aloo Palda",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 260,
+      "protein": 6,
+      "carbs": 35,
+      "fats": 12,
+      "fiber": 4
+    },
+    "ingredients": [
+      {"item": "Potatoes", "qty": "200g"},
+      {"item": "Yogurt", "qty": "150ml"},
+      {"item": "Besan (Gram Flour)", "qty": "30g"},
+      {"item": "Cumin Seeds", "qty": "1 tsp"},
+      {"item": "Ghee", "qty": "1 tbsp"}
+    ],
+    "tags": ["Creamy", "Tangy", "Home Style"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_015",
+    "name": "Dogri Babru",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 380,
+      "protein": 10,
+      "carbs": 50,
+      "fats": 16,
+      "fiber": 6
+    },
+    "ingredients": [
+      {"item": "Wheat Flour", "qty": "150g"},
+      {"item": "Black Urad Dal (filling)", "qty": "80g"},
+      {"item": "Oil (for frying)", "qty": "3 tbsp"},
+      {"item": "Spice Mix (Jeera, Ajwain)", "qty": "1 tsp"}
+    ],
+    "tags": ["Fried Bread", "Festive", "Stuffed"],
+    "seasonality": "Winter",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_016",
+    "name": "Chaman Qaliya (Paneer Curry)",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 340,
+      "protein": 18,
+      "carbs": 10,
+      "fats": 26,
+      "fiber": 2
+    },
+    "ingredients": [
+      {"item": "Paneer (Cottage Cheese)", "qty": "200g"},
+      {"item": "Turmeric", "qty": "1 tsp"},
+      {"item": "Milk", "qty": "100ml"},
+      {"item": "Mustard Oil", "qty": "2 tbsp"},
+      {"item": "Dry Ginger Powder", "qty": "1 tsp"}
+    ],
+    "tags": ["High Protein", "Kashmiri Pandit", "Rich"],
+    "seasonality": "All",
+    "price_index": 2
+  },
+  {
+    "id": "jk_rec_017",
+    "name": "Dogri Patisa Chicken",
+    "cuisine": "Dogri",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 360,
+      "protein": 30,
+      "carbs": 6,
+      "fats": 22,
+      "fiber": 1
+    },
+    "ingredients": [
+      {"item": "Chicken", "qty": "250g"},
+      {"item": "Yogurt", "qty": "100ml"},
+      {"item": "Onion Paste", "qty": "50g"},
+      {"item": "Whole Spices (Cardamom, Cloves)", "qty": "4 pcs"},
+      {"item": "Mustard Oil", "qty": "2 tbsp"}
+    ],
+    "tags": ["High Protein", "Slow Cooked", "Traditional"],
+    "seasonality": "All",
+    "price_index": 2
+  },
+  {
+    "id": "jk_rec_018",
+    "name": "Kashmiri Gushtaba",
+    "cuisine": "Kashmiri",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 440,
+      "protein": 24,
+      "carbs": 10,
+      "fats": 34,
+      "fiber": 1
+    },
+    "ingredients": [
+      {"item": "Minced Mutton", "qty": "200g"},
+      {"item": "Yogurt", "qty": "200ml"},
+      {"item": "Fennel Powder", "qty": "2 tsp"},
+      {"item": "Dry Ginger Powder", "qty": "1 tsp"},
+      {"item": "Ghee", "qty": "2 tbsp"}
+    ],
+    "tags": ["Wazwan", "Royal", "Festive"],
+    "seasonality": "All",
+    "price_index": 3
+  },
+  {
+    "id": "jk_rec_019",
+    "name": "Dogri Bhalle",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 250,
+      "protein": 10,
+      "carbs": 30,
+      "fats": 10,
+      "fiber": 4
+    },
+    "ingredients": [
+      {"item": "Moong Dal (soaked)", "qty": "100g"},
+      {"item": "Oil (for frying)", "qty": "3 tbsp"},
+      {"item": "Green Chili", "qty": "2 pcs"},
+      {"item": "Yogurt (for serving)", "qty": "100ml"},
+      {"item": "Tamarind Chutney", "qty": "2 tbsp"}
+    ],
+    "tags": ["Snack", "Crispy", "Street Food"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_020",
+    "name": "Kashmiri Lyodur Tschaman",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 360,
+      "protein": 16,
+      "carbs": 8,
+      "fats": 30,
+      "fiber": 1
+    },
+    "ingredients": [
+      {"item": "Paneer", "qty": "200g"},
+      {"item": "Turmeric", "qty": "1 tsp"},
+      {"item": "Mustard Oil", "qty": "3 tbsp"},
+      {"item": "Milk", "qty": "50ml"},
+      {"item": "Asafoetida", "qty": "pinch"}
+    ],
+    "tags": ["Turmeric Paneer", "Kashmiri Pandit", "Simple"],
+    "seasonality": "All",
+    "price_index": 2
   }
 ]

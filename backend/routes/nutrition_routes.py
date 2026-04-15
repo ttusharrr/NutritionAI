@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, current_app
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from bson import ObjectId
 from utils.nutrition_calc import calculate_daily_requirements
 from utils.nutrition_matcher import get_recommendations, load_regional_recipes
 
@@ -19,7 +20,7 @@ def recommend_meals():
     db = current_app.config['db']
     user_id = get_jwt_identity()
     
-    user = db.users.find_one({"email": user_id})
+    user = db.users.find_one({"_id": ObjectId(user_id)})
     if not user:
         return jsonify({"error": "User not found"}), 404
         
