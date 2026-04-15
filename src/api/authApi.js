@@ -283,6 +283,13 @@ class AuthAPI {
     return data;
   }
 
+  /**
+   * Fetch personalized meal recommendations.
+   */
+  async getRecommendations() {
+    return this.request('/nutrition/recommend', { method: 'GET' });
+  }
+
 
   /**
    * Logout.

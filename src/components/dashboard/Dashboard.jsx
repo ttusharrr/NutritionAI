@@ -25,6 +25,8 @@ export default function Dashboard() {
   const { user, logout, updateUser } = useAuth();
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [loadingRegion, setLoadingRegion] = useState(false);
+  const [recommendations, setRecommendations] = useState([]);
+  const [loadingMeals, setLoadingMeals] = useState(false);
 
   // Close region dropdown on click outside
   useEffect(() => {
@@ -33,16 +35,36 @@ export default function Dashboard() {
     return () => window.removeEventListener('click', handleClick);
   }, []);
 
+  // Fetch recommendations
+  const fetchRecommendations = async () => {
+    if (!user?.profile_completed) return;
+    setLoadingMeals(true);
+    try {
+      const data = await authApi.getRecommendations();
+      setRecommendations(data.recommendations || []);
+    } catch (err) {
+      console.error('Failed to fetch recommendations:', err);
+    } finally {
+      setLoadingMeals(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [user?.profile?.region, user?.profile?.dietary_goal]);
+
   const handleLogout = async () => {
     await logout();
     navigate('/auth/login');
   };
 
   const handleRegionChange = async (region) => {
+    if (region === currentRegion.id) return;
     setLoadingRegion(true);
     try {
       const data = await authApi.updateRegion(region);
       updateUser(data.user);
+      // fetchRecommendations is triggered by useEffect dependency
     } catch (err) {
       console.error('Failed to update region:', err);
     } finally {
@@ -272,25 +294,65 @@ export default function Dashboard() {
 
         {/* Diet Plan Section (Static/Dummy for now) */}
 
-        <section className="diet-section">
           <div className="section-header">
             <h2 className="section-title">
-              <HiOutlineClipboardList /> Today's Diet Plan
+              <HiOutlineClipboardList /> Regional Recommendations
             </h2>
-            <button className="view-all">Customize Plan</button>
+            <button className="view-all" onClick={fetchRecommendations} disabled={loadingMeals}>
+              {loadingMeals ? 'Refreshing...' : 'Refresh Plan'}
+            </button>
           </div>
 
-          <div className="diet-placeholder">
-            <div className="placeholder-content">
-              <div className="placeholder-icon">🌱</div>
-              <h3>Intelligent Plan Cooking...</h3>
-              <p>Our AI is analyzing {currentRegion.label} market availability to build your perfect meal sequence.</p>
-              <div className="placeholder-tags">
-                <span className="tag">Low Glycemic</span>
-                <span className="tag">High Volume</span>
-                <span className="tag">{user?.profile?.gender === 'female' ? 'Women Optimized' : 'Men Optimized'}</span>
+          <div className="recommendations-container">
+            {loadingMeals ? (
+              <div className="meals-loading">
+                <div className="shimmer-card" />
+                <div className="shimmer-card" />
+                <div className="shimmer-card" />
               </div>
-            </div>
+            ) : recommendations.length > 0 ? (
+              <div className="meals-grid">
+                {recommendations.map((meal, idx) => (
+                  <motion.div 
+                    key={meal.id}
+                    className="meal-card"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: idx * 0.1 }}
+                  >
+                    <div className="meal-badge">{meal.cuisine}</div>
+                    <h3 className="meal-name">{meal.name}</h3>
+                    
+                    <div className="meal-macros-mini">
+                      <div className="mini-macro"><span>P</span> {meal.macros.protein}g</div>
+                      <div className="mini-macro"><span>C</span> {meal.macros.carbs}g</div>
+                      <div className="mini-macro"><span>F</span> {meal.macros.fat}g</div>
+                    </div>
+
+                    <p className="agent-hint">
+                      <span className="sparkle">✨</span> {meal.agent_hint}
+                    </p>
+
+                    <div className="meal-footer">
+                      <div className="ingredient-count">
+                        {meal.ingredients.length} Ingredients
+                      </div>
+                      <button className="grocery-btn">
+                        Grocery List
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
+              <div className="diet-placeholder">
+                <div className="placeholder-content">
+                  <div className="placeholder-icon">🌱</div>
+                  <h3>No specific plan yet...</h3>
+                  <p>Complete your profile to unlock {currentRegion.label} regional meal recommendations.</p>
+                </div>
+              </div>
+            )}
           </div>
         </section>
       </main>

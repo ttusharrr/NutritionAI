@@ -1,0 +1,223 @@
+[
+  {
+    "id": "jk_rec_001",
+    "name": "Kashmiri Roganjosh",
+    "cuisine": "Kashmiri",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 380,
+      "protein": 28,
+      "carbs": 8,
+      "fats": 25,
+      "fiber": 2
+    },
+    "ingredients": [
+      {"item": "Mutton (Lamb)", "qty": "200g"},
+      {"item": "Mustard Oil", "qty": "2 tbsp"},
+      {"item": "Kashmiri Red Chili", "qty": "3 tsp"},
+      {"item": "Fennel Powder", "qty": "2 tsp"},
+      {"item": "Dry Ginger Powder", "qty": "1 tsp"},
+      {"item": "Curd", "qty": "100g"}
+    ],
+    "tags": ["Low Carb", "High Protein", "Spicy", "Wazwan"],
+    "seasonality": "All",
+    "price_index": 3
+  },
+  {
+    "id": "jk_rec_002",
+    "name": "Haak-e-Saag",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 120,
+      "protein": 4,
+      "carbs": 12,
+      "fats": 6,
+      "fiber": 8
+    },
+    "ingredients": [
+      {"item": "Collard Greens (Haak)", "qty": "250g"},
+      {"item": "Mustard Oil", "qty": "1 tbsp"},
+      {"item": "Dry Red Chili", "qty": "2 pcs"},
+      {"item": "Asafoetida (Hing)", "qty": "pinch"}
+    ],
+    "tags": ["Low Calorie", "High Fiber", "Everyday Food"],
+    "seasonality": "Winter",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_003",
+    "name": "Dogri Rajma Chawal (Bhaderwah style)",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 480,
+      "protein": 18,
+      "carbs": 70,
+      "fats": 14,
+      "fiber": 12
+    },
+    "ingredients": [
+      {"item": "Red Kidney Beans (Rajma)", "qty": "100g"},
+      {"item": "Basmati Rice", "qty": "150g"},
+      {"item": "Ghee", "qty": "1 tbsp"},
+      {"item": "Pomegranate Seed Powder", "qty": "1 tsp"}
+    ],
+    "tags": ["Comfort Food", "High Fiber", "Signature Dish"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_004",
+    "name": "Dum Aloo",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 310,
+      "protein": 6,
+      "carbs": 42,
+      "fats": 14,
+      "fiber": 5
+    },
+    "ingredients": [
+      {"item": "Potato", "qty": "250g"},
+      {"item": "Mustard Oil", "qty": "2 tbsp"},
+      {"item": "Kashmiri Red Chili Powder", "qty": "3 tsp"},
+      {"item": "Fennel Powder", "qty": "2 tsp"}
+    ],
+    "tags": ["Vegetarian", "Spicy", "Classic"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_005",
+    "name": "Khatta Meat",
+    "cuisine": "Dogri",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 350,
+      "protein": 26,
+      "carbs": 6,
+      "fats": 24,
+      "fiber": 1
+    },
+    "ingredients": [
+      {"item": "Mutton", "qty": "200g"},
+      {"item": "Amchur (Dry Mango Powder)", "qty": "2 tbsp"},
+      {"item": "Mustard Oil", "qty": "2 tbsp"},
+      {"item": "Coal (for smoky flavor)", "qty": "1 pc"}
+    ],
+    "tags": ["Sour", "Smoky", "Traditional Dogri"],
+    "seasonality": "All",
+    "price_index": 3
+  },
+  {
+    "id": "jk_rec_006",
+    "name": "Nadru Yakhni",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 240,
+      "protein": 8,
+      "carbs": 22,
+      "fats": 14,
+      "fiber": 6
+    },
+    "ingredients": [
+      {"item": "Lotus Root (Nadru)", "qty": "150g"},
+      {"item": "Yogurt", "qty": "200g"},
+      {"item": "Fennel Powder", "qty": "1 tsp"},
+      {"item": "Dry Mint", "qty": "1 tsp"}
+    ],
+    "tags": ["Light", "Nutritious", "Kashmiri Pandit Cuisine"],
+    "seasonality": "All",
+    "price_index": 2
+  },
+  {
+    "id": "jk_rec_007",
+    "name": "Kalari Kulcha",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 420,
+      "protein": 22,
+      "carbs": 38,
+      "fats": 20,
+      "fiber": 2
+    },
+    "ingredients": [
+      {"item": "Kalari (Indigenous Cheese)", "qty": "100g"},
+      {"item": "Kulcha (Bread)", "qty": "1 pc"},
+      {"item": "Butter", "qty": "1 tbsp"}
+    ],
+    "tags": ["Street Food", "High Protein", "Local Cheese"],
+    "seasonality": "All",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_008",
+    "name": "Kahwa",
+    "cuisine": "Kashmiri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 85,
+      "protein": 1,
+      "carbs": 12,
+      "fats": 4,
+      "fiber": 1
+    },
+    "ingredients": [
+      {"item": "Green Tea Leaves", "qty": "1 tsp"},
+      {"item": "Almonds", "qty": "5 pcs"},
+      {"item": "Saffron", "qty": "2 strands"},
+      {"item": "Cardamom", "qty": "2 pcs"}
+    ],
+    "tags": ["Detox", "Antioxidant", "Traditional Tea"],
+    "seasonality": "Winter",
+    "price_index": 1
+  },
+  {
+    "id": "jk_rec_009",
+    "name": "Madra (Dahi Wala Chana)",
+    "cuisine": "Dogri",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 290,
+      "protein": 12,
+      "carbs": 34,
+      "fats": 12,
+      "fiber": 8
+    },
+    "ingredients": [
+      {"item": "Kabuli Chana (Chickpeas)", "qty": "100g"},
+      {"item": "Yogurt", "qty": "150g"},
+      {"item": "Dry Fruits", "qty": "10g"},
+      {"item": "Ghee", "qty": "1 tbsp"}
+    ],
+    "tags": ["Creamy", "Festive Dish", "Dogri Cuisine"],
+    "seasonality": "All",
+    "price_index": 2
+  },
+  {
+    "id": "jk_rec_010",
+    "name": "Tabak Maaz",
+    "cuisine": "Kashmiri",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 520,
+      "protein": 32,
+      "carbs": 2,
+      "fats": 42,
+      "fiber": 0
+    },
+    "ingredients": [
+      {"item": "Lamb Ribs", "qty": "250g"},
+      {"item": "Ghee (for frying)", "qty": "3 tbsp"},
+      {"item": "Milk", "qty": "100ml"},
+      {"item": "Spices Mix", "qty": "2 tbsp"}
+    ],
+    "tags": ["High Fat", "Keto Friendly", "Wazwan Special"],
+    "seasonality": "All",
+    "price_index": 3
+  }
+]
