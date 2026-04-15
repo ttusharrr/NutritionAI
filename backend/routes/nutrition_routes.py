@@ -50,13 +50,20 @@ def recommend_meals():
     # In a real scenario, we'd pass these to GPT-4o-mini here.
     processed_recommendations = []
     for rec in recommendations:
+        nutrients = rec['nutrients']
         processed_recommendations.append({
             "id": rec['id'],
             "name": rec['name'],
             "cuisine": rec['cuisine'],
-            "macros": rec['nutrients'],
+            "macros": {
+                "calories": nutrients.get('calories', 0),
+                "protein": nutrients.get('protein', 0),
+                "carbs": nutrients.get('carbs', 0),
+                "fat": nutrients.get('fats', 0),
+                "fiber": nutrients.get('fiber', 0)
+            },
             "ingredients": rec['ingredients'],
-            "agent_hint": f"This is a {rec['cuisine']} specialty. We've balanced this to fit your {profile.get('dietary_goal')} goal."
+            "agent_hint": f"This is a {rec['cuisine']} specialty. We've balanced this to fit your {profile.get('dietary_goal', 'maintain').replace('_', ' ')} goal."
         })
 
     return jsonify({

@@ -37,13 +37,13 @@ export default function Dashboard() {
 
   // Fetch recommendations
   const fetchRecommendations = async () => {
-    if (!user?.profile_completed) return;
     setLoadingMeals(true);
     try {
       const data = await authApi.getRecommendations();
       setRecommendations(data.recommendations || []);
     } catch (err) {
       console.error('Failed to fetch recommendations:', err);
+      setRecommendations([]);
     } finally {
       setLoadingMeals(false);
     }
