@@ -294,6 +294,7 @@ export default function Dashboard() {
 
         {/* Diet Plan Section (Static/Dummy for now) */}
 
+        <section className="diet-section">
           <div className="section-header">
             <h2 className="section-title">
               <HiOutlineClipboardList /> Regional Recommendations
