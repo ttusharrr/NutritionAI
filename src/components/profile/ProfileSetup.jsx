@@ -15,6 +15,7 @@ const STEPS = [
   { key: 'age', title: 'How old are you?', subtitle: 'Age affects your metabolic rate.' },
   { key: 'measurements', title: 'Your measurements', subtitle: 'Weight and height for accurate calculations.' },
   { key: 'activity', title: 'Activity level', subtitle: 'How active are you on a typical day?' },
+  { key: 'dietary_type', title: 'Dietary preference', subtitle: 'What kind of food do you prefer?' },
   { key: 'goal', title: 'Your dietary goal', subtitle: 'What would you like to achieve?' },
 ];
 
@@ -38,6 +39,7 @@ export default function ProfileSetup() {
     weight: 70,
     height: 170,
     activity_level: '',
+    dietary_type: 'Both',
     dietary_goal: '',
   });
 
@@ -49,6 +51,7 @@ export default function ProfileSetup() {
       case 'age': return profile.age >= 13 && profile.age <= 100;
       case 'measurements': return profile.weight > 0 && profile.height > 0;
       case 'activity': return !!profile.activity_level;
+      case 'dietary_type': return !!profile.dietary_type;
       case 'goal': return !!profile.dietary_goal;
       default: return true;
     }
@@ -210,6 +213,27 @@ export default function ProfileSetup() {
                       <div style={{ fontWeight: 600 }}>{opt.label}</div>
                       <div style={{ fontSize: '12px', opacity: 0.6, marginTop: '2px' }}>{opt.desc}</div>
                     </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Dietary Preference */}
+            {currentStep.key === 'dietary_type' && (
+              <div className="segmented-group cols-3">
+                {[
+                  { value: 'Veg', emoji: '🥗', label: 'Vegetarian' },
+                  { value: 'Non-Veg', emoji: '🍗', label: 'Non-Vegetarian' },
+                  { value: 'Both', emoji: '🍽️', label: 'Both' },
+                ].map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    className={`segmented-btn ${profile.dietary_type === opt.value ? 'active' : ''}`}
+                    onClick={() => setProfile({ ...profile, dietary_type: opt.value })}
+                  >
+                    <span className="emoji">{opt.emoji}</span>
+                    {opt.label}
                   </button>
                 ))}
               </div>

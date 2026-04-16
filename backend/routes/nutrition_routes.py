@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
 from utils.nutrition_calc import calculate_daily_requirements
 from utils.nutrition_matcher import get_recommendations, load_regional_recipes
+from utils.ai_agent import MealAgent
 
 nutrition_bp = Blueprint('nutrition', __name__, url_prefix='/api/nutrition')
 
@@ -15,7 +16,7 @@ def recommend_meals():
     2. Macro Splitter
     3. ML Matcher (k-NN)
     4. Constraint Filter
-    5. Agentic Reasoning (Placeholder)
+    5. Agentic Reasoning (OpenAI)
     """
     db = current_app.config['db']
     user_id = get_jwt_identity()
@@ -27,50 +28,92 @@ def recommend_meals():
     if not user.get('profile_completed'):
         return jsonify({"error": "Please complete your profile first"}), 400
 
+    # Initialize AI Agent (Hardened)
+    ai_agent = MealAgent()
+
     # Layer 1 & 2: Calculate Requirements
     profile = user.get('profile', {})
     nutrition_targets = calculate_daily_requirements(profile)
     
-    # Layer 3 & 4: Match Dishes (k-NN + Filter)
-    # We focus on the user's regional preference if set to J&K
-    filters = {
-        "type": "Veg" if "Vegetarian" in profile.get('restrictions', []) else None,
-        "cuisine": profile.get('region') if profile.get('region') in ['Kashmiri', 'Dogri'] else None
-    }
+    region = profile.get('region', 'J&K')
+    available_recipes = load_regional_recipes(region)
     
-    # For now, let's assume we want to match their daily calorie limit divided by 3 (for one meal)
-    single_meal_macros = {
-        "protein": nutrition_targets['macros']['protein'] / 3,
-        "carbs": nutrition_targets['macros']['carbs'] / 3,
-        "fat": nutrition_targets['macros']['fat'] / 3
-    }
-    
-    recommendations = get_recommendations(single_meal_macros, filters=filters, top_n=3)
+    if not available_recipes:
+        return jsonify({
+            "user_targets": nutrition_targets,
+            "recommendations": {},
+            "region_available": False,
+            "message": f"Our nutritional database for {region} is currently under development. Please check back soon for local specialties!"
+        }), 200
 
-    # Layer 5: Agentic Reasoning (Simulated for Now)
-    # In a real scenario, we'd pass these to GPT-4o-mini here.
-    processed_recommendations = []
-    for rec in recommendations:
-        nutrients = rec['nutrients']
-        processed_recommendations.append({
-            "id": rec['id'],
-            "name": rec['name'],
-            "cuisine": rec['cuisine'],
-            "macros": {
-                "calories": nutrients.get('calories', 0),
-                "protein": nutrients.get('protein', 0),
-                "carbs": nutrients.get('carbs', 0),
-                "fat": nutrients.get('fats', 0),
-                "fiber": nutrients.get('fiber', 0)
-            },
-            "ingredients": rec['ingredients'],
-            "agent_hint": f"This is a {rec['cuisine']} specialty. We've balanced this to fit your {profile.get('dietary_goal', 'maintain').replace('_', ' ')} goal."
-        })
+    # Professional Caloric Splitting Ratios
+    slots = {
+        "breakfast": 0.25,
+        "lunch": 0.35,
+        "snacks": 0.10,
+        "dinner": 0.30
+    }
+    
+    daily_plan = {}
+    exclude_ids = []
+    
+    # Base filters from user profile
+    dietary_type = profile.get('dietary_type', 'both') # 'Veg', 'Non-Veg', 'Both'
+    diet_map = {'Veg': 'Veg', 'Non-Veg': 'Non-Veg', 'Both': 'Both'}
+    target_diet = diet_map.get(dietary_type, 'Both')
+
+    base_filters = {
+        "type": target_diet,
+    }
+
+    for slot, ratio in slots.items():
+        slot_macros = {
+            "protein": nutrition_targets['macros']['protein'] * ratio,
+            "carbs": nutrition_targets['macros']['carbs'] * ratio,
+            "fat": nutrition_targets['macros']['fat'] * ratio
+        }
+        
+        # Combine base filters with meal-specific slot
+        slot_filters = {**base_filters, "meal_type": slot}
+        
+        # Get one best recommendation for this slot
+        recs = get_recommendations(slot_macros, region=region, filters=slot_filters, exclude_ids=exclude_ids, top_n=1)
+        
+        if recs:
+            rec = recs[0]
+            exclude_ids.append(rec['id'])
+            nutrients = rec['nutrients']
+            daily_plan[slot] = {
+                "id": rec['id'],
+                "name": rec['name'],
+                "macros": {
+                    "calories": nutrients.get('calories', 0),
+                    "protein": nutrients.get('protein', 0),
+                    "carbs": nutrients.get('carbs', 0),
+                    "fat": nutrients.get('fats', 0),
+                },
+                "ingredients": rec['ingredients'],
+                "sub_region": rec.get('sub_region', region),
+                "target_calories": round(nutrition_targets['daily_calories'] * ratio),
+                "agent_hint": f"Professional {slot} pick from {rec.get('sub_region', region)}. Balanced to your {profile.get('dietary_goal', 'maintain').replace('_', ' ')} target."
+            }
+
+    # Layer 5: Agentic Reasoning (The "Brain")
+    # Batch the whole plan to the LLM for expert insights
+    try:
+        ai_insights = ai_agent.generate_daily_insights(profile, daily_plan)
+        if ai_insights:
+            for slot, insight in ai_insights.items():
+                if slot in daily_plan:
+                    daily_plan[slot]['agent_hint'] = insight
+    except Exception as e:
+        print(f"Agentic Reasoning Layer Failed: {e}")
 
     return jsonify({
         "user_targets": nutrition_targets,
-        "recommendations": processed_recommendations,
-        "message": "Personalized J&K regional meal plan generated."
+        "recommendations": daily_plan,
+        "region_available": True,
+        "message": f"Full-day regional meal plan generated for {region}."
     }), 200
 
 @nutrition_bp.route('/recipes/jk', methods=['GET'])

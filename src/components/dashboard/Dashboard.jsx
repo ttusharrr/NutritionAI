@@ -15,17 +15,21 @@ import {
   HiOutlineCube,
   HiOutlineGlobe,
   HiOutlineUserCircle,
-  HiOutlineClipboardList
+  HiOutlineClipboardList,
+  HiOutlineMenuAlt3
 } from 'react-icons/hi';
 import { useAuth } from '../../context/AuthContext';
 import authApi from '../../api/authApi';
+import Sidebar from './Sidebar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
   const { user, logout, updateUser } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [loadingRegion, setLoadingRegion] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState({});
+  const [regionAvailable, setRegionAvailable] = useState(true);
   const [loadingMeals, setLoadingMeals] = useState(false);
 
   // Close region dropdown on click outside
@@ -40,10 +44,11 @@ export default function Dashboard() {
     setLoadingMeals(true);
     try {
       const data = await authApi.getRecommendations();
-      setRecommendations(data.recommendations || []);
+      setRecommendations(data.recommendations || {});
+      setRegionAvailable(data.region_available !== false);
     } catch (err) {
       console.error('Failed to fetch recommendations:', err);
-      setRecommendations([]);
+      setRecommendations({});
     } finally {
       setLoadingMeals(false);
     }
@@ -84,6 +89,13 @@ export default function Dashboard() {
     { id: 'Kerala', label: 'Kerala', icon: '🌴' },
     { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
     { id: 'International', label: 'International', icon: '🌍' },
+  ];
+
+  const mealSlots = [
+    { id: 'breakfast', label: 'Breakfast', icon: '🍳' },
+    { id: 'lunch', label: 'Lunch', icon: '🍲' },
+    { id: 'snacks', label: 'Snacks', icon: '🍎' },
+    { id: 'dinner', label: 'Dinner', icon: '🥘' }
   ];
 
   const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region || 'Punjab')) || REGIONS[0];
@@ -157,12 +169,8 @@ export default function Dashboard() {
               </AnimatePresence>
             </div>
 
-            <button className="nav-profile-btn" onClick={() => navigate('/profile-setup')}>
-              <HiOutlineUserCircle size={22} />
-            </button>
-
-            <button className="logout-icon-btn" onClick={handleLogout} title="Logout">
-              <HiOutlineLogout size={22} />
+            <button className="menu-trigger" onClick={() => setIsSidebarOpen(true)}>
+              <HiOutlineMenuAlt3 size={24} />
             </button>
           </div>
         </div>
@@ -175,7 +183,7 @@ export default function Dashboard() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <h1 className="greeting">Good Morning, {user?.name?.split(' ')[0] || 'Explorer'}!</h1>
+            <h1 className="greeting">Welcome, {user?.name?.split(' ')[0] || 'Explorer'}!</h1>
             <p className="welcome-sub">Here is your nutritional blueprint for today.</p>
           </motion.div>
         </header>
@@ -288,68 +296,9 @@ export default function Dashboard() {
 
           </div>
         </motion.div>
-
-        {/* Regional Recommendations Section */}
-        <section className="diet-section">
-          <div className="section-header">
-            <h2 className="section-title">
-              <HiOutlineClipboardList /> Regional Recommendations
-            </h2>
-            <button className="view-all" onClick={fetchRecommendations} disabled={loadingMeals}>
-              {loadingMeals ? 'Refreshing...' : 'Refresh Plan'}
-            </button>
-          </div>
-
-          <div className="recommendations-container">
-            {loadingMeals ? (
-              <div className="meals-loading">
-                <div className="shimmer-card" />
-                <div className="shimmer-card" />
-                <div className="shimmer-card" />
-              </div>
-            ) : recommendations.length > 0 ? (
-              <div className="meals-grid">
-                {recommendations.map((meal, idx) => (
-                  <motion.div 
-                    key={meal.id}
-                    className="meal-card"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: idx * 0.1 }}
-                  >
-                    <div className="meal-badge">{meal.cuisine}</div>
-                    <h3 className="meal-name">{meal.name}</h3>
-                    
-                    <div className="meal-macros-mini">
-                      <div className="mini-macro"><span>P</span> {meal.macros.protein}g</div>
-                      <div className="mini-macro"><span>C</span> {meal.macros.carbs}g</div>
-                      <div className="mini-macro"><span>F</span> {meal.macros.fat}g</div>
-                    </div>
-
-                    <p className="agent-hint">
-                      <span className="sparkle">✨</span> {meal.agent_hint}
-                    </p>
-
-                    <div className="meal-footer">
-                      <div className="ingredient-count">
-                        {meal.ingredients.length} Ingredients
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              <div className="diet-placeholder">
-                <div className="placeholder-content">
-                  <div className="placeholder-icon">🌱</div>
-                  <h3>No specific plan yet...</h3>
-                  <p>Complete your profile to unlock {currentRegion.label} regional meal recommendations.</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </section>
       </main>
+
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       {/* Background Decor */}
       <div className="dashboard-decor-1" />

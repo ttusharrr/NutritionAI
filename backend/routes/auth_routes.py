@@ -634,6 +634,7 @@ def profile_setup():
         "profile.height": data.get("height"),
         "profile.activity_level": data.get("activity_level"),
         "profile.dietary_goal": data.get("dietary_goal"),
+        "profile.dietary_type": data.get("dietary_type", "both"),
         "profile.region": data.get("region", "Global"),
         "profile.restrictions": data.get("restrictions", []),
         "profile_completed": True,

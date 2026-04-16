@@ -20,6 +20,7 @@ import ResetPasswordPage from './components/auth/ResetPasswordPage';
 // Protected pages
 import Dashboard from './components/dashboard/Dashboard';
 import ProfileSetup from './components/profile/ProfileSetup';
+import DietPlan from './components/dashboard/DietPlan';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -54,6 +55,9 @@ export default function App() {
             } />
             <Route path="/profile-setup" element={
               <ProtectedRoute><ProfileSetup /></ProtectedRoute>
+            } />
+            <Route path="/diet-plan" element={
+              <ProtectedRoute><DietPlan /></ProtectedRoute>
             } />
 
             {/* Default redirect */}

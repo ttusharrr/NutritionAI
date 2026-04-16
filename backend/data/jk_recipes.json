@@ -1,452 +1,702 @@
 [
   {
-    "id": "jk_rec_001",
-    "name": "Kashmiri Roganjosh",
-    "cuisine": "Kashmiri",
+    "id": "jk_001",
+    "name": "Rogan Josh",
+    "sub_region": "Kashmir",
     "type": "Non-Veg",
     "nutrients": {
-      "calories": 380,
-      "protein": 28,
-      "carbs": 8,
-      "fats": 25,
-      "fiber": 2
+      "calories": 277,
+      "protein": 13.2,
+      "carbs": 1,
+      "fats": 24
     },
-    "ingredients": [
-      {"item": "Mutton (Lamb)", "qty": "200g"},
-      {"item": "Mustard Oil", "qty": "2 tbsp"},
-      {"item": "Kashmiri Red Chili", "qty": "3 tsp"},
-      {"item": "Fennel Powder", "qty": "2 tsp"},
-      {"item": "Dry Ginger Powder", "qty": "1 tsp"},
-      {"item": "Curd", "qty": "100g"}
-    ],
-    "tags": ["Low Carb", "High Protein", "Spicy", "Wazwan"],
-    "seasonality": "All",
-    "price_index": 3
+    "ingredients": ["Mutton", "yogurt", "spices"],
+    "meal_type": "dinner"
   },
   {
-    "id": "jk_rec_002",
-    "name": "Haak-e-Saag",
-    "cuisine": "Kashmiri",
+    "id": "jk_002",
+    "name": "Gushtaba",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 290,
+      "protein": 14,
+      "carbs": 2,
+      "fats": 25
+    },
+    "ingredients": ["Minced mutton", "yogurt"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_003",
+    "name": "Rista",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 270,
+      "protein": 13,
+      "carbs": 3,
+      "fats": 22
+    },
+    "ingredients": ["Minced mutton"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_004",
+    "name": "Yakhni (Mutton)",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 250,
+      "protein": 13,
+      "carbs": 2,
+      "fats": 20
+    },
+    "ingredients": ["Mutton", "yogurt"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_005",
+    "name": "Tabak Maaz",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 320,
+      "protein": 15,
+      "carbs": 1,
+      "fats": 28
+    },
+    "ingredients": ["Lamb ribs", "ghee"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_006",
+    "name": "Aab Gosht",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 260,
+      "protein": 13,
+      "carbs": 3,
+      "fats": 21
+    },
+    "ingredients": ["Mutton", "milk"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_007",
+    "name": "Marchwangan Korma",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 275,
+      "protein": 13,
+      "carbs": 2,
+      "fats": 23
+    },
+    "ingredients": ["Mutton", "chili"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_008",
+    "name": "Dhaniwal Korma",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 270,
+      "protein": 13,
+      "carbs": 2,
+      "fats": 22
+    },
+    "ingredients": ["Mutton", "coriander"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_009",
+    "name": "Seekh Kebab",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 300,
+      "protein": 16,
+      "carbs": 1,
+      "fats": 26
+    },
+    "ingredients": ["Minced mutton"],
+    "meal_type": "snack"
+  },
+  {
+    "id": "jk_010",
+    "name": "Shab Deg",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 240,
+      "protein": 12,
+      "carbs": 5,
+      "fats": 18
+    },
+    "ingredients": ["Mutton", "turnip"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_011",
+    "name": "Kanti",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 290,
+      "protein": 15,
+      "carbs": 1,
+      "fats": 25
+    },
+    "ingredients": ["Boneless mutton"],
+    "meal_type": "snack"
+  },
+  {
+    "id": "jk_012",
+    "name": "Harissa",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 220,
+      "protein": 10,
+      "carbs": 18,
+      "fats": 10
+    },
+    "ingredients": ["Mutton", "wheat"],
+    "meal_type": "breakfast"
+  },
+  {
+    "id": "jk_013",
+    "name": "Muj Gaad",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 180,
+      "protein": 14,
+      "carbs": 4,
+      "fats": 10
+    },
+    "ingredients": ["Fish", "radish"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_014",
+    "name": "Kokur Yakhni",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 210,
+      "protein": 16,
+      "carbs": 2,
+      "fats": 14
+    },
+    "ingredients": ["Chicken", "yogurt"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_015",
+    "name": "Safed Kokur",
+    "sub_region": "Kashmir",
+    "type": "Non-Veg",
+    "nutrients": {
+      "calories": 230,
+      "protein": 15,
+      "carbs": 3,
+      "fats": 16
+    },
+    "ingredients": ["Chicken", "milk"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_016",
+    "name": "Dum Aloo",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 156,
+      "protein": 2,
+      "carbs": 13,
+      "fats": 10
+    },
+    "ingredients": ["Potato", "yogurt"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_017",
+    "name": "Haakh",
+    "sub_region": "Kashmir",
     "type": "Veg",
     "nutrients": {
       "calories": 120,
-      "protein": 4,
-      "carbs": 12,
-      "fats": 6,
-      "fiber": 8
-    },
-    "ingredients": [
-      {"item": "Collard Greens (Haak)", "qty": "250g"},
-      {"item": "Mustard Oil", "qty": "1 tbsp"},
-      {"item": "Dry Red Chili", "qty": "2 pcs"},
-      {"item": "Asafoetida (Hing)", "qty": "pinch"}
-    ],
-    "tags": ["Low Calorie", "High Fiber", "Everyday Food"],
-    "seasonality": "Winter",
-    "price_index": 1
-  },
-  {
-    "id": "jk_rec_003",
-    "name": "Dogri Rajma Chawal (Bhaderwah style)",
-    "cuisine": "Dogri",
-    "type": "Veg",
-    "nutrients": {
-      "calories": 480,
-      "protein": 18,
-      "carbs": 70,
-      "fats": 14,
-      "fiber": 12
-    },
-    "ingredients": [
-      {"item": "Red Kidney Beans (Rajma)", "qty": "100g"},
-      {"item": "Basmati Rice", "qty": "150g"},
-      {"item": "Ghee", "qty": "1 tbsp"},
-      {"item": "Pomegranate Seed Powder", "qty": "1 tsp"}
-    ],
-    "tags": ["Comfort Food", "High Fiber", "Signature Dish"],
-    "seasonality": "All",
-    "price_index": 1
-  },
-  {
-    "id": "jk_rec_004",
-    "name": "Dum Aloo",
-    "cuisine": "Kashmiri",
-    "type": "Veg",
-    "nutrients": {
-      "calories": 310,
-      "protein": 6,
-      "carbs": 42,
-      "fats": 14,
-      "fiber": 5
-    },
-    "ingredients": [
-      {"item": "Potato", "qty": "250g"},
-      {"item": "Mustard Oil", "qty": "2 tbsp"},
-      {"item": "Kashmiri Red Chili Powder", "qty": "3 tsp"},
-      {"item": "Fennel Powder", "qty": "2 tsp"}
-    ],
-    "tags": ["Vegetarian", "Spicy", "Classic"],
-    "seasonality": "All",
-    "price_index": 1
-  },
-  {
-    "id": "jk_rec_005",
-    "name": "Khatta Meat",
-    "cuisine": "Dogri",
-    "type": "Non-Veg",
-    "nutrients": {
-      "calories": 350,
-      "protein": 26,
+      "protein": 3,
       "carbs": 6,
-      "fats": 24,
-      "fiber": 1
+      "fats": 8
     },
-    "ingredients": [
-      {"item": "Mutton", "qty": "200g"},
-      {"item": "Amchur (Dry Mango Powder)", "qty": "2 tbsp"},
-      {"item": "Mustard Oil", "qty": "2 tbsp"},
-      {"item": "Coal (for smoky flavor)", "qty": "1 pc"}
-    ],
-    "tags": ["Sour", "Smoky", "Traditional Dogri"],
-    "seasonality": "All",
-    "price_index": 3
+    "ingredients": ["Greens"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_006",
+    "id": "jk_018",
     "name": "Nadru Yakhni",
-    "cuisine": "Kashmiri",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 140,
+      "protein": 3,
+      "carbs": 10,
+      "fats": 8
+    },
+    "ingredients": ["Lotus stem"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_019",
+    "name": "Gogji Rajma",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 190,
+      "protein": 8,
+      "carbs": 20,
+      "fats": 4
+    },
+    "ingredients": ["Rajma", "turnip"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_020",
+    "name": "Chaman Kaliya",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 260,
+      "protein": 12,
+      "carbs": 4,
+      "fats": 20
+    },
+    "ingredients": ["Paneer"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_021",
+    "name": "Ruwangan Chaman",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 250,
+      "protein": 11,
+      "carbs": 6,
+      "fats": 18
+    },
+    "ingredients": ["Paneer"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_022",
+    "name": "Lyodur Tschaman",
+    "sub_region": "Kashmir",
     "type": "Veg",
     "nutrients": {
       "calories": 240,
-      "protein": 8,
-      "carbs": 22,
-      "fats": 14,
-      "fiber": 6
+      "protein": 11,
+      "carbs": 5,
+      "fats": 17
     },
-    "ingredients": [
-      {"item": "Lotus Root (Nadru)", "qty": "150g"},
-      {"item": "Yogurt", "qty": "200g"},
-      {"item": "Fennel Powder", "qty": "1 tsp"},
-      {"item": "Dry Mint", "qty": "1 tsp"}
-    ],
-    "tags": ["Light", "Nutritious", "Kashmiri Pandit Cuisine"],
-    "seasonality": "All",
-    "price_index": 2
+    "ingredients": ["Paneer"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_007",
-    "name": "Kalari Kulcha",
-    "cuisine": "Dogri",
+    "id": "jk_023",
+    "name": "Tsok Wangun",
+    "sub_region": "Kashmir",
     "type": "Veg",
     "nutrients": {
-      "calories": 420,
-      "protein": 22,
-      "carbs": 38,
-      "fats": 20,
-      "fiber": 2
-    },
-    "ingredients": [
-      {"item": "Kalari (Indigenous Cheese)", "qty": "100g"},
-      {"item": "Kulcha (Bread)", "qty": "1 pc"},
-      {"item": "Butter", "qty": "1 tbsp"}
-    ],
-    "tags": ["Street Food", "High Protein", "Local Cheese"],
-    "seasonality": "All",
-    "price_index": 1
-  },
-  {
-    "id": "jk_rec_008",
-    "name": "Kahwa",
-    "cuisine": "Kashmiri",
-    "type": "Veg",
-    "nutrients": {
-      "calories": 85,
-      "protein": 1,
+      "calories": 160,
+      "protein": 3,
       "carbs": 12,
-      "fats": 4,
-      "fiber": 1
+      "fats": 10
     },
-    "ingredients": [
-      {"item": "Green Tea Leaves", "qty": "1 tsp"},
-      {"item": "Almonds", "qty": "5 pcs"},
-      {"item": "Saffron", "qty": "2 strands"},
-      {"item": "Cardamom", "qty": "2 pcs"}
-    ],
-    "tags": ["Detox", "Antioxidant", "Traditional Tea"],
-    "seasonality": "Winter",
-    "price_index": 1
+    "ingredients": ["Brinjal"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_009",
-    "name": "Madra (Dahi Wala Chana)",
-    "cuisine": "Dogri",
+    "id": "jk_024",
+    "name": "Nadir Palak",
+    "sub_region": "Kashmir",
     "type": "Veg",
     "nutrients": {
-      "calories": 290,
-      "protein": 12,
-      "carbs": 34,
-      "fats": 12,
-      "fiber": 8
+      "calories": 140,
+      "protein": 4,
+      "carbs": 10,
+      "fats": 7
     },
-    "ingredients": [
-      {"item": "Kabuli Chana (Chickpeas)", "qty": "100g"},
-      {"item": "Yogurt", "qty": "150g"},
-      {"item": "Dry Fruits", "qty": "10g"},
-      {"item": "Ghee", "qty": "1 tbsp"}
-    ],
-    "tags": ["Creamy", "Festive Dish", "Dogri Cuisine"],
-    "seasonality": "All",
-    "price_index": 2
+    "ingredients": ["Lotus stem"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_010",
-    "name": "Tabak Maaz",
-    "cuisine": "Kashmiri",
+    "id": "jk_025",
+    "name": "Al Yakhni",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 130,
+      "protein": 3,
+      "carbs": 9,
+      "fats": 7
+    },
+    "ingredients": ["Bottle gourd"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_026",
+    "name": "Modur Pulao",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 280,
+      "protein": 5,
+      "carbs": 40,
+      "fats": 10
+    },
+    "ingredients": ["Rice", "dry fruits"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_027",
+    "name": "Kashmiri Pulao",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 260,
+      "protein": 5,
+      "carbs": 38,
+      "fats": 9
+    },
+    "ingredients": ["Rice", "nuts"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_028",
+    "name": "Wazwan Rice",
+    "sub_region": "Kashmir",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 220,
+      "protein": 4,
+      "carbs": 32,
+      "fats": 6
+    },
+    "ingredients": ["Rice"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_029",
+    "name": "Kahwa",
+    "sub_region": "Kashmir",
+    "type": "Drink",
+    "nutrients": {
+      "calories": 40,
+      "protein": 1,
+      "carbs": 6,
+      "fats": 1
+    },
+    "ingredients": ["Green tea"],
+    "meal_type": "snack"
+  },
+  {
+    "id": "jk_030",
+    "name": "Noon Chai",
+    "sub_region": "Kashmir",
+    "type": "Drink",
+    "nutrients": {
+      "calories": 60,
+      "protein": 2,
+      "carbs": 5,
+      "fats": 3
+    },
+    "ingredients": ["Tea", "milk"],
+    "meal_type": "breakfast"
+  },
+  {
+    "id": "jk_031",
+    "name": "Phirni",
+    "sub_region": "Kashmir",
+    "type": "Dessert",
+    "nutrients": {
+      "calories": 180,
+      "protein": 5,
+      "carbs": 25,
+      "fats": 6
+    },
+    "ingredients": ["Milk", "rice"],
+    "meal_type": "dessert"
+  },
+  {
+    "id": "jk_032",
+    "name": "Shufta",
+    "sub_region": "Kashmir",
+    "type": "Dessert",
+    "nutrients": {
+      "calories": 350,
+      "protein": 6,
+      "carbs": 30,
+      "fats": 20
+    },
+    "ingredients": ["Dry fruits"],
+    "meal_type": "dessert"
+  },
+  {
+    "id": "jk_033",
+    "name": "Rajma Chawal",
+    "sub_region": "Jammu",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 205,
+      "protein": 6.5,
+      "carbs": 15,
+      "fats": 10
+    },
+    "ingredients": ["Rajma", "rice"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_034",
+    "name": "Kalaadi Kulcha",
+    "sub_region": "Jammu",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 300,
+      "protein": 12,
+      "carbs": 25,
+      "fats": 18
+    },
+    "ingredients": ["Cheese", "bread"],
+    "meal_type": "breakfast"
+  },
+  {
+    "id": "jk_035",
+    "name": "Ambal",
+    "sub_region": "Jammu",
+    "type": "Veg",
+    "nutrients": {
+      "calories": 150,
+      "protein": 2,
+      "carbs": 20,
+      "fats": 5
+    },
+    "ingredients": ["Pumpkin"],
+    "meal_type": "side"
+  },
+  {
+    "id": "jk_036",
+    "name": "Khatta Meat",
+    "sub_region": "Jammu",
     "type": "Non-Veg",
     "nutrients": {
-      "calories": 520,
-      "protein": 32,
-      "carbs": 2,
-      "fats": 42,
-      "fiber": 0
+      "calories": 280,
+      "protein": 14,
+      "carbs": 3,
+      "fats": 22
     },
-    "ingredients": [
-      {"item": "Lamb Ribs", "qty": "250g"},
-      {"item": "Ghee (for frying)", "qty": "3 tbsp"},
-      {"item": "Milk", "qty": "100ml"},
-      {"item": "Spices Mix", "qty": "2 tbsp"}
-    ],
-    "tags": ["High Fat", "Keto Friendly", "Wazwan Special"],
-    "seasonality": "All",
-    "price_index": 3
+    "ingredients": ["Mutton"],
+    "meal_type": "dinner"
   },
   {
-    "id": "jk_rec_011",
-    "name": "Ambal (Dogri Pumpkin Curry)",
-    "cuisine": "Dogri",
+    "id": "jk_037",
+    "name": "Dal Patt",
+    "sub_region": "Jammu",
     "type": "Veg",
     "nutrients": {
       "calories": 180,
-      "protein": 3,
-      "carbs": 28,
-      "fats": 7,
-      "fiber": 4
+      "protein": 8,
+      "carbs": 20,
+      "fats": 6
     },
-    "ingredients": [
-      {"item": "Pumpkin (Kaddu)", "qty": "250g"},
-      {"item": "Tamarind Paste", "qty": "1 tbsp"},
-      {"item": "Jaggery", "qty": "1 tbsp"},
-      {"item": "Mustard Seeds", "qty": "1 tsp"},
-      {"item": "Fenugreek Seeds", "qty": "1/2 tsp"}
-    ],
-    "tags": ["Sweet & Sour", "Light", "Everyday Dogri"],
-    "seasonality": "All",
-    "price_index": 1
+    "ingredients": ["Chana dal"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_012",
-    "name": "Dogri Maa Ki Dal",
-    "cuisine": "Dogri",
+    "id": "jk_038",
+    "name": "Maa Da Madra",
+    "sub_region": "Jammu",
     "type": "Veg",
     "nutrients": {
-      "calories": 320,
-      "protein": 16,
-      "carbs": 42,
-      "fats": 10,
-      "fiber": 10
+      "calories": 220,
+      "protein": 9,
+      "carbs": 18,
+      "fats": 10
     },
-    "ingredients": [
-      {"item": "Whole Black Urad Dal", "qty": "100g"},
-      {"item": "Ghee", "qty": "2 tbsp"},
-      {"item": "Cream", "qty": "50ml"},
-      {"item": "Tomato", "qty": "2 pcs"},
-      {"item": "Ginger-Garlic Paste", "qty": "1 tbsp"}
-    ],
-    "tags": ["Protein Rich", "Comfort Food", "Slow Cooked"],
-    "seasonality": "All",
-    "price_index": 1
+    "ingredients": ["Chickpeas"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_013",
-    "name": "Auriya Kadhi (Dogri Kadhi)",
-    "cuisine": "Dogri",
+    "id": "jk_039",
+    "name": "Chana Madra",
+    "sub_region": "Jammu",
     "type": "Veg",
     "nutrients": {
       "calories": 210,
       "protein": 8,
-      "carbs": 18,
-      "fats": 12,
-      "fiber": 2
+      "carbs": 20,
+      "fats": 9
     },
-    "ingredients": [
-      {"item": "Besan (Gram Flour)", "qty": "50g"},
-      {"item": "Yogurt", "qty": "200ml"},
-      {"item": "Turmeric", "qty": "1 tsp"},
-      {"item": "Ghee", "qty": "1 tbsp"},
-      {"item": "Dry Red Chili", "qty": "2 pcs"}
-    ],
-    "tags": ["Probiotic", "Light Meal", "Traditional"],
-    "seasonality": "All",
-    "price_index": 1
+    "ingredients": ["Chickpeas"],
+    "meal_type": "lunch"
   },
   {
-    "id": "jk_rec_014",
-    "name": "Dogri Aloo Palda",
-    "cuisine": "Dogri",
+    "id": "jk_040",
+    "name": "Auriya",
+    "sub_region": "Jammu",
     "type": "Veg",
+    "nutrients": {
+      "calories": 140,
+      "protein": 2,
+      "carbs": 15,
+      "fats": 7
+    },
+    "ingredients": ["Potato"],
+    "meal_type": "lunch"
+  },
+  {
+    "id": "jk_041",
+    "name": "Kulcha (Jammu)",
+    "sub_region": "Jammu",
+    "type": "Snack",
     "nutrients": {
       "calories": 260,
       "protein": 6,
+      "carbs": 40,
+      "fats": 8
+    },
+    "ingredients": ["Flour"],
+    "meal_type": "snack"
+  },
+  {
+    "id": "jk_042",
+    "name": "Babru",
+    "sub_region": "Jammu",
+    "type": "Snack",
+    "nutrients": {
+      "calories": 300,
+      "protein": 8,
       "carbs": 35,
-      "fats": 12,
-      "fiber": 4
+      "fats": 12
     },
-    "ingredients": [
-      {"item": "Potatoes", "qty": "200g"},
-      {"item": "Yogurt", "qty": "150ml"},
-      {"item": "Besan (Gram Flour)", "qty": "30g"},
-      {"item": "Cumin Seeds", "qty": "1 tsp"},
-      {"item": "Ghee", "qty": "1 tbsp"}
-    ],
-    "tags": ["Creamy", "Tangy", "Home Style"],
-    "seasonality": "All",
-    "price_index": 1
+    "ingredients": ["Wheat", "black gram"],
+    "meal_type": "breakfast"
   },
   {
-    "id": "jk_rec_015",
-    "name": "Dogri Babru",
-    "cuisine": "Dogri",
-    "type": "Veg",
+    "id": "jk_043",
+    "name": "Patisa",
+    "sub_region": "Jammu",
+    "type": "Dessert",
     "nutrients": {
-      "calories": 380,
-      "protein": 10,
+      "calories": 450,
+      "protein": 6,
       "carbs": 50,
-      "fats": 16,
-      "fiber": 6
+      "fats": 25
     },
-    "ingredients": [
-      {"item": "Wheat Flour", "qty": "150g"},
-      {"item": "Black Urad Dal (filling)", "qty": "80g"},
-      {"item": "Oil (for frying)", "qty": "3 tbsp"},
-      {"item": "Spice Mix (Jeera, Ajwain)", "qty": "1 tsp"}
-    ],
-    "tags": ["Fried Bread", "Festive", "Stuffed"],
-    "seasonality": "Winter",
-    "price_index": 1
+    "ingredients": ["Sugar"],
+    "meal_type": "dessert"
   },
   {
-    "id": "jk_rec_016",
-    "name": "Chaman Qaliya (Paneer Curry)",
-    "cuisine": "Kashmiri",
+    "id": "jk_044",
+    "name": "Anardana Chutney",
+    "sub_region": "Jammu",
+    "type": "Side",
+    "nutrients": {
+      "calories": 80,
+      "protein": 1,
+      "carbs": 18,
+      "fats": 0
+    },
+    "ingredients": ["Pomegranate"],
+    "meal_type": "side"
+  },
+  {
+    "id": "jk_045",
+    "name": "Pudina Chutney",
+    "sub_region": "Jammu",
+    "type": "Side",
+    "nutrients": {
+      "calories": 60,
+      "protein": 1,
+      "carbs": 10,
+      "fats": 2
+    },
+    "ingredients": ["Mint"],
+    "meal_type": "side"
+  },
+  {
+    "id": "jk_046",
+    "name": "Thukpa",
+    "sub_region": "Ladakh",
+    "type": "Veg/Non-Veg",
+    "nutrients": {
+      "calories": 190,
+      "protein": 7,
+      "carbs": 25,
+      "fats": 6
+    },
+    "ingredients": ["Noodles"],
+    "meal_type": "dinner"
+  },
+  {
+    "id": "jk_047",
+    "name": "Skyu",
+    "sub_region": "Ladakh",
     "type": "Veg",
     "nutrients": {
-      "calories": 340,
-      "protein": 18,
-      "carbs": 10,
-      "fats": 26,
-      "fiber": 2
-    },
-    "ingredients": [
-      {"item": "Paneer (Cottage Cheese)", "qty": "200g"},
-      {"item": "Turmeric", "qty": "1 tsp"},
-      {"item": "Milk", "qty": "100ml"},
-      {"item": "Mustard Oil", "qty": "2 tbsp"},
-      {"item": "Dry Ginger Powder", "qty": "1 tsp"}
-    ],
-    "tags": ["High Protein", "Kashmiri Pandit", "Rich"],
-    "seasonality": "All",
-    "price_index": 2
-  },
-  {
-    "id": "jk_rec_017",
-    "name": "Dogri Patisa Chicken",
-    "cuisine": "Dogri",
-    "type": "Non-Veg",
-    "nutrients": {
-      "calories": 360,
-      "protein": 30,
-      "carbs": 6,
-      "fats": 22,
-      "fiber": 1
-    },
-    "ingredients": [
-      {"item": "Chicken", "qty": "250g"},
-      {"item": "Yogurt", "qty": "100ml"},
-      {"item": "Onion Paste", "qty": "50g"},
-      {"item": "Whole Spices (Cardamom, Cloves)", "qty": "4 pcs"},
-      {"item": "Mustard Oil", "qty": "2 tbsp"}
-    ],
-    "tags": ["High Protein", "Slow Cooked", "Traditional"],
-    "seasonality": "All",
-    "price_index": 2
-  },
-  {
-    "id": "jk_rec_018",
-    "name": "Kashmiri Gushtaba",
-    "cuisine": "Kashmiri",
-    "type": "Non-Veg",
-    "nutrients": {
-      "calories": 440,
-      "protein": 24,
-      "carbs": 10,
-      "fats": 34,
-      "fiber": 1
-    },
-    "ingredients": [
-      {"item": "Minced Mutton", "qty": "200g"},
-      {"item": "Yogurt", "qty": "200ml"},
-      {"item": "Fennel Powder", "qty": "2 tsp"},
-      {"item": "Dry Ginger Powder", "qty": "1 tsp"},
-      {"item": "Ghee", "qty": "2 tbsp"}
-    ],
-    "tags": ["Wazwan", "Royal", "Festive"],
-    "seasonality": "All",
-    "price_index": 3
-  },
-  {
-    "id": "jk_rec_019",
-    "name": "Dogri Bhalle",
-    "cuisine": "Dogri",
-    "type": "Veg",
-    "nutrients": {
-      "calories": 250,
-      "protein": 10,
+      "calories": 200,
+      "protein": 6,
       "carbs": 30,
-      "fats": 10,
-      "fiber": 4
+      "fats": 5
     },
-    "ingredients": [
-      {"item": "Moong Dal (soaked)", "qty": "100g"},
-      {"item": "Oil (for frying)", "qty": "3 tbsp"},
-      {"item": "Green Chili", "qty": "2 pcs"},
-      {"item": "Yogurt (for serving)", "qty": "100ml"},
-      {"item": "Tamarind Chutney", "qty": "2 tbsp"}
-    ],
-    "tags": ["Snack", "Crispy", "Street Food"],
-    "seasonality": "All",
-    "price_index": 1
+    "ingredients": ["Wheat dough"],
+    "meal_type": "dinner"
   },
   {
-    "id": "jk_rec_020",
-    "name": "Kashmiri Lyodur Tschaman",
-    "cuisine": "Kashmiri",
-    "type": "Veg",
+    "id": "jk_048",
+    "name": "Momos",
+    "sub_region": "Ladakh",
+    "type": "Veg/Non-Veg",
     "nutrients": {
-      "calories": 360,
-      "protein": 16,
-      "carbs": 8,
-      "fats": 30,
-      "fiber": 1
+      "calories": 220,
+      "protein": 9,
+      "carbs": 28,
+      "fats": 7
     },
-    "ingredients": [
-      {"item": "Paneer", "qty": "200g"},
-      {"item": "Turmeric", "qty": "1 tsp"},
-      {"item": "Mustard Oil", "qty": "3 tbsp"},
-      {"item": "Milk", "qty": "50ml"},
-      {"item": "Asafoetida", "qty": "pinch"}
-    ],
-    "tags": ["Turmeric Paneer", "Kashmiri Pandit", "Simple"],
-    "seasonality": "All",
-    "price_index": 2
+    "ingredients": ["Dough"],
+    "meal_type": "snack"
+  },
+  {
+    "id": "jk_049",
+    "name": "Butter Tea",
+    "sub_region": "Ladakh",
+    "type": "Drink",
+    "nutrients": {
+      "calories": 120,
+      "protein": 2,
+      "carbs": 2,
+      "fats": 12
+    },
+    "ingredients": ["Tea", "butter"],
+    "meal_type": "breakfast"
+  },
+  {
+    "id": "jk_050",
+    "name": "Chhurpi",
+    "sub_region": "Ladakh",
+    "type": "Dairy",
+    "nutrients": {
+      "calories": 300,
+      "protein": 20,
+      "carbs": 5,
+      "fats": 22
+    },
+    "ingredients": ["Yak cheese"],
+    "meal_type": "snack"
   }
 ]
