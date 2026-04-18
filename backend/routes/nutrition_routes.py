@@ -76,36 +76,44 @@ def recommend_meals():
         # Combine base filters with meal-specific slot
         slot_filters = {**base_filters, "meal_type": slot}
         
-        # Get one best recommendation for this slot
-        recs = get_recommendations(slot_macros, region=region, filters=slot_filters, exclude_ids=exclude_ids, top_n=1)
+        # Get one best recommendation for this slot (from Dishes)
+        recs = get_recommendations(slot_macros, region="All", filters=slot_filters, exclude_ids=exclude_ids, top_n=1, dataset_type="Dishes")
         
         if recs:
             rec = recs[0]
             exclude_ids.append(rec['id'])
-            nutrients = rec['nutrients']
+            # Since matcher now scopes to EXACT target cals, we use scaled_nutrients
+            nutrients = rec.get('scaled_nutrients', rec['nutrients'])
+            multiplier = rec.get('scale_multiplier', 1)
+            base_g = rec.get('base_serving_g', 100)
+            
             daily_plan[slot] = {
                 "id": rec['id'],
                 "name": rec['name'],
+                "category": rec.get('category', 'Dish'),
+                "quantity_grams": round(base_g * multiplier), 
                 "macros": {
-                    "calories": nutrients.get('calories', 0),
-                    "protein": nutrients.get('protein', 0),
-                    "carbs": nutrients.get('carbs', 0),
-                    "fat": nutrients.get('fats', 0),
+                    "calories": round(nutrients.get('calories', 0)),
+                    "protein": round(nutrients.get('protein', 0)),
+                    "carbs": round(nutrients.get('carbs', 0)),
+                    "fat": round(nutrients.get('fats', 0)),
                 },
-                "ingredients": rec['ingredients'],
+                "ingredients": rec.get('ingredients', []),
                 "sub_region": rec.get('sub_region', region),
                 "target_calories": round(nutrition_targets['daily_calories'] * ratio),
-                "agent_hint": f"Professional {slot} pick from {rec.get('sub_region', region)}. Balanced to your {profile.get('dietary_goal', 'maintain').replace('_', ' ')} target."
+                "agent_hint": f"Professional {slot} pick. Balanced to your target.",
+                "core_item": "Healthy Food"
             }
 
     # Layer 5: Agentic Reasoning (The "Brain")
     # Batch the whole plan to the LLM for expert insights
     try:
         ai_insights = ai_agent.generate_daily_insights(profile, daily_plan)
-        if ai_insights:
-            for slot, insight in ai_insights.items():
-                if slot in daily_plan:
-                    daily_plan[slot]['agent_hint'] = insight
+        if type(ai_insights) is dict:
+            for slot, data in ai_insights.items():
+                if slot in daily_plan and type(data) is dict:
+                    daily_plan[slot]['agent_hint'] = data.get('insight', daily_plan[slot]['agent_hint'])
+                    daily_plan[slot]['core_item'] = data.get('core_item', 'Healthy Base Item')
     except Exception as e:
         print(f"Agentic Reasoning Layer Failed: {e}")
 
@@ -121,3 +129,41 @@ def get_jk_recipes():
     """Return the raw list of J&K recipes for exploration."""
     recipes = load_regional_recipes()
     return jsonify(recipes), 200
+
+@nutrition_bp.route('/recipe', methods=['GET'])
+@jwt_required()
+def get_ai_recipe():
+    """Generate a recipe dynamically using the AI Agent."""
+    from flask import request
+    dish_name = request.args.get('dish')
+    if not dish_name:
+        return jsonify({"error": "Dish name is required"}), 400
+        
+    ai_agent = MealAgent()
+    recipe_data = ai_agent.generate_recipe(dish_name)
+    
+    if "error" in recipe_data:
+        return jsonify(recipe_data), 500
+        
+    return jsonify({"recipe": recipe_data}), 200
+
+@nutrition_bp.route('/chat', methods=['POST'])
+@jwt_required()
+def chat_with_agent():
+    from flask import request
+    data = request.get_json()
+    message = data.get('message')
+    history = data.get('history', [])
+    
+    if not message:
+        return jsonify({"error": "Message is required"}), 400
+        
+    db = current_app.config['db']
+    user_id = get_jwt_identity()
+    user = db.users.find_one({"_id": ObjectId(user_id)})
+    profile = user.get('profile', {}) if user else {}
+        
+    ai_agent = MealAgent()
+    response_text = ai_agent.chat(message, history, profile)
+    
+    return jsonify({"response": response_text}), 200

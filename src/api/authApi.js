@@ -286,11 +286,26 @@ class AuthAPI {
   /**
    * Fetch personalized meal recommendations.
    */
-  async getRecommendations() {
-    return this.request('/nutrition/recommend', { method: 'GET' });
+  async getRecommendations(signal) {
+    return this.request('/nutrition/recommend', { method: 'GET', signal });
   }
 
 
+  /**
+   * Fetch a dynamically generated AI recipe for a specific dish
+   */
+  async getRecipe(dishName) {
+    return this.request(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`, { method: 'GET' });
+  }
+  /**
+   * Send a message to the AI Chatbot.
+   */
+  async chat(message, history = []) {
+    return this.request('/nutrition/chat', { 
+      method: 'POST',
+      body: JSON.stringify({ message, history })
+    });
+  }
 
   /**
    * Logout.

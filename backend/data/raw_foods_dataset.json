@@ -1,0 +1,162 @@
+[
+  {
+    "id": "raw_apple_1",
+    "name": "Fresh Apple",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "snack",
+    "nutrients": {
+      "calories": 52,
+      "protein": 0.3,
+      "fats": 0.2,
+      "carbs": 14
+    },
+    "ingredients": ["100g Apple"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_banana_1",
+    "name": "Banana",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "snack",
+    "nutrients": {
+      "calories": 89,
+      "protein": 1.1,
+      "fats": 0.3,
+      "carbs": 23
+    },
+    "ingredients": ["100g Banana"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_almonds_1",
+    "name": "Raw Almonds",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "snack",
+    "nutrients": {
+      "calories": 579,
+      "protein": 21,
+      "fats": 49,
+      "carbs": 21
+    },
+    "ingredients": ["100g Almonds"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_curd_1",
+    "name": "Plain Curd (Dahi)",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 98,
+      "protein": 3.5,
+      "fats": 4.3,
+      "carbs": 3.4
+    },
+    "ingredients": ["100g Milk Curd"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_egg_1",
+    "name": "Boiled Eggs",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Non-Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 155,
+      "protein": 13,
+      "fats": 11,
+      "carbs": 1.1
+    },
+    "ingredients": ["100g Boiled Egg"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_paneer_1",
+    "name": "Raw Paneer",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 265,
+      "protein": 18,
+      "fats": 20,
+      "carbs": 1.2
+    },
+    "ingredients": ["100g Paneer"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_cucumber_1",
+    "name": "Cucumber Salad",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 15,
+      "protein": 0.6,
+      "fats": 0.1,
+      "carbs": 3.6
+    },
+    "ingredients": ["100g Cucumber"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_whey_1",
+    "name": "Whey Protein Shake",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "snack",
+    "nutrients": {
+      "calories": 120,
+      "protein": 24,
+      "fats": 1.5,
+      "carbs": 3
+    },
+    "ingredients": ["1 Scoop Whey", "Water"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_chicken_breast_1",
+    "name": "Grilled Chicken Breast (Plain)",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Non-Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 165,
+      "protein": 31,
+      "fats": 3.6,
+      "carbs": 0
+    },
+    "ingredients": ["100g Chicken Breast"],
+    "category": "Side"
+  },
+  {
+    "id": "raw_oats_1",
+    "name": "Plain Rolled Oats",
+    "region": "All",
+    "sub_region": "All",
+    "type": "Veg",
+    "meal_type": "side",
+    "nutrients": {
+      "calories": 389,
+      "protein": 16.9,
+      "fats": 6.9,
+      "carbs": 66.3
+    },
+    "ingredients": ["100g Rolled Oats"],
+    "category": "Side"
+  }
+]

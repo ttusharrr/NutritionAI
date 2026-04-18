@@ -8,79 +8,141 @@ load_dotenv(os.path.join(base_dir, '..', '.env'))
 
 class MealAgent:
     def __init__(self):
-        self.api_key = os.getenv("OPENAI_API_KEY")
+        self.api_key = os.getenv("NVIDIA_API_KEY")
         self.client = None
-        self.model = "gpt-4o-mini"
+        self.model = "meta/llama-3.1-8b-instruct"
         
         if self.api_key:
             try:
-                self.client = OpenAI(api_key=self.api_key)
+                self.client = OpenAI(
+                    base_url="https://integrate.api.nvidia.com/v1",
+                    api_key=self.api_key
+                )
             except Exception as e:
                 print(f"AI Client Initialization Failed: {e}")
 
     def generate_daily_insights(self, profile, daily_plan):
         """
-        Generate professional nutritional insights for a full day of meals.
+        Generate professional nutritional insights and extract the core raw ingredient.
+        Returns JSON: { "breakfast": {"insight": "...", "core_item": "..."}, ... }
         """
-        # Fallback if AI client is not available or key is missing
         if not self.client:
-            return {slot: f"Professional {slot} pick from your selected region." for slot in daily_plan.keys()}
+            return {slot: {"insight": f"Professional {slot} pick.", "core_item": "Healthy Food"} for slot in daily_plan.keys()}
 
-        # Construct specific context for the AI
         profile_context = (
             f"User Profile: {profile.get('age')} year old {profile.get('gender')}. "
             f"Current Weight: {profile.get('weight')}kg, Height: {profile.get('height')}cm. "
             f"Goal: {profile.get('dietary_goal', 'Healthy Eating')}. "
-            f"Dietary Preference: {profile.get('dietary_type', 'Both')}. "
-            f"Region: {profile.get('region', 'J&K')}. "
+            f"Dietary Preference: {profile.get('dietary_type', 'Both')}."
         )
 
         meals_text = ""
         for slot, dish in daily_plan.items():
-            meals_text += f"- {slot.capitalize()}: {dish['name']} ({dish['macros']['calories']} kcal, {dish['macros']['protein']}g P, {dish['macros']['carbs']}g C, {dish['macros']['fat']}g F)\n"
+            # Handle both formats (if items exist or just name)
+            dish_name = dish['name'] if 'name' in dish else (' + '.join([i['name'] for i in dish.get('items', [])]) if 'items' in dish else 'Meal')
+            meals_text += f"- {slot}: {dish_name}\n"
 
         prompt = f"""
-        You are a Professional Indian Clinical Nutritionist Agent. 
-        Analyze the following daily meal plan for a user with these biometrics:
-        {profile_context}
-
-        The proposed meals are:
+        You are an Indian Clinical Nutritionist. 
+        User Biometrics: {profile_context}
+        Meals:
         {meals_text}
 
-        For EACH meal slot, provide a ONE-SENTENCE professional nutritional insight (max 20 words). 
-        The insight should explain WHY this specific dish is good for their specific goal (e.g. Muscle Gain, Weight Loss).
-        Be professional, scientific, but encouraging. Focus on Indian nutritional context.
+        For EACH meal slot, provide:
+        1. A ONE-SENTENCE nutritional insight explaining why the dish supports the user's goal.
+        2. The primary raw base ingredient / food product the dish is made from (e.g., 'Chicken', 'Lentils', 'Oats', 'Lamb', 'Rice').
 
-        Return the response in this exact format:
-        Breakfast: [Insight]
-        Lunch: [Insight]
-        Snacks: [Insight]
-        Dinner: [Insight]
+        Return ONLY a raw JSON object with NO markdown formatting:
+        {{
+            "breakfast": {{"insight": "Supports metabolism...", "core_item": "Oats"}},
+            "lunch": {{"insight": "High protein...", "core_item": "Lamb"}},
+            "snacks": {{"insight": "Energy boost...", "core_item": "Apples"}},
+            "dinner": {{"insight": "Light recovery...", "core_item": "Lentils"}}
+        }}
         """
 
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
-                    {"role": "system", "content": "You are a highly accurate Indian Nutritionist Agent. You only provide scientific, meal-specific insights."},
+                    {"role": "system", "content": "You are a JSON generator. Output pure JSON."},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.7,
-                max_tokens=300
+                temperature=0.5,
+                max_tokens=400
             )
 
-            results_text = response.choices[0].message.content.strip()
+            import json
+            result_text = response.choices[0].message.content.strip()
+            if result_text.startswith("```json"): result_text = result_text[7:-3].strip()
+            elif result_text.startswith("```"): result_text = result_text[3:-3].strip()
             
-            # Simple parsing of the response
-            insights = {}
-            lines = results_text.split('\n')
-            for line in lines:
-                if ':' in line:
-                    slot, insight = line.split(':', 1)
-                    insights[slot.strip().lower()] = insight.strip()
-            
-            return insights
+            return json.loads(result_text)
 
         except Exception as e:
             print(f"AI Agent Error: {e}")
-            return {}
+            return {slot: {"insight": f"Target hit.", "core_item": "Healthy Food"} for slot in daily_plan.keys()}
+
+    def generate_recipe(self, dish_name):
+        """Generate a detailed recipe for a given dish using exact JSON format."""
+        if not self.client:
+            return {"error": "AI client not initialized"}
+
+        prompt = f"""
+        You are a Master Indian Chef. Provide a realistic, delicious recipe for '{dish_name}'.
+        Return the recipe ONLY as a raw JSON object with NO markdown formatting, NO backticks. Structure:
+        {{
+            "name": "{dish_name}",
+            "prep_time": "15 mins",
+            "cook_time": "30 mins",
+            "ingredients": ["ingredient 1 (amount)", "ingredient 2"],
+            "instructions": ["Step 1", "Step 2"]
+        }}
+        """
+
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": "You are a backend JSON generator. Output ONLY pure JSON."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.5,
+                max_tokens=600
+            )
+            import json
+            recipe_text = response.choices[0].message.content.strip()
+            if recipe_text.startswith("```json"): recipe_text = recipe_text[7:-3].strip()
+            elif recipe_text.startswith("```"): recipe_text = recipe_text[3:-3].strip()
+            return json.loads(recipe_text)
+        except Exception as e:
+            return {"error": "Failed to generate recipe"}
+
+    def chat(self, user_message, history, profile):
+        """Respond to arbitrary user nutrition queries via Chatbot."""
+        if not self.client:
+            return "AI client not active."
+
+        # Truncate history to last 5 messages to save tokens
+        recent_history = history[-5:] if history else []
+        
+        messages = [
+            {"role": "system", "content": f"You are NutriAI, an expert Indian clinical nutritionist bot. User goal: {profile.get('dietary_goal')}. Diet: {profile.get('dietary_type')}. Be concise, friendly, and helpful."}
+        ]
+        
+        for msg in recent_history:
+            messages.append({"role": msg['role'], "content": msg['content']})
+            
+        messages.append({"role": "user", "content": user_message})
+
+        try:
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=0.7,
+                max_tokens=400
+            )
+            return response.choices[0].message.content.strip()
+        except Exception as e:
+            print(f"Chatbot Error: {e}")
+            return "I'm having trouble connecting to my brain right now. Please try again later."

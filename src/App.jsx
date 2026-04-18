@@ -22,6 +22,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import ProfileSetup from './components/profile/ProfileSetup';
 import DietPlan from './components/dashboard/DietPlan';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import ChatBot from './components/dashboard/ChatBot';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="/" element={<Navigate to="/auth/login" replace />} />
             <Route path="*" element={<Navigate to="/auth/login" replace />} />
           </Routes>
+          <ChatBot />
         </AuthProvider>
       </BrowserRouter>
     </GoogleOAuthProvider>
