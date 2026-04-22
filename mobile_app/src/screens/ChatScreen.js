@@ -88,6 +88,11 @@ export default function ChatScreen({ navigation }) {
             {item.content}
           </Text>
         </View>
+        {isUser && (
+          <View style={[styles.avatarContainer, styles.userAvatar]}>
+            <Ionicons name="person" size={14} color="#000" />
+          </View>
+        )}
       </View>
     );
   };
@@ -113,23 +118,27 @@ export default function ChatScreen({ navigation }) {
 
   return (
     <View style={styles.mainContainer}>
+      <LinearGradient
+        colors={COLORS.gradients.dark}
+        style={StyleSheet.absoluteFill}
+      />
       <SafeAreaView style={{ flex: 1 }}>
-        {/* Header */}
+        {/* Header - Parity with Web */}
         <View style={styles.header}>
           <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={22} color={COLORS.text} />
+            <Ionicons name="chevron-back" size={24} color={COLORS.text} />
           </TouchableOpacity>
           <View style={styles.headerCenter}>
-            <Text style={styles.headerEmoji}>🤖</Text>
+            <View style={styles.headerAvatar}>
+              <Text style={styles.headerEmoji}>🤖</Text>
+              <View style={styles.onlineBadge} />
+            </View>
             <View>
               <Text style={styles.headerTitle}>NutriAI Expert</Text>
               <Text style={styles.headerSubtitle}>
-                {isTyping ? 'Typing...' : 'Online'}
+                {isTyping ? 'Typing analysis...' : 'Agentic Reasoning Active'}
               </Text>
             </View>
-          </View>
-          <View style={styles.headerDot}>
-            <View style={[styles.statusDot, isTyping && styles.statusDotTyping]} />
           </View>
         </View>
 
@@ -137,7 +146,7 @@ export default function ChatScreen({ navigation }) {
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1 }}
-          keyboardVerticalOffset={0}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
         >
           <FlatList
             ref={flatListRef}
@@ -149,27 +158,29 @@ export default function ChatScreen({ navigation }) {
             ListFooterComponent={isTyping ? <TypingIndicator /> : null}
           />
 
-          {/* Input Area */}
+          {/* Input Area - Parity with Web */}
           <View style={styles.inputArea}>
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.textInput}
-                placeholder="Ask about nutrition..."
+                placeholder="Ask about your nutritional blueprint..."
                 placeholderTextColor={COLORS.textTertiary}
                 value={input}
                 onChangeText={setInput}
                 multiline
                 maxLength={500}
-                returnKeyType="send"
-                onSubmitEditing={handleSend}
-                blurOnSubmit={false}
               />
               <TouchableOpacity 
                 style={[styles.sendBtn, (!input.trim() || isTyping) && styles.sendBtnDisabled]}
                 onPress={handleSend}
                 disabled={!input.trim() || isTyping}
               >
-                <Ionicons name="send" size={18} color={input.trim() && !isTyping ? '#000' : COLORS.textTertiary} />
+                <LinearGradient
+                  colors={input.trim() && !isTyping ? COLORS.gradients.primary : ['rgba(255,255,255,0.05)', 'rgba(255,255,255,0.02)']}
+                  style={styles.sendBtnGradient}
+                >
+                  <Ionicons name="arrow-up" size={20} color={input.trim() && !isTyping ? '#000' : COLORS.textTertiary} />
+                </LinearGradient>
               </TouchableOpacity>
             </View>
           </View>
@@ -189,60 +200,74 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: SPACING.lg,
-    paddingVertical: 14,
+    paddingVertical: 16,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
-    backgroundColor: COLORS.surface,
   },
   backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255,255,255,0.03)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   headerCenter: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginLeft: 14,
+    marginLeft: 16,
+  },
+  headerAvatar: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.primary + '30',
   },
   headerEmoji: {
-    fontSize: 28,
+    fontSize: 24,
+  },
+  onlineBadge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: COLORS.success,
+    borderWidth: 2,
+    borderColor: COLORS.background,
   },
   headerTitle: {
     color: COLORS.text,
     fontSize: 17,
     fontWeight: '800',
+    letterSpacing: -0.3,
   },
   headerSubtitle: {
     color: COLORS.primary,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  headerDot: {
-    padding: 8,
-  },
-  statusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: COLORS.success,
-  },
-  statusDotTyping: {
-    backgroundColor: COLORS.accent,
+    fontSize: 11,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   /* Messages */
   messagesList: {
     padding: SPACING.lg,
-    paddingBottom: 12,
+    paddingBottom: 24,
   },
   messageBubbleWrapper: {
     flexDirection: 'row',
-    marginBottom: 16,
+    marginBottom: 20,
     alignItems: 'flex-end',
+    gap: 10,
   },
   userWrapper: {
     justifyContent: 'flex-end',
@@ -259,20 +284,24 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 8,
+  },
+  userAvatar: {
+    backgroundColor: COLORS.primary,
+    borderColor: 'transparent',
   },
   avatarText: {
     fontSize: 16,
   },
   messageBubble: {
-    maxWidth: '78%',
-    padding: 14,
-    borderRadius: 18,
+    maxWidth: '75%',
+    padding: 16,
+    borderRadius: 20,
   },
   userBubble: {
-    backgroundColor: COLORS.primary,
+    backgroundColor: 'rgba(45, 212, 191, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(45, 212, 191, 0.2)',
     borderBottomRightRadius: 4,
-    marginLeft: 'auto',
   },
   assistantBubble: {
     backgroundColor: COLORS.surface,
@@ -286,7 +315,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   userText: {
-    color: '#000',
+    color: COLORS.text,
   },
   assistantText: {
     color: COLORS.text,
@@ -295,52 +324,55 @@ const styles = StyleSheet.create({
   typingBubble: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 18,
   },
   typingDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: COLORS.textTertiary,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: COLORS.primary,
+    opacity: 0.6,
   },
   /* Input */
   inputArea: {
     padding: SPACING.md,
-    paddingBottom: Platform.OS === 'ios' ? 8 : SPACING.md,
+    paddingBottom: Platform.OS === 'ios' ? 30 : SPACING.md,
     borderTopWidth: 1,
     borderTopColor: COLORS.border,
-    backgroundColor: COLORS.surface,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    backgroundColor: COLORS.background,
-    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderRadius: 28,
     borderWidth: 1,
     borderColor: COLORS.border,
-    paddingLeft: 16,
+    paddingLeft: 20,
     paddingRight: 6,
-    paddingVertical: 4,
+    paddingVertical: 6,
   },
   textInput: {
     flex: 1,
     color: COLORS.text,
     fontSize: 15,
-    maxHeight: 100,
+    maxHeight: 120,
     paddingVertical: 10,
   },
   sendBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    overflow: 'hidden',
     marginBottom: 2,
   },
+  sendBtnGradient: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   sendBtnDisabled: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    opacity: 0.5,
   },
 });

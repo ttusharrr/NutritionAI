@@ -21,9 +21,10 @@ export const PremiumBackground = ({ children }) => {
         colors={COLORS.gradients.dark}
         style={StyleSheet.absoluteFill}
       />
-      {/* Decorative Orbs */}
-      <View style={styles.orb1} />
-      <View style={styles.orb2} />
+      {/* Decorative Orbs - Parity with Web index.css */}
+      <View style={styles.nebula1} />
+      <View style={styles.nebula2} />
+      <View style={styles.nebula3} />
       
       {children}
     </View>
@@ -86,25 +87,33 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  orb1: {
+  nebula1: {
     position: 'absolute',
-    top: -100,
+    top: -150,
+    left: -100,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: 'rgba(45, 212, 191, 0.08)',
+    // filter: 'blur(100px)', // Unsupported, using opacity and size
+  },
+  nebula2: {
+    position: 'absolute',
+    bottom: -100,
     right: -100,
+    width: 500,
+    height: 500,
+    borderRadius: 250,
+    backgroundColor: 'rgba(168, 85, 247, 0.06)',
+  },
+  nebula3: {
+    position: 'absolute',
+    top: '40%',
+    right: -50,
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: COLORS.primary,
-    opacity: 0.05,
-  },
-  orb2: {
-    position: 'absolute',
-    bottom: -50,
-    left: -100,
-    width: 250,
-    height: 250,
-    borderRadius: 125,
-    backgroundColor: COLORS.secondary,
-    opacity: 0.05,
+    backgroundColor: 'rgba(59, 130, 246, 0.04)',
   },
   inputWrapper: {
     flexDirection: 'row',
@@ -145,10 +154,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#000',
-    fontSize: 16,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '900',
     textTransform: 'uppercase',
-    letterSpacing: 1.2,
+    letterSpacing: 1.5,
   },
   secondaryButtonText: {
     color: COLORS.text,
@@ -157,7 +166,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    backgroundColor: 'rgba(240, 244, 255, 0.03)',
     borderWidth: 1,
     borderColor: COLORS.glassBorder,
     borderRadius: 16,

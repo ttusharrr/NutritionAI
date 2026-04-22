@@ -151,75 +151,78 @@ export default function DashboardScreen({ navigation }) {
             <Ionicons name="chevron-down" size={16} color={COLORS.textTertiary} />
           </TouchableOpacity>
 
-          {/* Mission Control Hero */}
+          {/* Calorie Hero - Parity with Web */}
           <View style={styles.missionHero}>
             <LinearGradient
               colors={COLORS.gradients.primary}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
               style={styles.heroCard}
             >
-              <View style={styles.energyCircle}>
-                <View style={styles.energyInner}>
-                  <Text style={styles.energyVal}>{targets.daily_calories}</Text>
-                  <Text style={styles.energyLab}>KCAL</Text>
+              <View style={styles.cardFlare} />
+              <View style={styles.heroInfo}>
+                <Text style={styles.cardLabel}>Daily Target</Text>
+                <View style={styles.calorieRow}>
+                  <Ionicons name="flame" size={32} color="#000" style={{ opacity: 0.9 }} />
+                  <Text style={styles.energyVal}>{targets.daily_calories.toLocaleString()}</Text>
                 </View>
+                <Text style={styles.cardUnit}>kcal / day</Text>
               </View>
-              <View style={styles.missionDetails}>
-                <View style={styles.statusBadge}>
-                  <View style={styles.pulseDot} />
-                  <Text style={styles.statusText}>PROTOCOL ACTIVE</Text>
-                </View>
-                <Text style={styles.integrityTitle}>System Integrity: 94%</Text>
-                <Text style={styles.integritySub}>Metabolic baseline optimized.</Text>
+              <View style={styles.goalBadge}>
+                <Text style={styles.goalBadgeText}>
+                  {user?.profile?.dietary_goal?.replace('_', ' ') || 'MAINTAIN'}
+                </Text>
               </View>
             </LinearGradient>
           </View>
 
-          {/* Macro Grid */}
+          {/* Macro Grid - Parity with Web */}
           <View style={styles.gridContainer}>
-            <Text style={styles.sectionTitle}>Macro Distribution</Text>
+            <Text style={styles.sectionTitle}>Macro Breakdown</Text>
             <View style={styles.macroGrid}>
               <MacroTile 
                 label="PROTEIN" 
                 value={targets.macros.protein} 
                 unit="g" 
-                icon="fitness" 
-                colors={COLORS.gradients.primary} 
+                icon="flash" 
+                colors={['rgba(45, 212, 191, 0.15)', 'rgba(45, 212, 191, 0.05)']} 
+                accent={COLORS.primary}
               />
               <MacroTile 
                 label="CARBS" 
                 value={targets.macros.carbs} 
                 unit="g" 
-                icon="fast-food" 
-                colors={['#fbbf24', '#d97706']} 
+                icon="cube" 
+                colors={['rgba(168, 85, 247, 0.15)', 'rgba(168, 85, 247, 0.05)']} 
+                accent={COLORS.secondary}
               />
               <MacroTile 
                 label="FATS" 
                 value={targets.macros.fat} 
                 unit="g" 
-                icon="water" 
-                colors={COLORS.gradients.secondary} 
+                icon="heart" 
+                colors={['rgba(236, 72, 153, 0.15)', 'rgba(236, 72, 153, 0.05)']} 
+                accent="#ec4899"
               />
             </View>
           </View>
 
-          {/* BMI Section */}
+          {/* BMI Strip - Parity with Web */}
           <View style={styles.bmiSection}>
-            <Text style={styles.sectionTitle}>Body Mass Index</Text>
-            <View style={styles.bmiCard}>
-              <View style={styles.bmiHeader}>
+            <Text style={styles.sectionTitle}>Body Mass Index (BMI)</Text>
+            <View style={styles.bmiStripCard}>
+              <View style={styles.bmiInfoRow}>
                 <View>
-                  <Text style={styles.bmiLabel}>BMI Score</Text>
                   <Text style={styles.bmiValue}>{bmiData.value || '0.0'}</Text>
                 </View>
-                <View style={[styles.bmiStatusBadge, { backgroundColor: getBMIColor(bmiData.status) + '20', borderColor: getBMIColor(bmiData.status) + '40' }]}>
-                  <Text style={[styles.bmiStatusText, { color: getBMIColor(bmiData.status) }]}>
+                <View style={[styles.bmiStatusTag, { backgroundColor: getBMIColor(bmiData.status) + '20', borderColor: getBMIColor(bmiData.status) + '40' }]}>
+                  <Text style={[styles.bmiStatusTagText, { color: getBMIColor(bmiData.status) }]}>
                     {bmiData.status || 'Calculating'}
                   </Text>
                 </View>
               </View>
               
-              {/* BMI Meter */}
-              <View style={styles.bmiMeter}>
+              <View style={styles.bmiVisualMeter}>
                 <View style={styles.meterSegments}>
                   <View style={[styles.segment, { backgroundColor: '#fbbf24', flex: 1 }]} />
                   <View style={[styles.segment, { backgroundColor: '#22c55e', flex: 2 }]} />
@@ -235,34 +238,6 @@ export default function DashboardScreen({ navigation }) {
                   <Text style={styles.meterLabelText}>40+</Text>
                 </View>
               </View>
-            </View>
-          </View>
-
-          {/* Featured Protocol Card */}
-          <View style={styles.featuredSection}>
-            <Text style={styles.sectionTitle}>Next Protocol Item</Text>
-            <View style={styles.featuredCard}>
-              <View style={styles.featuredHeader}>
-                <View style={styles.mealTag}>
-                  <Text style={styles.mealTagText}>BREAKFAST</Text>
-                </View>
-                <Ionicons name="sparkles" size={16} color={COLORS.primary} />
-              </View>
-              <Text style={styles.featuredMealName}>Masala Oats Protocol</Text>
-              <View style={styles.featuredStats}>
-                <View style={styles.featStat}>
-                  <Ionicons name="flame-outline" size={14} color={COLORS.textTertiary} />
-                  <Text style={styles.featStatText}>350 kcal</Text>
-                </View>
-                <View style={styles.featStat}>
-                  <Ionicons name="fitness-outline" size={14} color={COLORS.textTertiary} />
-                  <Text style={styles.featStatText}>15g Protein</Text>
-                </View>
-              </View>
-              <TouchableOpacity style={styles.btnSync} onPress={() => navigation.navigate('Diet')}>
-                <Text style={styles.btnSyncText}>VIEW FULL PROTOCOL</Text>
-                <Ionicons name="arrow-forward" size={16} color="#000" />
-              </TouchableOpacity>
             </View>
           </View>
 
@@ -340,14 +315,25 @@ export default function DashboardScreen({ navigation }) {
   );
 }
 
-function MacroTile({ label, value, unit, icon, colors }) {
+function MacroTile({ label, value, unit, icon, colors, accent }) {
   return (
     <View style={styles.macroTileWrapper}>
-      <LinearGradient colors={colors} style={styles.macroTile}>
-        <Ionicons name={icon} size={20} color="#000" style={{ opacity: 0.8 }} />
-        <Text style={styles.macroTileVal}>{value}<Text style={{ fontSize: 10 }}>{unit}</Text></Text>
-        <Text style={styles.macroTileLabel}>{label}</Text>
-      </LinearGradient>
+      <View style={[styles.macroTile, { backgroundColor: COLORS.surface, borderColor: COLORS.border, borderWidth: 1 }]}>
+        <View style={[styles.macroIconContainer, { backgroundColor: accent + '15' }]}>
+          <Ionicons name={icon} size={18} color={accent} />
+        </View>
+        <View style={styles.macroContent}>
+          <Text style={styles.macroLabel}>{label}</Text>
+          <View style={styles.macroValueContainer}>
+            <Text style={styles.macroValue}>{value}</Text>
+            <Text style={styles.macroUnit}>{unit}</Text>
+          </View>
+        </View>
+        {/* Progress Fill - Parity with Web */}
+        <View style={styles.macroProgressBg}>
+          <View style={[styles.macroProgressFill, { backgroundColor: accent, height: '65%' }]} />
+        </View>
+      </View>
     </View>
   );
 }
@@ -385,24 +371,26 @@ const styles = StyleSheet.create({
   },
   greetingHeader: {
     color: COLORS.primary,
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '900',
     letterSpacing: 2,
+    textTransform: 'uppercase',
   },
   greetingTitle: {
     color: COLORS.text,
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: '800',
+    letterSpacing: -0.5,
   },
   logoutBtn: {
     width: 44,
     height: 44,
     borderRadius: 14,
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    backgroundColor: 'rgba(239, 68, 68, 0.08)',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(239, 68, 68, 0.2)',
+    borderColor: 'rgba(239, 68, 68, 0.15)',
   },
   /* Region Selector */
   regionSelector: {
@@ -423,151 +411,214 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  /* Mission Hero */
+  /* Calorie Hero */
   missionHero: {
     marginBottom: 32,
   },
   heroCard: {
-    padding: 24,
+    padding: 28,
     borderRadius: 32,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 20,
+    overflow: 'hidden',
     elevation: 10,
     shadowColor: COLORS.primary,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
   },
-  energyCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.2)',
+  cardFlare: {
+    position: 'absolute',
+    top: -50,
+    right: -50,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
-  energyInner: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'rgba(255,255,255,0.25)',
-    justifyContent: 'center',
+  heroInfo: {
+    flex: 1,
+  },
+  cardLabel: {
+    color: 'rgba(0,0,0,0.5)',
+    fontSize: 11,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 4,
+  },
+  calorieRow: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
   },
   energyVal: {
     color: '#000',
-    fontSize: 22,
+    fontSize: 38,
     fontWeight: '900',
+    letterSpacing: -1,
   },
-  energyLab: {
-    color: 'rgba(0,0,0,0.5)',
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 1,
-  },
-  missionDetails: {
-    flex: 1,
-  },
-  statusBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    alignSelf: 'flex-start',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginBottom: 10,
-    gap: 6,
-  },
-  pulseDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#000',
-    opacity: 0.6,
-  },
-  statusText: {
-    fontSize: 9,
-    fontWeight: '900',
-    color: '#000',
-    letterSpacing: 0.5,
-  },
-  integrityTitle: {
-    color: '#000',
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 2,
-  },
-  integritySub: {
-    color: 'rgba(0,0,0,0.5)',
+  cardUnit: {
+    color: 'rgba(0,0,0,0.4)',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
-  /* Featured Section */
-  featuredSection: {
-    marginBottom: 32,
-  },
-  featuredCard: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 24,
-    padding: 20,
+  goalBadge: {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 99,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: 'rgba(0,0,0,0.1)',
   },
-  featuredHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  mealTag: {
-    backgroundColor: 'rgba(168, 85, 247, 0.1)',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-  },
-  mealTagText: {
-    color: COLORS.secondary,
+  goalBadgeText: {
+    color: '#000',
     fontSize: 10,
     fontWeight: '800',
+    letterSpacing: 0.5,
   },
-  featuredMealName: {
+  /* Grid */
+  gridContainer: {
+    marginBottom: 32,
+  },
+  sectionTitle: {
     color: COLORS.text,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
+    marginBottom: 16,
+    letterSpacing: -0.5,
+  },
+  macroGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  macroTileWrapper: {
+    width: '31%',
+  },
+  macroTile: {
+    padding: 14,
+    borderRadius: 20,
+    height: 140,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  macroIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 12,
   },
-  featuredStats: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 20,
+  macroContent: {
+    flex: 1,
   },
-  featStat: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  featStatText: {
+  macroLabel: {
     color: COLORS.textTertiary,
-    fontSize: 13,
+    fontSize: 10,
+    fontWeight: '700',
+    marginBottom: 4,
+  },
+  macroValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 2,
+  },
+  macroValue: {
+    color: COLORS.text,
+    fontSize: 18,
+    fontWeight: '800',
+  },
+  macroUnit: {
+    color: COLORS.textTertiary,
+    fontSize: 10,
     fontWeight: '600',
   },
-  btnSync: {
-    backgroundColor: COLORS.primary,
+  macroProgressBg: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: 4,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+  },
+  macroProgressFill: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    borderRadius: 2,
+  },
+  /* BMI Strip - Parity with Web */
+  bmiSection: {
+    marginBottom: 32,
+  },
+  bmiStripCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    padding: 24,
+  },
+  bmiInfoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    paddingVertical: 14,
-    borderRadius: 14,
+    justifyContent: 'space-between',
+    marginBottom: 24,
   },
-  btnSyncText: {
-    color: '#000',
-    fontWeight: '800',
-    fontSize: 14,
+  bmiValue: {
+    color: COLORS.text,
+    fontSize: 32,
+    fontWeight: '900',
+  },
+  bmiStatusTag: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  bmiStatusTagText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  bmiVisualMeter: {
+    marginTop: 8,
+  },
+  meterSegments: {
+    flexDirection: 'row',
+    height: 6,
+    borderRadius: 3,
+    overflow: 'hidden',
+    gap: 2,
+  },
+  segment: {
+    borderRadius: 3,
+  },
+  meterPointer: {
+    position: 'absolute',
+    top: -4,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: COLORS.text,
+    borderWidth: 3,
+    borderColor: COLORS.surface,
+    marginLeft: -7,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  meterLabels: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  meterLabelText: {
+    color: COLORS.textTertiary,
+    fontSize: 10,
+    fontWeight: '600',
   },
   /* Checklist Section */
   checklistSection: {
@@ -608,181 +659,39 @@ const styles = StyleSheet.create({
     color: COLORS.textTertiary,
     textDecorationLine: 'line-through',
   },
-  /* Grid */
-  gridContainer: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    color: COLORS.text,
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 16,
-    letterSpacing: -0.5,
-  },
-  macroGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  macroTileWrapper: {
-    width: '31%',
-  },
-  macroTile: {
-    padding: 16,
-    borderRadius: 20,
-    height: 110,
-    justifyContent: 'space-between',
-  },
-  macroTileVal: {
-    color: '#000',
-    fontSize: 22,
-    fontWeight: '900',
-  },
-  macroTileLabel: {
-    color: 'rgba(0,0,0,0.6)',
-    fontSize: 10,
-    fontWeight: '800',
-  },
-  /* BMI */
-  bmiSection: {
-    marginBottom: 32,
-  },
-  bmiCard: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    padding: 24,
-  },
-  bmiHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 24,
-  },
-  bmiLabel: {
-    color: COLORS.textTertiary,
-    fontSize: 12,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  bmiValue: {
-    color: COLORS.text,
-    fontSize: 36,
-    fontWeight: '900',
-    marginTop: 4,
-  },
-  bmiStatusBadge: {
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-  },
-  bmiStatusText: {
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  /* BMI Meter */
-  bmiMeter: {
-    position: 'relative',
-  },
-  meterSegments: {
-    flexDirection: 'row',
-    height: 8,
-    borderRadius: 4,
-    overflow: 'hidden',
-    gap: 2,
-  },
-  segment: {
-    borderRadius: 4,
-  },
-  meterPointer: {
-    position: 'absolute',
-    top: -4,
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: COLORS.text,
-    borderWidth: 3,
-    borderColor: COLORS.background,
-    marginLeft: -8,
-  },
-  meterLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
-  meterLabelText: {
-    color: COLORS.textTertiary,
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  /* Stats */
-  profileSection: {
-    marginBottom: 20,
-  },
-  statsCard: {
-    flexDirection: 'row',
-    backgroundColor: COLORS.surface,
-    padding: 24,
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  statItem: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statDivider: {
-    width: 1,
-    height: 30,
-    backgroundColor: COLORS.border,
-  },
-  statLabel: {
-    color: COLORS.textTertiary,
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    marginBottom: 4,
-  },
-  statValue: {
-    color: COLORS.text,
-    fontSize: 16,
-    fontWeight: '800',
-  },
   /* Chat FAB */
   chatFab: {
     position: 'absolute',
-    bottom: 90,
+    bottom: 30,
     right: 24,
     zIndex: 100,
   },
   chatFabGradient: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: COLORS.primary,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
-    shadowRadius: 12,
-    elevation: 8,
+    shadowRadius: 16,
+    elevation: 12,
   },
   /* Region Modal */
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     justifyContent: 'flex-end',
   },
   modalContent: {
     backgroundColor: COLORS.surface,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    maxHeight: '60%',
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '70%',
     paddingBottom: 40,
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
   modalHandle: {
     width: 40,
@@ -791,13 +700,47 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.border,
     alignSelf: 'center',
     marginTop: 12,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   modalTitle: {
     color: COLORS.text,
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '800',
     textAlign: 'center',
+    marginBottom: 20,
+  },
+  regionList: {
+    paddingHorizontal: 20,
+  },
+  regionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 8,
+    backgroundColor: 'rgba(255,255,255,0.02)',
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  regionItemActive: {
+    backgroundColor: 'rgba(45, 212, 191, 0.08)',
+    borderColor: 'rgba(45, 212, 191, 0.2)',
+  },
+  regionItemIcon: {
+    fontSize: 20,
+    marginRight: 16,
+  },
+  regionItemText: {
+    flex: 1,
+    color: COLORS.textSecondary,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  regionItemTextActive: {
+    color: COLORS.primary,
+    fontWeight: '700',
+  },
+});
     marginBottom: 16,
   },
   regionList: {

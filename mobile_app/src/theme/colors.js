@@ -1,30 +1,33 @@
 export const COLORS = {
-  background: '#040405',
-  surface: '#0d0d0f',
-  surfaceLight: '#16161b',
+  background: '#0a0e1a',
+  surface: '#0f1629',
+  surfaceLight: '#151c32',
   
   primary: '#2dd4bf', // Teal/Cyan
   primaryLight: '#5eead4',
-  secondary: '#8b5cf6', // Violet
-  accent: '#fbbf24', // Amber
+  secondary: '#a855f7', // Purple
+  accent: '#f59e0b', // Amber
   
-  text: '#ffffff',
-  textSecondary: '#94a3b8',
-  textTertiary: '#64748b',
+  text: '#f0f4ff',
+  textSecondary: 'rgba(240, 244, 255, 0.65)',
+  textTertiary: 'rgba(240, 244, 255, 0.4)',
   
-  border: 'rgba(255, 255, 255, 0.08)',
+  border: 'rgba(240, 244, 255, 0.08)',
   error: '#ef4444',
-  success: '#22c55e',
+  success: '#10b981',
   
-  glass: 'rgba(255, 255, 255, 0.03)',
-  glassBorder: 'rgba(255, 255, 255, 0.12)',
+  glass: 'rgba(15, 22, 41, 0.55)',
+  glassBorder: 'rgba(240, 244, 255, 0.12)',
 
   gradients: {
-    primary: ['#2dd4bf', '#0d9488'],
-    secondary: ['#8b5cf6', '#6d28d9'],
-    dark: ['#0f172a', '#020617'],
-    surface: ['#1e293b', '#0f172a'],
-    glass: ['rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.01)'],
+    primary: ['#2dd4bf', '#a855f7'],
+    primaryReverse: ['#a855f7', '#2dd4bf'],
+    dark: ['#0a0e1a', '#0f1629'],
+    surface: ['#0f1629', '#151c32'],
+    glass: ['rgba(15, 22, 41, 0.6)', 'rgba(15, 22, 41, 0.2)'],
+    teal: ['#2dd4bf', '#0d9488'],
+    purple: ['#a855f7', '#7e22ce'],
+    amber: ['#f59e0b', '#d97706'],
   }
 };
 
