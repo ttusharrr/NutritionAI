@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     height: width * 1.2,
     borderRadius: (width * 1.2) / 2,
     backgroundColor: 'rgba(45, 212, 191, 0.05)',
-    filter: 'blur(100px)',
+    // filter: 'blur(100px)', // Unsupported in React Native
   },
   safeArea: {
     flex: 1,
