@@ -74,9 +74,9 @@ export default function App() {
               <ProtectedRoute><SettingsPage /></ProtectedRoute>
             } />
 
-            {/* Default redirect / Landing */}
-            <Route path="/" element={<LandingPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            {/* Default redirect */}
+            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            <Route path="*" element={<Navigate to="/auth/login" replace />} />
           </Routes>
           <ChatBotWrapper />
         </AuthProvider>

@@ -138,72 +138,19 @@ export default function DietPlan() {
         </div>
       </nav>
 
-      <main className="dashboard-main cinematic-diet-main">
-        <header className="cinematic-header">
-          <div className="header-bg">
-            <video autoPlay muted loop playsInline>
-              <source src="/texture_map.mp4" type="video/mp4" />
-            </video>
-            <div className="header-overlay" />
-          </div>
-          <div className="header-content">
-            <div className="protocol-badge">
-              <HiOutlineGlobe /> REGIONAL PROTOCOL: {currentRegion.label.toUpperCase()}
-            </div>
-            <h1 className="greeting">Nutritional <span className="gradient-text">Blueprint</span></h1>
-            <p className="welcome-sub">Biological meal mapping for the {currentRegion.label} kitchen.</p>
-          </div>
+      <main className="dashboard-main">
+        <header className="section-header">
+          <h1 className="section-title"><HiOutlineClipboardList /> Your {currentRegion.label} Meal Plan</h1>
+          <button className="view-all" onClick={fetchRecommendations} disabled={loadingMeals}>
+            {loadingMeals ? 'Syncing...' : 'Regenerate'}
+          </button>
         </header>
 
-        {/* Goal Dashboard - Mission Control Style */}
-        {userTargets && (
-          <section className="diet-goal-grid">
-            <motion.div className="diet-goal-card energy" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-              <div className="goal-icon"><HiOutlineFire /></div>
-              <div className="goal-info">
-                <span className="goal-label">ENERGY TARGET</span>
-                <div className="goal-value">{userTargets.daily_calories} <span>KCAL</span></div>
-              </div>
-            </motion.div>
-
-            <motion.div className="diet-goal-card protein" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              <div className="goal-icon"><HiOutlineLightningBolt /></div>
-              <div className="goal-info">
-                <span className="goal-label">PROTEIN BASE</span>
-                <div className="goal-value">{userTargets.macros.protein} <span>G</span></div>
-              </div>
-            </motion.div>
-
-            <motion.div className="diet-goal-card carbs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-              <div className="goal-icon"><HiOutlineSparkles /></div>
-              <div className="goal-info">
-                <span className="goal-label">CARBOHYDRATES</span>
-                <div className="goal-value">{userTargets.macros.carbs} <span>G</span></div>
-              </div>
-            </motion.div>
-
-            <motion.div className="diet-goal-card fats" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <div className="goal-icon"><HiOutlineGlobe /></div>
-              <div className="goal-info">
-                <span className="goal-label">HEALTHY LIPIDS</span>
-                <div className="goal-value">{userTargets.macros.fat} <span>G</span></div>
-              </div>
-            </motion.div>
-          </section>
-        )}
-
-        <section className="diet-section" style={{ marginTop: 0 }}>
-          <div className="section-header" style={{ marginBottom: '32px' }}>
-            <h2 className="section-title" style={{ fontSize: '20px', fontWeight: 700 }}><HiOutlineClipboardList /> Protocol Recommendations</h2>
-            <button className="view-all" onClick={fetchRecommendations} disabled={loadingMeals}>
-              {loadingMeals ? 'Syncing...' : 'Regenerate'}
-            </button>
-          </div>
-
+        <section className="diet-section">
           <div className="recommendations-container">
             {loadingMeals ? (
-              <div className="meals-grid-professional">
-                {[1,2,3,4].map(n => <div key={n} className="shimmer-card" style={{ height: '400px' }} />)}
+              <div style={{ padding: '40px', textAlign: 'center' }}>
+                <div className="btn-spinner" style={{ margin: '0 auto', width: '40px', height: '40px', borderTopColor: 'var(--accent-cyan)' }} />
               </div>
             ) : regionAvailable ? (
               <div className="meals-grid-professional">
@@ -211,7 +158,6 @@ export default function DietPlan() {
                   const meal = recommendations[slot.id];
                   if (!meal) return null;
                   
-                  // Calculate macro percentages for meters
                   const totalMacros = meal.macros.protein + meal.macros.carbs + meal.macros.fat;
                   const pPerc = (meal.macros.protein / totalMacros) * 100;
                   const cPerc = (meal.macros.carbs / totalMacros) * 100;
@@ -235,7 +181,6 @@ export default function DietPlan() {
                         )}
                       </div>
                       
-                      {/* Macro Meters */}
                       <div className="macro-meter-group">
                         <div className="macro-meter-item">
                           <div className="macro-meter-header">
@@ -299,7 +244,6 @@ export default function DietPlan() {
         </section>
       </main>
 
-      {/* Recipe Modal - Premium 3D Refresh */}
       <AnimatePresence>
         {selectedMeal && (
           <div className="modal-overlay" onClick={() => setSelectedMeal(null)}>
