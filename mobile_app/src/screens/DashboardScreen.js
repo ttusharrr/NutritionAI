@@ -161,7 +161,7 @@ export default function DashboardScreen({ navigation }) {
                 <View style={styles.energyInner}>
                   <Text style={styles.energyVal}>{targets.daily_calories}</Text>
                   <Text style={styles.energyLab}>KCAL</Text>
-                </div>
+                </View>
               </View>
               <View style={styles.missionDetails}>
                 <View style={styles.statusBadge}>
