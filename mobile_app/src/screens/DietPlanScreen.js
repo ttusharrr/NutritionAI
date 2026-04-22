@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   RefreshControl,
   Modal,
+  ScrollView,
   StatusBar,
   SafeAreaView
 } from 'react-native';
