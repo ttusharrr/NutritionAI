@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
   RefreshControl,
   Modal,
-  ScrollView
+  StatusBar,
+  SafeAreaView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING } from '../theme/colors';
@@ -83,27 +84,36 @@ export default function DietPlanScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <View>
-          <Text style={styles.title}>Meal Protocol</Text>
-          <Text style={styles.subtitle}>Optimized regional diet plan</Text>
-        </View>
-        <TouchableOpacity style={styles.regenBtn} onPress={handleRegenerate}>
-          <Ionicons name="refresh" size={18} color={COLORS.primary} />
-          <Text style={styles.regenText}>Regenerate</Text>
-        </TouchableOpacity>
+      <StatusBar barStyle="light-content" />
+      
+      {/* Premium Nebula Background */}
+      <View style={StyleSheet.absoluteFill}>
+        <View style={styles.nebula1} />
+        <View style={styles.nebula2} />
       </View>
 
-      {/* Daily Objective Summary */}
-      {userTargets && (
-        <View style={styles.objectiveCard}>
-          <View style={styles.objectiveHeader}>
-            <Text style={styles.objectiveTitle}>Daily Objective</Text>
-            <View style={styles.aiBadge}>
-              <Text style={styles.aiBadgeText}>AI Active</Text>
-            </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        {/* Header - Parity with Web/Dashboard */}
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.brandText}>Nutri<Text style={{ color: COLORS.primary }}>AI</Text></Text>
+            <Text style={styles.greetingTitle}>Meal Protocol</Text>
           </View>
+          <TouchableOpacity style={styles.regenBtn} onPress={handleRegenerate}>
+            <Ionicons name="refresh" size={18} color={COLORS.primary} />
+            <Text style={styles.regenText}>Regenerate</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Daily Objective Summary */}
+        {userTargets && (
+          <View style={styles.objectiveCard}>
+            <View style={styles.objectiveHeader}>
+              <Text style={styles.objectiveTitle}>Daily Objective</Text>
+              <View style={styles.aiBadge}>
+                <Text style={styles.aiBadgeText}>Agentic Reasoning Active</Text>
+              </View>
+            </View>
           <View style={styles.objectiveGrid}>
             <View style={styles.objectiveStat}>
               <Text style={styles.objectiveValue}>{userTargets.daily_calories}</Text>
@@ -254,15 +264,15 @@ export default function DietPlanScreen() {
                 </TouchableOpacity>
               </View>
             )}
-
             <TouchableOpacity style={styles.modalCloseX} onPress={() => setSelectedMeal(null)}>
               <Ionicons name="close" size={24} color={COLORS.text} />
             </TouchableOpacity>
           </View>
         </View>
       </Modal>
-    </View>
-  );
+    </SafeAreaView>
+  </View>
+);
 }
 
 function MacroMeter({ label, value, percent, color }) {
@@ -299,23 +309,41 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   header: {
-    marginTop: 60,
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 24,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
   },
-  title: {
-    color: COLORS.text,
-    fontSize: 28,
-    fontWeight: '800',
+  brandText: {
+    color: '#fff',
+    fontSize: 22,
+    fontWeight: '900',
+    letterSpacing: -1,
   },
-  subtitle: {
+  greetingTitle: {
     color: COLORS.textSecondary,
-    fontSize: 13,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginTop: 4,
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  nebula1: {
+    position: 'absolute',
+    top: -100,
+    left: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(45, 212, 191, 0.05)',
+  },
+  nebula2: {
+    position: 'absolute',
+    bottom: 200,
+    right: -100,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: 'rgba(168, 85, 247, 0.04)',
   },
   regenBtn: {
     flexDirection: 'row',
