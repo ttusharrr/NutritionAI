@@ -12,14 +12,21 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING } from '../theme/colors';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
-import { Video } from 'expo-av';
+const videoSource = require('../../assets/texture_map.mp4');
 
 const { width, height } = Dimensions.get('window');
 
 export default function LandingScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(40)).current;
+
+  const player = useVideoPlayer(videoSource, (player) => {
+    player.loop = true;
+    player.muted = true;
+    player.play();
+  });
 
   useEffect(() => {
     Animated.parallel([
@@ -64,15 +71,12 @@ export default function LandingScreen({ navigation }) {
 
           <View style={styles.visualContainer}>
             <View style={styles.videoWrapper}>
-              <Video
-                source={require('../../assets/texture_map.mp4')}
-                rate={1.0}
-                volume={0}
-                isMuted={true}
-                resizeMode="cover"
-                shouldPlay
-                isLooping
+              <VideoView
+                player={player}
                 style={styles.heroVideo}
+                contentFit="cover"
+                allowsFullscreen={false}
+                allowsPictureInPicture={false}
               />
               
               {/* Edge Fading Gradients - Parity with Web Overlay */}
