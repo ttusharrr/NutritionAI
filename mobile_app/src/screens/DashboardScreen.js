@@ -124,20 +124,27 @@ export default function DashboardScreen({ navigation }) {
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle="light-content" />
+      
+      {/* Premium Nebula Background - Parity with Web */}
+      <View style={StyleSheet.absoluteFill}>
+        <View style={styles.nebula1} />
+        <View style={styles.nebula2} />
+      </View>
+
       <ScrollView 
         style={styles.container}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={COLORS.primary} />}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       >
         <SafeAreaView>
-          {/* Nav Bar */}
+          {/* Nav Bar - Parity with Web */}
           <View style={styles.navBar}>
             <View>
-              <Text style={styles.greetingHeader}>PROTOCOL</Text>
+              <Text style={styles.brandText}>Nutri<Text style={{ color: COLORS.primary }}>AI</Text></Text>
               <Text style={styles.greetingTitle}>Welcome, {firstName}!</Text>
             </View>
             <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-              <Ionicons name="log-out-outline" size={24} color={COLORS.error} />
+              <Ionicons name="log-out-outline" size={22} color={COLORS.error} />
             </TouchableOpacity>
           </View>
 
@@ -224,9 +231,9 @@ export default function DashboardScreen({ navigation }) {
               
               <View style={styles.bmiVisualMeter}>
                 <View style={styles.meterSegments}>
-                  <View style={[styles.segment, { backgroundColor: '#fbbf24', flex: 1 }]} />
-                  <View style={[styles.segment, { backgroundColor: '#22c55e', flex: 2 }]} />
-                  <View style={[styles.segment, { backgroundColor: '#f97316', flex: 1 }]} />
+                  <View style={[styles.segment, { backgroundColor: '#f59e0b', flex: 1 }]} />
+                  <View style={[styles.segment, { backgroundColor: '#10b981', flex: 2 }]} />
+                  <View style={[styles.segment, { backgroundColor: '#ec4899', flex: 1 }]} />
                   <View style={[styles.segment, { backgroundColor: '#ef4444', flex: 1.5 }]} />
                 </View>
                 <View style={[styles.meterPointer, { left: `${getBMIPosition(bmiData.value)}%` }]} />
@@ -367,20 +374,37 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 16,
+    marginBottom: 24,
   },
-  greetingHeader: {
-    color: COLORS.primary,
-    fontSize: 11,
+  brandText: {
+    color: '#fff',
+    fontSize: 22,
     fontWeight: '900',
-    letterSpacing: 2,
-    textTransform: 'uppercase',
+    letterSpacing: -1,
   },
   greetingTitle: {
-    color: COLORS.text,
-    fontSize: 26,
-    fontWeight: '800',
-    letterSpacing: -0.5,
+    color: COLORS.textSecondary,
+    fontSize: 14,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  nebula1: {
+    position: 'absolute',
+    top: -100,
+    left: -100,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(45, 212, 191, 0.05)',
+  },
+  nebula2: {
+    position: 'absolute',
+    bottom: 200,
+    right: -100,
+    width: 400,
+    height: 400,
+    borderRadius: 200,
+    backgroundColor: 'rgba(168, 85, 247, 0.04)',
   },
   logoutBtn: {
     width: 44,
