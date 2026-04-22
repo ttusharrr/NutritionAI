@@ -13,13 +13,13 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING } from '../theme/colors';
 
+import { Video } from 'expo-av';
+
 const { width, height } = Dimensions.get('window');
 
 export default function LandingScreen({ navigation }) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(40)).current;
-  const orbScale = useRef(new Animated.Value(0.8)).current;
-  const slideTexture = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.parallel([
@@ -33,28 +33,9 @@ export default function LandingScreen({ navigation }) {
         tension: 20,
         friction: 7,
         useNativeDriver: true,
-      }),
-      Animated.spring(orbScale, {
-        toValue: 1,
-        tension: 10,
-        friction: 4,
-        useNativeDriver: true,
-      }),
-      Animated.loop(
-        Animated.timing(slideTexture, {
-          toValue: 1,
-          duration: 25000,
-          easing: t => t,
-          useNativeDriver: true,
-        })
-      )
+      })
     ]).start();
   }, []);
-
-  const translateX = slideTexture.interpolate({
-    inputRange: [0, 1],
-    outputRange: [0, -width * 0.85] // Slide by half the texture width (since it repeats)
-  });
 
   return (
     <View style={styles.container}>
@@ -82,24 +63,29 @@ export default function LandingScreen({ navigation }) {
           </Animated.View>
 
           <View style={styles.visualContainer}>
-            <View style={styles.imageWrapper}>
-              <Animated.Image 
-                source={require('../../assets/texture_map.png')} 
-                style={[styles.heroImage, { transform: [{ translateX }] }]}
+            <View style={styles.videoWrapper}>
+              <Video
+                source={require('../../assets/texture_map.mp4')}
+                rate={1.0}
+                volume={0}
+                isMuted={true}
                 resizeMode="cover"
+                shouldPlay
+                isLooping
+                style={styles.heroVideo}
               />
               
-              {/* Edge Fading Gradients */}
+              {/* Edge Fading Gradients - Parity with Web Overlay */}
               <LinearGradient
                 colors={['#000', 'transparent', 'transparent', '#000']}
-                locations={[0, 0.1, 0.9, 1]}
+                locations={[0, 0.2, 0.8, 1]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
                 style={StyleSheet.absoluteFill}
               />
               <LinearGradient
                 colors={['#000', 'transparent', 'transparent', '#000']}
-                locations={[0, 0.1, 0.9, 1]}
+                locations={[0, 0.2, 0.8, 1]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 0, y: 1 }}
                 style={StyleSheet.absoluteFill}
@@ -216,16 +202,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginVertical: 40,
   },
-  imageWrapper: {
+  videoWrapper: {
     width: width,
-    height: width * 0.7,
+    height: width * 0.75,
     backgroundColor: '#000',
     overflow: 'hidden',
   },
-  heroImage: {
-    width: width * 2,
+  heroVideo: {
+    width: '100%',
     height: '100%',
-    opacity: 0.85,
+    opacity: 0.9,
   },
   bottomSection: {
     marginBottom: 20,
