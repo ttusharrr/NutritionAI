@@ -765,34 +765,3 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
-    marginBottom: 16,
-  },
-  regionList: {
-    paddingHorizontal: 20,
-  },
-  regionItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 14,
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-    borderRadius: 14,
-    marginBottom: 4,
-  },
-  regionItemActive: {
-    backgroundColor: 'rgba(45, 212, 191, 0.08)',
-  },
-  regionItemIcon: {
-    fontSize: 22,
-  },
-  regionItemText: {
-    flex: 1,
-    color: COLORS.textSecondary,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  regionItemTextActive: {
-    color: COLORS.primary,
-    fontWeight: '700',
-  },
-});
