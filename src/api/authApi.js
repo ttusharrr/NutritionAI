@@ -308,6 +308,16 @@ class AuthAPI {
   }
 
   /**
+   * Change user password.
+   */
+  async changePassword(currentPassword, newPassword) {
+    return this.request('/auth/change-password', {
+      method: 'POST',
+      body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+    });
+  }
+
+  /**
    * Logout.
    */
   async logout() {

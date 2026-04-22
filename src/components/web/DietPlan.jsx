@@ -138,49 +138,57 @@ export default function DietPlan() {
         </div>
       </nav>
 
-      <main className="dashboard-main" style={{ paddingBottom: '100px' }}>
-        <header className="welcome-header">
-          <h1 className="greeting">Nutritional Blueprint</h1>
-          <p className="welcome-sub">Optimized regional meal protocols mapped to your biometrics.</p>
+      <main className="dashboard-main cinematic-diet-main">
+        <header className="cinematic-header">
+          <div className="header-bg">
+            <video autoPlay muted loop playsInline>
+              <source src="/texture_map.mp4" type="video/mp4" />
+            </video>
+            <div className="header-overlay" />
+          </div>
+          <div className="header-content">
+            <div className="protocol-badge">
+              <HiOutlineGlobe /> REGIONAL PROTOCOL: {currentRegion.label.toUpperCase()}
+            </div>
+            <h1 className="greeting">Nutritional <span className="gradient-text">Blueprint</span></h1>
+            <p className="welcome-sub">Biological meal mapping for the {currentRegion.label} kitchen.</p>
+          </div>
         </header>
 
-        {/* Goal Dashboard - Backend Aligned */}
+        {/* Goal Dashboard - Mission Control Style */}
         {userTargets && (
-          <section className="goal-dashboard animate-fade-in">
-            <div className="goal-header-main">
-              <h3>Daily Objective</h3>
-              <div className="status-badge" style={{ fontSize: '12px', color: 'var(--accent-cyan)', background: 'rgba(45, 212, 191, 0.1)', padding: '4px 12px', borderRadius: '12px' }}>
-                AI Active
+          <section className="diet-goal-grid">
+            <motion.div className="diet-goal-card energy" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="goal-icon"><HiOutlineFire /></div>
+              <div className="goal-info">
+                <span className="goal-label">ENERGY TARGET</span>
+                <div className="goal-value">{userTargets.daily_calories} <span>KCAL</span></div>
               </div>
-            </div>
-            
-            <div className="macro-stat">
-              <span className="macro-stat-label">Energy Target</span>
-              <div className="macro-stat-value">
-                {userTargets.daily_calories} <span className="unit">kcal</span>
-              </div>
-            </div>
+            </motion.div>
 
-            <div className="macro-stat">
-              <span className="macro-stat-label">Protein</span>
-              <div className="macro-stat-value" style={{ color: 'var(--accent-cyan)' }}>
-                {userTargets.macros.protein} <span className="unit">g</span>
+            <motion.div className="diet-goal-card protein" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+              <div className="goal-icon"><HiOutlineLightningBolt /></div>
+              <div className="goal-info">
+                <span className="goal-label">PROTEIN BASE</span>
+                <div className="goal-value">{userTargets.macros.protein} <span>G</span></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="macro-stat">
-              <span className="macro-stat-label">Carbs</span>
-              <div className="macro-stat-value" style={{ color: 'var(--accent-amber)' }}>
-                {userTargets.macros.carbs} <span className="unit">g</span>
+            <motion.div className="diet-goal-card carbs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
+              <div className="goal-icon"><HiOutlineSparkles /></div>
+              <div className="goal-info">
+                <span className="goal-label">CARBOHYDRATES</span>
+                <div className="goal-value">{userTargets.macros.carbs} <span>G</span></div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="macro-stat">
-              <span className="macro-stat-label">Fats</span>
-              <div className="macro-stat-value" style={{ color: 'var(--accent-purple)' }}>
-                {userTargets.macros.fat} <span className="unit">g</span>
+            <motion.div className="diet-goal-card fats" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
+              <div className="goal-icon"><HiOutlineGlobe /></div>
+              <div className="goal-info">
+                <span className="goal-label">HEALTHY LIPIDS</span>
+                <div className="goal-value">{userTargets.macros.fat} <span>G</span></div>
               </div>
-            </div>
+            </motion.div>
           </section>
         )}
 

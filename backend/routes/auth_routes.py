@@ -689,6 +689,57 @@ def update_region():
 
 
 # ─────────────────────────────────────────────────────────────────
+# CHANGE PASSWORD
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/change-password", methods=["POST"])
+@jwt_required()
+def change_password():
+    """Change user password."""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "Request body is required"}), 400
+
+    current_password = data.get("current_password")
+    new_password = data.get("new_password")
+
+    if not current_password or not new_password:
+        return jsonify({"error": "Current and new passwords are required"}), 400
+
+    db = get_db()
+    user = db.users.find_one({"_id": ObjectId(user_id)})
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    # If user is Google-only (no password hash), they can set one here too
+    if user.get("password_hash"):
+        if not verify_password(current_password, user["password_hash"]):
+            return jsonify({"error": "Invalid current password"}), 401
+
+    # Validate new password
+    valid, err = validate_password(new_password)
+    if not valid:
+        return jsonify({"error": err}), 400
+
+    # Update password
+    new_hash = hash_password(new_password)
+    db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {
+            "$set": {
+                "password_hash": new_hash,
+                "security.password_changed_at": datetime.now(timezone.utc),
+                "updated_at": datetime.now(timezone.utc),
+            }
+        }
+    )
+
+    return jsonify({"message": "Password updated successfully"}), 200
+
+
+# ─────────────────────────────────────────────────────────────────
 # LOGOUT (Token blacklist — optional)
 # ─────────────────────────────────────────────────────────────────
 @auth_bp.route("/logout", methods=["POST"])

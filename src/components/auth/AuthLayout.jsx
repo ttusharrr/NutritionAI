@@ -32,6 +32,14 @@ export default function AuthLayout({ children }) {
       <div className="auth-orb auth-orb--purple" />
       <div className="auth-orb auth-orb--blue" />
 
+      {/* Background Video */}
+      <div className="auth-video-bg">
+        <video autoPlay muted loop playsInline>
+          <source src="/texture_map.mp4" type="video/mp4" />
+        </video>
+        <div className="video-overlay" />
+      </div>
+
       {/* Grid overlay */}
       <div className="auth-grid" />
 

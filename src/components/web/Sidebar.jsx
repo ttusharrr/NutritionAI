@@ -5,6 +5,8 @@ import {
   HiOutlineHome, 
   HiOutlineClipboardList, 
   HiOutlineUserCircle,
+  HiOutlineCog,
+  HiOutlineInformationCircle,
   HiOutlineLogout
 } from 'react-icons/hi';
 import { useAuth } from '../../context/AuthContext';
@@ -18,6 +20,8 @@ export default function Sidebar({ isOpen, onClose }) {
     { id: 'dashboard', label: 'Dashboard', icon: HiOutlineHome, path: '/dashboard' },
     { id: 'diet-plan', label: 'Daily Diet Plan', icon: HiOutlineClipboardList, path: '/diet-plan' },
     { id: 'profile', label: 'Profile Setup', icon: HiOutlineUserCircle, path: '/profile-setup' },
+    { id: 'settings', label: 'Settings', icon: HiOutlineCog, path: '/settings' },
+    { id: 'about', label: 'About', icon: HiOutlineInformationCircle, path: '/about' },
   ];
 
   const sidebarVariants = {

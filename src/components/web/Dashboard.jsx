@@ -60,7 +60,7 @@ export default function Dashboard() {
 
   const handleLogout = async () => {
     await logout();
-    navigate('/auth/login');
+    navigate('/');
   };
 
   const handleRegionChange = async (region) => {
@@ -190,23 +190,42 @@ export default function Dashboard() {
 
         {/* Nutritional Grid */}
         <div className="nutrition-grid">
-          {/* Main Calorie Card */}
+          {/* Main Mission Control Card */}
           <motion.div 
-            className="nutrition-card calorie-hero"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="nutrition-card mission-control-hero"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <div className="card-flare" />
-            <div className="card-label">Daily Target</div>
-            <div className="calorie-value">
-              <HiOutlineFire className="fire-icon" />
-              {nutrition.daily_calories.toLocaleString()}
-            </div>
-            <div className="card-unit">kcal / day</div>
-            
-            <div className="goal-tag">
-              {user?.profile?.dietary_goal?.replace('_', ' ') || 'Maintain'}
+            <div className="mission-content">
+              <div className="energy-meter-box">
+                <svg viewBox="0 0 100 100" className="energy-ring">
+                  <circle className="ring-bg" cx="50" cy="50" r="45" />
+                  <motion.circle 
+                    className="ring-fill" 
+                    cx="50" cy="50" r="45" 
+                    initial={{ strokeDasharray: "0 283" }}
+                    animate={{ strokeDasharray: "180 283" }} // 65% progress mock
+                    transition={{ duration: 1.5, delay: 0.5 }}
+                  />
+                </svg>
+                <div className="energy-stats">
+                  <div className="energy-value">{nutrition.daily_calories.toLocaleString()}</div>
+                  <div className="energy-label">TARGET KCAL</div>
+                </div>
+              </div>
+
+              <div className="mission-details">
+                <div className="protocol-status">
+                  <span className="pulse-dot"></span>
+                  PROTOCOL ACTIVE
+                </div>
+                <h3>System Integrity: 94%</h3>
+                <p>Your biological markers are optimized for the {user?.profile?.dietary_goal?.replace('_', ' ') || 'Maintain'} protocol.</p>
+                <button className="btn-protocol-sync" onClick={fetchRecommendations}>
+                  <HiOutlineLightningBolt /> RE-SYNC PROTOCOL
+                </button>
+              </div>
             </div>
           </motion.div>
 
@@ -248,6 +267,68 @@ export default function Dashboard() {
               </motion.div>
             ))}
           </div>
+        </div>
+
+        {/* Featured Protocol & Checklist */}
+        <div className="mission-secondary-grid">
+          {/* Next Meal Protocol */}
+          <motion.div 
+            className="featured-meal-card"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+          >
+            <div className="card-header">
+              <HiOutlineClipboardList className="header-icon" />
+              <span>Next Protocol Item</span>
+            </div>
+            {loadingMeals ? (
+              <div className="meal-skeleton"></div>
+            ) : recommendations.breakfast ? (
+              <div className="featured-meal-content">
+                <div className="meal-tag">{recommendations.breakfast.category}</div>
+                <h4>{recommendations.breakfast.name}</h4>
+                <div className="meal-stats">
+                  <span>{recommendations.breakfast.macros.calories} kcal</span>
+                  <span className="dot"></span>
+                  <span>{recommendations.breakfast.macros.protein}g Protein</span>
+                </div>
+                <button className="btn-view-recipe" onClick={() => navigate('/diet-plan')}>
+                  VIEW FULL PROTOCOL <HiArrowRight />
+                </button>
+              </div>
+            ) : (
+              <div className="no-meal-state">
+                <p>Initializing daily meal sequences...</p>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Daily Protocol Checklist */}
+          <motion.div 
+            className="protocol-checklist-card"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.5 }}
+          >
+            <div className="card-header">
+              <span>Health Protocol</span>
+              <span className="completion-count">2/4 Done</span>
+            </div>
+            <div className="checklist-items">
+              {[
+                { label: 'Hydration Cycle (1.5L)', done: true },
+                { label: 'Log Breakfast Protocol', done: true },
+                { label: 'Post-Meal Circulation', done: false },
+                { label: 'Nightly Recovery Logic', done: false },
+              ].map((item, i) => (
+                <div key={i} className={`checklist-item ${item.done ? 'done' : ''}`}>
+                  <div className="check-box">{item.done && <HiCheck />}</div>
+                  <span>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </div>
 
         {/* Health Insights (BMI) Row */}
