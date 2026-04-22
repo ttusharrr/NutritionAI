@@ -248,25 +248,6 @@ export default function DashboardScreen({ navigation }) {
             </View>
           </View>
 
-          {/* Health Protocol Checklist */}
-          <View style={styles.checklistSection}>
-            <Text style={styles.sectionTitle}>Health Protocol</Text>
-            <View style={styles.checklistCard}>
-              {[
-                { label: 'Hydration Cycle (1.5L)', done: true },
-                { label: 'Log Breakfast Protocol', done: true },
-                { label: 'Post-Meal Circulation', done: false },
-                { label: 'Nightly Recovery Logic', done: false },
-              ].map((item, index) => (
-                <View key={index} style={styles.checkItem}>
-                  <View style={[styles.checkBox, item.done && styles.checkBoxDone]}>
-                    {item.done && <Ionicons name="checkmark" size={14} color="#000" />}
-                  </View>
-                  <Text style={[styles.checkLabel, item.done && styles.checkLabelDone]}>{item.label}</Text>
-                </View>
-              ))}
-            </View>
-          </View>
         </SafeAreaView>
       </ScrollView>
 
@@ -643,45 +624,6 @@ const styles = StyleSheet.create({
     color: COLORS.textTertiary,
     fontSize: 10,
     fontWeight: '600',
-  },
-  /* Checklist Section */
-  checklistSection: {
-    marginBottom: 32,
-  },
-  checklistCard: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 24,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    gap: 16,
-  },
-  checkItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  checkBox: {
-    width: 22,
-    height: 22,
-    borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: COLORS.border,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkBoxDone: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-  checkLabel: {
-    color: COLORS.textSecondary,
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  checkLabelDone: {
-    color: COLORS.textTertiary,
-    textDecorationLine: 'line-through',
   },
   /* Chat FAB */
   chatFab: {
