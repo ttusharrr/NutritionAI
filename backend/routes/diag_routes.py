@@ -42,3 +42,35 @@ def network_check():
         results["auth_465"] = {"status": "failed", "error": str(e)}
 
     return jsonify(results), 200
+
+@diag_bp.route("/ai-check", methods=["GET"])
+def ai_check():
+    """Diagnostic check for AI connectivity."""
+    from utils.ai_agent import MealAgent
+    agent = MealAgent()
+    
+    status = {
+        "client_initialized": agent.client is not None,
+        "api_key_present": agent.api_key is not None and len(agent.api_key) > 0,
+        "model": agent.model
+    }
+    
+    if not agent.client:
+        status["test_call"] = "skipped (no client)"
+        return jsonify(status), 200
+        
+    try:
+        # Simple test call
+        response = agent.client.chat.completions.create(
+            model=agent.model,
+            messages=[{"role": "user", "content": "hi"}],
+            max_tokens=5,
+            timeout=5.0
+        )
+        status["test_call"] = "success"
+        status["response_preview"] = response.choices[0].message.content[:20]
+    except Exception as e:
+        status["test_call"] = "failed"
+        status["error"] = str(e)
+        
+    return jsonify(status), 200

@@ -32,9 +32,7 @@ def create_app():
                 Config.FRONTEND_URL, 
                 "http://localhost:5173", 
                 "http://127.0.0.1:5173",
-                "http://10.253.8.168:5173",
                 "http://localhost:3000",
-                "http://192.168.29.178:5173",
                 "https://nutrition-ai-nine.vercel.app",
                 # Allow all vercel.app and onrender.com domains for easier deployment
                 r"https://.*\.vercel\.app",
@@ -137,6 +135,13 @@ def create_app():
 
     return app
 
+
+from utils.ip_updater import update_config_files
+
+# Automatically update IP address in config files on startup
+# Run before app creation so environment variables are updated
+if os.environ.get("FLASK_ENV") == "development":
+    update_config_files()
 
 app = create_app()
 

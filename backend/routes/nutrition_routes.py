@@ -28,17 +28,23 @@ def recommend_meals():
     if not user.get('profile_completed'):
         return jsonify({"error": "Please complete your profile first"}), 400
 
+    # Extract profile and region
+    profile = user.get('profile', {})
+    region = profile.get('region', 'Punjab')
+    
     # Initialize AI Agent (Hardened)
     ai_agent = MealAgent()
+    
+    print(f"[NUTRITION] Generating plan for user: {user_id} in region: {region}")
 
     # Layer 1 & 2: Calculate Requirements
-    profile = user.get('profile', {})
     nutrition_targets = calculate_daily_requirements(profile)
+    print(f"[NUTRITION] Targets calculated: {nutrition_targets['daily_calories']} kcal")
     
-    region = profile.get('region', 'J&K')
     available_recipes = load_regional_recipes(region)
     
     if not available_recipes:
+        print(f"[NUTRITION WARNING] No recipes found for region: {region}")
         return jsonify({
             "user_targets": nutrition_targets,
             "recommendations": {},
@@ -107,15 +113,21 @@ def recommend_meals():
 
     # Layer 5: Agentic Reasoning (The "Brain")
     # Batch the whole plan to the LLM for expert insights
+    print(f"[NUTRITION] Entering Layer 5: Agentic Reasoning...")
     try:
         ai_insights = ai_agent.generate_daily_insights(profile, daily_plan)
         if type(ai_insights) is dict:
+            print(f"[NUTRITION] Successfully integrated {len(ai_insights)} AI insights.")
             for slot, data in ai_insights.items():
                 if slot in daily_plan and type(data) is dict:
                     daily_plan[slot]['agent_hint'] = data.get('insight', daily_plan[slot]['agent_hint'])
                     daily_plan[slot]['core_item'] = data.get('core_item', 'Healthy Base Item')
+        else:
+            print("[NUTRITION] AI insights format invalid, using defaults.")
     except Exception as e:
-        print(f"Agentic Reasoning Layer Failed: {e}")
+        print(f"[NUTRITION ERROR] Agentic Reasoning Layer Failed: {e}")
+
+    print("[NUTRITION] Meal plan generation complete.")
 
     return jsonify({
         "user_targets": nutrition_targets,

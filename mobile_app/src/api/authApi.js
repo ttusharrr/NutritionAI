@@ -1,8 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// USE YOUR LOCAL IP ADDRESS HERE (e.g., 192.168.x.x)
-const BASE_URL = 'http://192.168.29.178:5000/api'; 
+import { CONFIG } from '../constants/Config';
+
+// Centralized IP address from Config.js
+const BASE_URL = CONFIG.BASE_URL; 
 
 const authApi = axios.create({
   baseURL: BASE_URL,
