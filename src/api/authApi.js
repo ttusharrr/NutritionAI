@@ -268,6 +268,23 @@ class AuthAPI {
   }
 
   /**
+   * Update general user profile data.
+   */
+  async updateProfile(profileData) {
+    const data = await this.request('/auth/update-profile', {
+      method: 'PUT',
+      body: JSON.stringify(profileData),
+    });
+
+    if (data.user) {
+      localStorage.setItem('nutriai_user', JSON.stringify(data.user));
+    }
+
+    return data;
+  }
+
+
+  /**
    * Update user's selected region.
    */
   async updateRegion(region) {

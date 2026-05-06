@@ -19,7 +19,7 @@ export default function Sidebar({ isOpen, onClose }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: HiOutlineHome, path: '/dashboard' },
     { id: 'diet-plan', label: 'Daily Diet Plan', icon: HiOutlineClipboardList, path: '/diet-plan' },
-    { id: 'profile', label: 'Profile Setup', icon: HiOutlineUserCircle, path: '/profile-setup' },
+    { id: 'profile', label: 'My Profile', icon: HiOutlineUserCircle, path: '/profile' },
     { id: 'settings', label: 'Settings', icon: HiOutlineCog, path: '/settings' },
     { id: 'about', label: 'About', icon: HiOutlineInformationCircle, path: '/about' },
   ];

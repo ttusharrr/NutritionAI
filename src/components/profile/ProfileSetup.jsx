@@ -16,6 +16,7 @@ const STEPS = [
   { key: 'measurements', title: 'Your measurements', subtitle: 'Weight and height for accurate calculations.' },
   { key: 'activity', title: 'Activity level', subtitle: 'How active are you on a typical day?' },
   { key: 'dietary_type', title: 'Dietary preference', subtitle: 'What kind of food do you prefer?' },
+  { key: 'health', title: 'Health & Allergies', subtitle: 'Any medical conditions or food allergies?' },
   { key: 'goal', title: 'Your dietary goal', subtitle: 'What would you like to achieve?' },
 ];
 
@@ -41,6 +42,8 @@ export default function ProfileSetup() {
     activity_level: '',
     dietary_type: 'Both',
     dietary_goal: '',
+    diseases: [],
+    allergies: '',
   });
 
   const progress = ((step + 1) / STEPS.length) * 100;
@@ -236,6 +239,47 @@ export default function ProfileSetup() {
                     {opt.label}
                   </button>
                 ))}
+              </div>
+            )}
+
+            {/* Health & Allergies */}
+            {currentStep.key === 'health' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                <div>
+                  <label className="form-label">Medical Conditions</label>
+                  <div className="segmented-group cols-2">
+                    {[
+                      { value: 'BP', label: 'Blood Pressure' },
+                      { value: 'Diabetes', label: 'Diabetes' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`segmented-btn ${profile.diseases.includes(opt.value) ? 'active' : ''}`}
+                        onClick={() => {
+                          const newDiseases = profile.diseases.includes(opt.value)
+                            ? profile.diseases.filter(d => d !== opt.value)
+                            : [...profile.diseases, opt.value];
+                          setProfile({ ...profile, diseases: newDiseases });
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label className="form-label">Food Allergies (Optional)</label>
+                  <div className="input-wrapper">
+                    <input
+                      type="text"
+                      className="form-input"
+                      placeholder="e.g. Peanuts, Milk, Soy"
+                      value={profile.allergies}
+                      onChange={(e) => setProfile({ ...profile, allergies: e.target.value })}
+                    />
+                  </div>
+                </div>
               </div>
             )}
 

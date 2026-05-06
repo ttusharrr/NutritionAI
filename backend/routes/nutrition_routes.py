@@ -52,12 +52,14 @@ def recommend_meals():
             "message": f"Our nutritional database for {region} is currently under development. Please check back soon for local specialties!"
         }), 200
 
-    # Professional Caloric Splitting Ratios
+    # Professional Caloric Splitting Ratios (Including Sides & Drinks)
     slots = {
-        "breakfast": 0.25,
-        "lunch": 0.35,
+        "breakfast": 0.20,
+        "lunch": 0.30,
         "snacks": 0.10,
-        "dinner": 0.30
+        "dinner": 0.25,
+        "sides": 0.10,
+        "drinks": 0.05
     }
     
     daily_plan = {}
@@ -70,6 +72,9 @@ def recommend_meals():
 
     base_filters = {
         "type": target_diet,
+        "region": region,
+        "diseases": profile.get('diseases', []),
+        "allergies": profile.get('allergies', []),
     }
 
     for slot, ratio in slots.items():

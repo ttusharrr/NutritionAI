@@ -16,13 +16,14 @@ import {
   HiOutlineMail,
   HiOutlineCheckCircle,
   HiOutlineExclamationCircle,
+  HiOutlineClipboardList,
 } from 'react-icons/hi';
 import { useAuth } from '../../context/AuthContext';
 import authApi from '../../api/authApi';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -150,6 +151,8 @@ export default function SettingsPage() {
             </div>
           </div>
         </motion.section>
+
+
 
         {/* Change Password Section */}
         <motion.section

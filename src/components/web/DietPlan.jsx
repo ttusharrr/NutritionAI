@@ -94,7 +94,9 @@ export default function DietPlan() {
     { id: 'breakfast', label: 'Breakfast', icon: '🍳' },
     { id: 'lunch', label: 'Lunch', icon: '🍲' },
     { id: 'snacks', label: 'Snacks', icon: '🍎' },
-    { id: 'dinner', label: 'Dinner', icon: '🥘' }
+    { id: 'dinner', label: 'Dinner', icon: '🥘' },
+    { id: 'sides', label: 'Sides', icon: '🥗' },
+    { id: 'drinks', label: 'Drinks', icon: '🍹' }
   ];
 
   const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region || 'Punjab')) || REGIONS[0];

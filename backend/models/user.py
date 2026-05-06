@@ -25,6 +25,8 @@ def create_user_document(name, email, password_hash, auth_provider="local"):
             "activity_level": None,
             "dietary_goal": None,
             "region": "Punjab",
+            "diseases": [], # e.g., ["BP", "Diabetes"]
+            "allergies": [], # e.g., ["Peanuts", "Milk"]
             "restrictions": [],
         },
 

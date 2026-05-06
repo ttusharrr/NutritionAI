@@ -264,9 +264,61 @@ export default function Dashboard() {
                 <span style={{ left: '100%' }}>40+</span>
               </div>
             </div>
-
           </div>
         </motion.div>
+
+        {/* Regional Focus Section */}
+        <motion.section 
+          className="regional-focus-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          style={{ marginTop: '30px' }}
+        >
+          <div className="section-header">
+            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiOutlineGlobe className="text-cyan" /> 
+              Regional Cuisine Focus
+            </h2>
+            <p className="welcome-sub" style={{ marginBottom: '20px' }}>
+              Explore nutritional protocols based on authentic Indian regions.
+            </p>
+          </div>
+
+          <div className="region-cards-scroll">
+            {REGIONS.map((reg, idx) => (
+              <motion.div
+                key={reg.id}
+                className={`region-focus-card ${currentRegion.id === reg.id ? 'active' : ''}`}
+                onClick={() => handleRegionChange(reg.id)}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 + idx * 0.05 }}
+              >
+                <div className="region-icon">{reg.icon}</div>
+                <div className="region-info">
+                  <div className="region-name">{reg.label}</div>
+                  <div className="region-status">
+                    {currentRegion.id === reg.id ? 'Current Focus' : 'Explore Cuisine'}
+                  </div>
+                </div>
+                {currentRegion.id === reg.id && <div className="active-glow" />}
+              </motion.div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => navigate('/diet-plan')}
+              style={{ padding: '12px 32px' }}
+            >
+              View Full {currentRegion.label} Diet Plan
+            </button>
+          </div>
+        </motion.section>
       </main>
 
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

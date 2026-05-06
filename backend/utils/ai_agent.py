@@ -64,12 +64,15 @@ class MealAgent:
         1. A ONE-SENTENCE nutritional insight explaining why the dish supports the user's goal.
         2. The primary raw base ingredient / food product the dish is made from.
 
-        Return ONLY a raw JSON object:
+        Return ONLY a raw JSON object where each key corresponds to the meal slots provided above.
+        Example format:
         {{
             "breakfast": {{"insight": "Supports metabolism...", "core_item": "Oats"}},
             "lunch": {{"insight": "High protein...", "core_item": "Lamb"}},
             "snacks": {{"insight": "Energy boost...", "core_item": "Apples"}},
-            "dinner": {{"insight": "Light recovery...", "core_item": "Lentils"}}
+            "dinner": {{"insight": "Light recovery...", "core_item": "Lentils"}},
+            "sides": {{"insight": "Fiber rich...", "core_item": "Carrots"}},
+            "drinks": {{"insight": "Hydration...", "core_item": "Coconut Water"}}
         }}
         """
 

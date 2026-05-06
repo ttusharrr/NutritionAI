@@ -636,6 +636,8 @@ def profile_setup():
         "profile.dietary_goal": data.get("dietary_goal"),
         "profile.dietary_type": data.get("dietary_type", "both"),
         "profile.region": data.get("region", "Global"),
+        "profile.diseases": data.get("diseases", []),
+        "profile.allergies": data.get("allergies", []),
         "profile.restrictions": data.get("restrictions", []),
         "profile_completed": True,
         "updated_at": datetime.now(timezone.utc),
@@ -683,6 +685,51 @@ def update_region():
     
     return jsonify({
         "message": "Region updated successfully",
+        "user": sanitize_user(updated_user)
+    }), 200
+
+
+# ─────────────────────────────────────────────────────────────────
+# UPDATE PROFILE
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/update-profile", methods=["PUT"])
+@jwt_required()
+def update_profile():
+    """Update general user profile data."""
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "Profile data is required"}), 400
+
+    db = get_db()
+    
+    # Define fields allowed to be updated
+    allowed_fields = [
+        "age", "gender", "weight", "height", 
+        "activity_level", "dietary_goal", "dietary_type", 
+        "region", "diseases", "allergies", "restrictions"
+    ]
+    
+    update_query = {}
+    for field in allowed_fields:
+        if field in data:
+            update_query[f"profile.{field}"] = data[field]
+    
+    if "name" in data:
+        update_query["name"] = data["name"]
+
+    if not update_query:
+        return jsonify({"error": "No valid fields to update"}), 400
+
+    update_query["updated_at"] = datetime.now(timezone.utc)
+
+    db.users.update_one({"_id": ObjectId(user_id)}, {"$set": update_query})
+    
+    updated_user = db.users.find_one({"_id": ObjectId(user_id)})
+    
+    return jsonify({
+        "message": "Profile updated successfully",
         "user": sanitize_user(updated_user)
     }), 200
 

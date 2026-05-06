@@ -79,6 +79,31 @@ def get_recommendations(user_macros, region="All", filters=None, exclude_ids=Non
             if slot_matches:
                 filtered_recipes = slot_matches
 
+        # Allergy filter
+        allergies = filters.get('allergies', [])
+        if allergies:
+            filtered_recipes = [
+                r for r in filtered_recipes 
+                if not any(a.lower() in str(r.get('ingredients', [])).lower() or a.lower() in r['name'].lower() for a in allergies)
+            ]
+
+        # Disease constraints
+        diseases = filters.get('diseases', [])
+        if "BP" in diseases:
+            # Filter out dishes with sodium > 500mg per serving (or high sodium relative to calories)
+            filtered_recipes = [r for r in filtered_recipes if r['nutrients'].get('sodium', 0) < 500]
+        
+        if "Diabetes" in diseases:
+            # Filter out dishes with sugar > 10g per serving
+            filtered_recipes = [r for r in filtered_recipes if r['nutrients'].get('sugar', 0) < 10]
+
+        # Region Prioritization
+        target_region = filters.get('region', 'All')
+        if target_region and target_region != 'All' and target_region != 'Global':
+            region_matches = [r for r in filtered_recipes if target_region.lower() in r.get('sub_region', '').lower() or r.get('sub_region') == 'All']
+            if region_matches:
+                filtered_recipes = region_matches
+
     # 2. Calculate "Distance" for each recipe using Calorie-Scaling (Layer 3)
     scored_recipes = []
     for recipe in filtered_recipes:

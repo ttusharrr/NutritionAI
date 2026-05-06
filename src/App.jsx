@@ -28,6 +28,7 @@ import DietPlan from './components/web/DietPlan';
 import ChatBot from './components/web/ChatBot';
 import AboutPage from './components/web/AboutPage';
 import SettingsPage from './components/web/SettingsPage';
+import ProfilePage from './components/web/ProfilePage';
 import LandingPage from './components/web/LandingPage';
 import { useAuth } from './context/AuthContext';
 
@@ -60,6 +61,10 @@ export default function App() {
             
             <Route path="/profile-setup" element={
               <ProtectedRoute><ProfileSetup /></ProtectedRoute>
+            } />
+
+            <Route path="/profile" element={
+              <ProtectedRoute><ProfilePage /></ProtectedRoute>
             } />
 
             <Route path="/diet-plan" element={
