@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons'; 
 
 import { COLORS } from './src/theme/colors';
+import { CONFIG } from './src/constants/Config';
 
 // Screens
 import LandingScreen from './src/screens/LandingScreen';
@@ -58,6 +59,11 @@ function TabNavigator() {
 }
 
 export default function App() {
+  // Wake up Render backend immediately when app launches
+  useEffect(() => {
+    fetch(`${CONFIG.BASE_URL}/auth/health`, { method: 'GET' }).catch(() => {});
+  }, []);
+
   return (
     <NavigationContainer>
       <StatusBar style="light" />

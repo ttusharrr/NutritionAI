@@ -49,6 +49,15 @@ def send_email_async_aware(target_func, *args):
 
 
 # ─────────────────────────────────────────────────────────────────
+# HEALTH CHECK (used by mobile app to warm up Render free tier)
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/health", methods=["GET"])
+def health_check():
+    """Lightweight health check to wake up the server."""
+    return jsonify({"status": "ok"}), 200
+
+
+# ─────────────────────────────────────────────────────────────────
 # REGISTER
 # ─────────────────────────────────────────────────────────────────
 @auth_bp.route("/register", methods=["POST"])
@@ -420,7 +429,8 @@ def google_auth():
     try:
         # Verify token with Google's API
         google_response = http_requests.get(
-            f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}"
+            f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}",
+            timeout=5
         )
 
         if google_response.status_code != 200:
