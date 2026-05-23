@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 """
 Gmail API OAuth2 Setup Wizard.
-This script guides the developer to authorize their app to send emails
-via Gmail API using a local browser flow, generating a secure token.json file.
+Generates a secure token.json by authorizing via browser.
 """
 
 import os
@@ -22,13 +22,13 @@ SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 def main():
     print("=========================================================")
-    print("        📧 NutriAI Gmail API OAuth2 Setup Wizard         ")
+    print("        NutriAI Gmail API OAuth2 Setup Wizard")
     print("=========================================================")
     print("This tool will authorize your application to send OTP emails")
-    print("directly via Google's secure HTTPS API. This avoids SMTP firewall blocks!")
+    print("directly via Google's secure HTTPS API.")
     print("\nStep 1: Checking for Google Credentials...")
 
-    # Look for credentials.json in backend/ or backend/utils/
+    # Look for credentials.json in backend/ directory
     backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     cred_paths = [
         os.path.join(backend_dir, 'credentials.json'),
@@ -42,45 +42,38 @@ def main():
             break
 
     if not cred_path:
-        print("\n❌ Error: 'credentials.json' not found!")
-        print("\nTo generate credentials.json:")
-        print("1. Go to Google Cloud Console (https://console.cloud.google.com).")
-        print("2. Create a project named 'NutriAI'.")
-        print("3. Search for 'Gmail API' and click 'Enable'.")
-        print("4. Go to 'APIs & Services' -> 'OAuth consent screen', choose 'External', fill basic details, and add test user 'your_email@gmail.com'.")
-        print("5. Go to 'Credentials' -> 'Create Credentials' -> 'OAuth client ID'.")
-        print("6. Set Application type to 'Desktop app' and click Create.")
-        print("7. Download the JSON file, rename it to 'credentials.json', and save it in your 'backend/' folder.")
+        print("\n[ERROR] 'credentials.json' not found!")
         return
 
-    print(f"✅ Found credentials at: {cred_path}")
+    print(f"[OK] Found credentials at: {cred_path}")
     print("\nStep 2: Starting local authorization flow...")
     print("Opening your default browser for Google authentication...")
+    print("Please log in with tushar427sharma@gmail.com and click Allow.\n")
 
     try:
         flow = InstalledAppFlow.from_client_secrets_file(cred_path, SCOPES)
         creds = flow.run_local_server(port=0)
 
-        # Save credentials to token.json
+        # Save credentials to token.json inside backend/
         token_path = os.path.join(backend_dir, 'token.json')
         with open(token_path, 'w') as token:
             token.write(creds.to_json())
 
-        print("\n" + "="*57)
-        print("🎉 SUCCESS: Gmail API OAuth2 Authentication Complete!")
-        print("="*57)
+        print("\n" + "="*60)
+        print("SUCCESS: Gmail API OAuth2 Authentication Complete!")
+        print("="*60)
         print(f"Saved secure token to: {token_path}")
-        print("\nTo deploy this to Render:")
-        print("1. Open 'token.json' and copy the entire text contents.")
+        print("\nNext Step - To deploy to Render:")
+        print("1. Open backend/token.json and copy ALL of its text content.")
         print("2. Go to your Render Web Service -> Environment.")
         print("3. Add a new Environment Variable:")
-        print("   Key: GMAIL_TOKEN_JSON")
-        print("   Value: (Paste the copied token.json text here)")
-        print("\nNutriAI will now automatically send secure emails via Gmail's HTTPS API!")
+        print("   Key:   GMAIL_TOKEN_JSON")
+        print("   Value: (paste the full token.json text here)")
+        print("\nNutriAI will now automatically send secure emails via Gmail HTTPS API!")
         print("=========================================================\n")
 
     except Exception as e:
-        print(f"\n❌ Error during authorization flow: {e}")
+        print(f"\n[ERROR] Authorization flow failed: {e}")
 
 if __name__ == '__main__':
     main()

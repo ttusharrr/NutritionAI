@@ -36,3 +36,7 @@ yarn-error.log*
 # Project Specific
 artifacts/
 scratch/
+
+# Google OAuth2 Secrets — NEVER commit these to GitHub!
+backend/token.json
+backend/credentials.json
