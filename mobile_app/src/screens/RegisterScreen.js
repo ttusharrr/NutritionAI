@@ -10,15 +10,17 @@ import {
   ScrollView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import * as AuthSession from 'expo-auth-session';
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 import { COLORS, SPACING } from '../theme/colors';
 import { register, loginWithGoogle } from '../api/authApi';
 import { CONFIG } from '../constants/Config';
 import { PremiumBackground, GlassInput, PremiumButton, SocialButton } from '../components/AuthComponents';
 
-WebBrowser.maybeCompleteAuthSession();
+// Configure Google Sign-In once
+GoogleSignin.configure({
+  webClientId: CONFIG.EXPO_CLIENT_ID,
+  offlineAccess: true,
+});
 
 function getPasswordStrength(pw) {
   let score = 0;
@@ -45,41 +47,39 @@ export default function RegisterScreen({ navigation }) {
 
   const passwordStrength = getPasswordStrength(password);
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: Platform.OS === 'android' ? CONFIG.ANDROID_CLIENT_ID : CONFIG.EXPO_CLIENT_ID,
-    androidClientId: CONFIG.ANDROID_CLIENT_ID,
-    iosClientId: CONFIG.IOS_CLIENT_ID,
-    webClientId: CONFIG.EXPO_CLIENT_ID,
-    redirectUri: AuthSession.makeRedirectUri({
-      scheme: 'com.tusharjk17.nutriai',
-      path: 'oauthredirect',
-    }),
-    responseType: AuthSession.ResponseType.IdToken,
-    selectAccount: true,
-  });
-
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const idToken = response.authentication?.idToken || response.params?.id_token;
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo?.data?.idToken || userInfo?.idToken;
       if (idToken) {
-        handleGoogleLogin(idToken);
+        await handleGoogleLogin(idToken);
       } else {
-        setError('Authentication succeeded, but Google did not return an ID token.');
+        setError('Google did not return an ID token. Please try again.');
       }
-    } else if (response?.type === 'error') {
-      setError(response.error?.message || 'Google Sign-In failed');
+    } catch (err) {
+      if (err.code === statusCodes.SIGN_IN_CANCELLED) {
+        // User cancelled — do nothing
+      } else if (err.code === statusCodes.IN_PROGRESS) {
+        setError('Sign-in already in progress.');
+      } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        setError('Google Play Services not available on this device.');
+      } else {
+        setError(err.message || 'Google Sign-In failed');
+      }
+    } finally {
+      setLoading(false);
     }
-  }, [response]);
+  };
 
   const handleGoogleLogin = async (idToken) => {
-    setLoading(true);
     try {
       await loginWithGoogle(idToken);
       navigation.replace('Main');
     } catch (err) {
       setError(err.response?.data?.error || 'Google authentication failed');
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -136,7 +136,7 @@ export default function RegisterScreen({ navigation }) {
               {/* Google Sign Up */}
               <SocialButton 
                 title="Sign up with Google" 
-                onPress={() => promptAsync()} 
+                onPress={handleGoogleSignIn} 
               />
 
               <View style={styles.separator}>
