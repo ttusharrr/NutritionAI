@@ -45,6 +45,8 @@ export default function RegisterScreen({ navigation }) {
   const passwordStrength = getPasswordStrength(password);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    androidClientId: CONFIG.EXPO_CLIENT_ID,
+    iosClientId: CONFIG.EXPO_CLIENT_ID,
     webClientId: CONFIG.EXPO_CLIENT_ID,
     selectAccount: true,
   });
