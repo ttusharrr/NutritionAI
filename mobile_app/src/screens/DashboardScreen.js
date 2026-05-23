@@ -236,7 +236,9 @@ export default function DashboardScreen({ navigation }) {
                   <View style={[styles.segment, { backgroundColor: '#ec4899', flex: 1 }]} />
                   <View style={[styles.segment, { backgroundColor: '#ef4444', flex: 1.5 }]} />
                 </View>
-                <View style={[styles.meterPointer, { left: `${getBMIPosition(bmiData.value)}%` }]} />
+                <View style={styles.meterPointerTrack}>
+                  <View style={[styles.meterPointer, { marginLeft: `${getBMIPosition(bmiData.value)}%` }]} />
+                </View>
                 <View style={styles.meterLabels}>
                   <Text style={styles.meterLabelText}>15</Text>
                   <Text style={styles.meterLabelText}>18.5</Text>
@@ -599,6 +601,13 @@ const styles = StyleSheet.create({
   },
   segment: {
     borderRadius: 3,
+  },
+  meterPointerTrack: {
+    position: 'relative',
+    height: 14,
+    marginTop: -4,
+    marginBottom: 4,
+    flexDirection: 'row',
   },
   meterPointer: {
     position: 'absolute',
