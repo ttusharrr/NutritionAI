@@ -26,9 +26,10 @@ class Config:
     JWT_HEADER_NAME = "Authorization"
     JWT_HEADER_TYPE = "Bearer"
 
-    # Email (SMTP)
+    # Email (SMTP & SendGrid fallback)
     SENDER_EMAIL = os.getenv("SENDER_EMAIL", "tushar427sharma@gmail.com")
     EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+    SENDGRID_API_KEY = os.getenv("SENDGRID_API_KEY")
     SMTP_SERVER = "smtp.gmail.com"
     SMTP_PORT = 587  # TLS (STARTTLS)
 

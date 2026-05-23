@@ -80,9 +80,40 @@ def register():
     # Check if email already exists
     existing = db.users.find_one({"email": email})
     if existing:
-        return jsonify({"error": "An account with this email already exists"}), 409
+        if existing.get("is_verified"):
+            return jsonify({"error": "An account with this email already exists"}), 409
+        else:
+            # Unverified account exists -> update password and send new OTP
+            password_hash = hash_password(password)
+            otp_code = str(random.randint(100000, 999999))
+            
+            db.users.update_one(
+                {"_id": existing["_id"]},
+                {
+                    "$set": {
+                        "name": name,
+                        "password_hash": password_hash,
+                        "otp.code": otp_code,
+                        "otp.expires_at": datetime.now(timezone.utc).timestamp() + Config.OTP_EXPIRY.total_seconds(),
+                        "otp.attempts": 0,
+                        "updated_at": datetime.now(timezone.utc),
+                    }
+                }
+            )
+            
+            # Send OTP email
+            send_email_async_aware(send_otp_email, email, otp_code, name.split()[0])
+            print(f"[OTP] Resent Registration OTP for {email}: {otp_code}")
+            
+            return jsonify({
+                "message": "Verification email resent. Please check your inbox.",
+                "user_id": str(existing["_id"]),
+                "email": email,
+                "email_sent": True,
+                "requires_verification": True,
+            }), 201
 
-    # Create user
+    # Create new user
     password_hash = hash_password(password)
     user_doc = create_user_document(name, email, password_hash, auth_provider="local")
 

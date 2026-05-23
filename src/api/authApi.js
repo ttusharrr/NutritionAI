@@ -3,7 +3,7 @@
  * Handles all auth-related HTTP requests with token management.
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://nutritionai.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 class AuthAPI {
   constructor() {
