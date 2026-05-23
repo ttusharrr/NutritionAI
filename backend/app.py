@@ -37,7 +37,11 @@ def create_app():
                 # Allow all vercel.app and onrender.com domains for easier deployment
                 r"https://.*\.vercel\.app",
                 r"http://.*\.vercel\.app",
-                r"https://.*\.onrender\.com"
+                r"https://.*\.onrender\.com",
+                # Allow local network IP origins on any port for development
+                r"http://10\.\d+\.\d+\.\d+(:\d+)?",
+                r"http://192\.168\.\d+\.\d+(:\d+)?",
+                r"http://172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+(:\d+)?"
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],

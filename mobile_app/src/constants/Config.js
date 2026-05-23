@@ -1,6 +1,6 @@
 export const CONFIG = {
-  // Update this to your local IP if testing on a physical device
-  BASE_URL: 'http://10.75.239.24:5000/api',
+  // Production backend on Render — accessible from anywhere
+  BASE_URL: 'https://nutritionai.onrender.com/api',
 
   // Google Client IDs
   GOOGLE_CLIENT_ID: '1051916449617-8rsa54uaur43o43r0agqc1uaktu7r8cn.apps.googleusercontent.com',
