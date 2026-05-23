@@ -45,9 +45,8 @@ export default function RegisterScreen({ navigation }) {
   const passwordStrength = getPasswordStrength(password);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: CONFIG.GOOGLE_CLIENT_ID,
-    iosClientId: CONFIG.GOOGLE_CLIENT_ID,
-    webClientId: CONFIG.GOOGLE_CLIENT_ID,
+    webClientId: CONFIG.EXPO_CLIENT_ID,
+    selectAccount: true,
   });
 
   React.useEffect(() => {
