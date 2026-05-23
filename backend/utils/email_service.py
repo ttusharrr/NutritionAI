@@ -73,25 +73,6 @@ def send_otp_email(to_email, otp_code, user_name="there"):
     </html>
     """
 
-    # Try using SendGrid HTTP API first if key is present
-    if Config.SENDGRID_API_KEY:
-        try:
-            from sendgrid import SendGridAPIClient
-            from sendgrid.helpers.mail import Mail as SG_Mail
-            
-            message = SG_Mail(
-                from_email=Config.SENDER_EMAIL,
-                to_emails=to_email,
-                subject=subject,
-                html_content=html_content
-            )
-            sg = SendGridAPIClient(Config.SENDGRID_API_KEY)
-            response = sg.send(message)
-            print(f"[EMAIL] OTP sent to {to_email} via SendGrid API (Status: {response.status_code})")
-            return True
-        except Exception as sg_err:
-            print(f"[EMAIL ERROR] SendGrid API failed: {str(sg_err)}. Falling back to SMTP...")
-
     try:
         msg = MIMEMultipart()
         msg['From'] = f"NutriAI <{Config.SENDER_EMAIL}>"
@@ -177,25 +158,6 @@ def send_password_reset_email(to_email, reset_link, user_name="there"):
     </body>
     </html>
     """
-
-    # Try using SendGrid HTTP API first if key is present
-    if Config.SENDGRID_API_KEY:
-        try:
-            from sendgrid import SendGridAPIClient
-            from sendgrid.helpers.mail import Mail as SG_Mail
-            
-            message = SG_Mail(
-                from_email=Config.SENDER_EMAIL,
-                to_emails=to_email,
-                subject=subject,
-                html_content=html_content
-            )
-            sg = SendGridAPIClient(Config.SENDGRID_API_KEY)
-            response = sg.send(message)
-            print(f"[EMAIL] Reset link sent to {to_email} via SendGrid API (Status: {response.status_code})")
-            return True
-        except Exception as sg_err:
-            print(f"[EMAIL ERROR] SendGrid API failed: {str(sg_err)}. Falling back to SMTP...")
 
     try:
         msg = MIMEMultipart()
