@@ -107,13 +107,31 @@ def send_otp_email(to_email, otp_code, user_name="there"):
         msg['Subject'] = subject
         msg.attach(MIMEText(html_content, 'html'))
 
-        # Use smtplib.SMTP_SSL for Port 465
-        with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
-            server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
-            server.send_message(msg)
+        # Try Port 465 (SSL) first
+        try:
+            print("[EMAIL] Attempting delivery on Port 465 (SSL)...")
+            with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
+                server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
+                server.send_message(msg)
+            print(f"[EMAIL] OTP sent to {to_email} via Port 465 (SSL)")
+            return True
+        except Exception as ssl_err:
+            print(f"[EMAIL WARNING] Port 465 (SSL) failed: {ssl_err}. Trying Port 587 (TLS)...")
             
-        print(f"[EMAIL] OTP sent to {to_email} via Gmail SMTP")
-        return True
+            # Fallback to Port 587 (TLS/STARTTLS)
+            try:
+                with smtplib.SMTP(Config.SMTP_SERVER, 587, timeout=10) as server:
+                    server.starttls()
+                    server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
+                    server.send_message(msg)
+                print(f"[EMAIL] OTP sent to {to_email} via Port 587 (TLS)")
+                return True
+            except Exception as tls_err:
+                print(f"[EMAIL ERROR] Both Port 465 and Port 587 failed.")
+                print(f"  Port 465 Error: {ssl_err}")
+                print(f"  Port 587 Error: {tls_err}")
+                raise tls_err
+                
     except Exception as e:
         print(f"\n[EMAIL ERROR] ❌ Failed to send OTP to {to_email}: {str(e)}")
         print("\n" + "="*60)
@@ -193,13 +211,31 @@ def send_password_reset_email(to_email, reset_link, user_name="there"):
         msg['Subject'] = subject
         msg.attach(MIMEText(html_content, 'html'))
 
-        # Use smtplib.SMTP_SSL for Port 465
-        with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
-            server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
-            server.send_message(msg)
+        # Try Port 465 (SSL) first
+        try:
+            print("[EMAIL] Attempting delivery on Port 465 (SSL)...")
+            with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
+                server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
+                server.send_message(msg)
+            print(f"[EMAIL] Reset link sent to {to_email} via Port 465 (SSL)")
+            return True
+        except Exception as ssl_err:
+            print(f"[EMAIL WARNING] Port 465 (SSL) failed: {ssl_err}. Trying Port 587 (TLS)...")
             
-        print(f"[EMAIL] Reset link sent to {to_email} via Gmail SMTP")
-        return True
+            # Fallback to Port 587 (TLS/STARTTLS)
+            try:
+                with smtplib.SMTP(Config.SMTP_SERVER, 587, timeout=10) as server:
+                    server.starttls()
+                    server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
+                    server.send_message(msg)
+                print(f"[EMAIL] Reset link sent to {to_email} via Port 587 (TLS)")
+                return True
+            except Exception as tls_err:
+                print(f"[EMAIL ERROR] Both Port 465 and Port 587 failed.")
+                print(f"  Port 465 Error: {ssl_err}")
+                print(f"  Port 587 Error: {tls_err}")
+                raise tls_err
+                
     except Exception as e:
         print(f"[EMAIL ERROR] Failed to send reset email to {to_email}: {str(e)}")
         print(f"[FALLBACK] Reset link for {to_email}: {reset_link}")
