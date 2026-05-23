@@ -29,11 +29,12 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState('');
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: CONFIG.EXPO_CLIENT_ID,
-    iosClientId: CONFIG.EXPO_CLIENT_ID,
+    androidClientId: CONFIG.ANDROID_CLIENT_ID,
+    iosClientId: CONFIG.IOS_CLIENT_ID,
     webClientId: CONFIG.EXPO_CLIENT_ID,
     redirectUri: AuthSession.makeRedirectUri({
-      native: 'https://auth.expo.io/@tusharjk17/mobile_app',
+      scheme: 'com.tusharjk17.nutriai',
+      path: 'oauthredirect',
     }),
     selectAccount: true,
   });
