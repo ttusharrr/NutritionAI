@@ -13,6 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from 'expo-auth-session/providers/google';
+import * as AuthSession from 'expo-auth-session';
 import { COLORS, SPACING } from '../theme/colors';
 import { login, loginWithGoogle } from '../api/authApi';
 import { CONFIG } from '../constants/Config';
@@ -31,6 +32,9 @@ export default function LoginScreen({ navigation }) {
     androidClientId: CONFIG.EXPO_CLIENT_ID,
     iosClientId: CONFIG.EXPO_CLIENT_ID,
     webClientId: CONFIG.EXPO_CLIENT_ID,
+    redirectUri: AuthSession.makeRedirectUri({
+      native: 'https://auth.expo.io/@tusharjk17/mobile_app',
+    }),
     selectAccount: true,
   });
 
