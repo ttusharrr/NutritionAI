@@ -28,9 +28,9 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState('');
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    androidClientId: CONFIG.GOOGLE_CLIENT_ID,
-    iosClientId: CONFIG.GOOGLE_CLIENT_ID,
-    webClientId: CONFIG.GOOGLE_CLIENT_ID,
+    androidClientId: CONFIG.ANDROID_CLIENT_ID,
+    iosClientId: CONFIG.IOS_CLIENT_ID,
+    webClientId: CONFIG.EXPO_CLIENT_ID,
   });
 
   React.useEffect(() => {

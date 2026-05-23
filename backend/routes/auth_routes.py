@@ -429,7 +429,7 @@ def google_auth():
         google_data = google_response.json()
 
         # Verify audience matches our client ID
-        if google_data.get("aud") != Config.GOOGLE_CLIENT_ID:
+        if google_data.get("aud") not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
             return jsonify({"error": "Token was not issued for this application"}), 401
 
         google_email = google_data.get("email", "").lower()

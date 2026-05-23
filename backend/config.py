@@ -27,7 +27,11 @@ class Config:
     JWT_HEADER_TYPE = "Bearer"
 
     # Google OAuth
+    # Primary web client ID used by the web frontend
     GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+    # Mobile client IDs for Android and iOS (optional)
+    GOOGLE_ANDROID_CLIENT_ID = os.getenv("GOOGLE_ANDROID_CLIENT_ID")
+    GOOGLE_IOS_CLIENT_ID = os.getenv("GOOGLE_IOS_CLIENT_ID")
     GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
     # App
