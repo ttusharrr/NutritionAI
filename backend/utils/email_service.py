@@ -80,9 +80,8 @@ def send_otp_email(to_email, otp_code, user_name="there"):
         msg['Subject'] = subject
         msg.attach(MIMEText(html_content, 'html'))
 
-        # Use smtplib.SMTP with starttls for Port 587
-        with smtplib.SMTP(Config.SMTP_SERVER, Config.SMTP_PORT, timeout=7) as server:
-            server.starttls() # Secure the connection
+        # Use smtplib.SMTP_SSL for Port 465
+        with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
             server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
             server.send_message(msg)
             
@@ -167,9 +166,8 @@ def send_password_reset_email(to_email, reset_link, user_name="there"):
         msg['Subject'] = subject
         msg.attach(MIMEText(html_content, 'html'))
 
-        # Use smtplib.SMTP with starttls for Port 587
-        with smtplib.SMTP(Config.SMTP_SERVER, Config.SMTP_PORT, timeout=7) as server:
-            server.starttls() # Secure the connection
+        # Use smtplib.SMTP_SSL for Port 465
+        with smtplib.SMTP_SSL(Config.SMTP_SERVER, 465, timeout=10) as server:
             server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
             server.send_message(msg)
             

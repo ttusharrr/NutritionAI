@@ -2,7 +2,12 @@ import os
 from dotenv import load_dotenv
 from datetime import timedelta
 
-load_dotenv()
+# Explicitly load .env from the backend directory
+backend_env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+if os.path.exists(backend_env_path):
+    load_dotenv(backend_env_path)
+else:
+    load_dotenv()
 
 
 class Config:

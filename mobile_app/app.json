@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "mobile_app",
+    "name": "NutriAI",
     "slug": "mobile_app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -16,6 +16,7 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.tusharjk17.nutriai",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,6 +29,12 @@
     "plugins": [
       "expo-web-browser",
       "expo-video"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "f0a6b0eb-d966-401d-808f-21f5b92294b7"
+      }
+    },
+    "owner": "tusharjk17"
   }
 }

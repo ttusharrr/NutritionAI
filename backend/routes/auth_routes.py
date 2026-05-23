@@ -340,11 +340,12 @@ def login():
             message += " (Note: Email delivery failed. In development, check the server console for the OTP.)"
 
         return jsonify({
+            "message": message,
             "error": message,
             "requires_verification": True,
             "email": email,
             "email_sent": email_sent,
-        }), 403
+        }), 200
 
     # Success — reset failed attempts and update last login
     db.users.update_one(
