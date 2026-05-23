@@ -36,13 +36,20 @@ export default function LoginScreen({ navigation }) {
       scheme: 'com.tusharjk17.nutriai',
       path: 'oauthredirect',
     }),
+    responseType: AuthSession.ResponseType.IdToken,
     selectAccount: true,
   });
 
   React.useEffect(() => {
     if (response?.type === 'success') {
-      const { authentication } = response;
-      handleGoogleLogin(authentication.idToken);
+      const idToken = response.authentication?.idToken || response.params?.id_token;
+      if (idToken) {
+        handleGoogleLogin(idToken);
+      } else {
+        setError('Authentication succeeded, but Google did not return an ID token.');
+      }
+    } else if (response?.type === 'error') {
+      setError(response.error?.message || 'Google Sign-In failed');
     }
   }, [response]);
 
