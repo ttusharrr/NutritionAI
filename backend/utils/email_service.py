@@ -73,6 +73,33 @@ def send_otp_email(to_email, otp_code, user_name="there"):
     </html>
     """
 
+    # Network Diagnostic Check
+    import socket
+    print(f"\n--- [DIAGNOSTIC] Testing connection to {Config.SMTP_SERVER} ---")
+    try:
+        # 1. Test DNS Resolution
+        resolved_ips = socket.getaddrinfo(Config.SMTP_SERVER, 465)
+        ip_list = list(set([x[4][0] for x in resolved_ips]))
+        print(f"[DIAGNOSTIC] DNS Resolution Successful: {ip_list}")
+        
+        # 2. Test TCP Port Connection directly (timeout 5s)
+        for ip in ip_list:
+            # Skip IPv6 if the platform doesn't support it
+            if ":" in ip:
+                continue
+            try:
+                print(f"[DIAGNOSTIC] Testing TCP connection to IPv4 {ip}:465...")
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(5)
+                s.connect((ip, 465))
+                s.close()
+                print(f"[DIAGNOSTIC] TCP Port 465 is OPEN to {ip}!")
+            except Exception as conn_err:
+                print(f"[DIAGNOSTIC] TCP Connection to {ip}:465 failed: {conn_err}")
+    except Exception as dns_err:
+        print(f"[DIAGNOSTIC ERROR] DNS Resolution failed: {dns_err}")
+    print("---------------------------------------------------\n")
+
     try:
         msg = MIMEMultipart()
         msg['From'] = f"NutriAI <{Config.SENDER_EMAIL}>"
