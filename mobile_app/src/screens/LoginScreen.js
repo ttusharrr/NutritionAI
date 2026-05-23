@@ -29,6 +29,7 @@ export default function LoginScreen({ navigation }) {
   const [error, setError] = useState('');
 
   const [request, response, promptAsync] = Google.useAuthRequest({
+    clientId: Platform.OS === 'android' ? CONFIG.ANDROID_CLIENT_ID : CONFIG.EXPO_CLIENT_ID,
     androidClientId: CONFIG.ANDROID_CLIENT_ID,
     iosClientId: CONFIG.IOS_CLIENT_ID,
     webClientId: CONFIG.EXPO_CLIENT_ID,
