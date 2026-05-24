@@ -10,7 +10,7 @@ import {
   ScrollView
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+import { GoogleSignin, statusCodes } from '../utils/GoogleSigninSafe';
 import { COLORS, SPACING } from '../theme/colors';
 import { register, loginWithGoogle } from '../api/authApi';
 import { CONFIG } from '../constants/Config';
