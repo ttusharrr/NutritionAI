@@ -46,6 +46,9 @@ class AuthAPI {
   /**
    * Make an authenticated API request with auto-refresh.
    */
+  /**
+   * Make an authenticated API request with auto-refresh and automatic cold-start retry.
+   */
   async request(endpoint, options = {}) {
     const url = `${this.baseURL}${endpoint}`;
     const headers = {
@@ -59,58 +62,82 @@ class AuthAPI {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    try {
-      let response = await fetch(url, {
-        ...options,
-        headers,
-      });
+    const maxRetries = 25; // 25 attempts * 2s = 50s total wait time (perfect for Render cold starts)
+    let attempt = 0;
 
-      // If 401 and we have a refresh token, try refreshing
-      if (response.status === 401 && this.getRefreshToken()) {
-        const refreshed = await this.refreshAccessToken();
-        if (refreshed) {
-          headers['Authorization'] = `Bearer ${this.getToken()}`;
-          response = await fetch(url, { ...options, headers });
+    while (attempt < maxRetries) {
+      try {
+        let response = await fetch(url, {
+          ...options,
+          headers,
+        });
+
+        // If 401 and we have a refresh token, try refreshing
+        if (response.status === 401 && this.getRefreshToken()) {
+          const refreshed = await this.refreshAccessToken();
+          if (refreshed) {
+            headers['Authorization'] = `Bearer ${this.getToken()}`;
+            response = await fetch(url, { ...options, headers });
+          }
         }
-      }
 
-      // Try to parse as JSON, but handle errors if not JSON
-      let data = {};
-      const contentType = response.headers.get('content-type');
-      if (contentType && contentType.includes('application/json')) {
-        data = await response.json();
-      } else {
-        // Handle non-JSON response (like HTML error pages or rate limit messages)
-        const text = await response.text();
-        data = { error: text || `Server returned ${response.status}` };
-      }
+        // Try to parse as JSON, but handle errors if not JSON
+        let data = {};
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          data = await response.json();
+        } else {
+          // Handle non-JSON response (like HTML error pages or rate limit messages)
+          const text = await response.text();
+          data = { error: text || `Server returned ${response.status}` };
+        }
 
-      if (!response.ok) {
-        // Specific handling for common status codes
-        let errorMessage = data.error || data.message || 'Request failed';
+        if (!response.ok) {
+          // Specific handling for common status codes
+          let errorMessage = data.error || data.message || 'Request failed';
+          
+          if (response.status === 429) {
+            errorMessage = 'Too many requests. Please wait a moment before trying again.';
+          } else if (response.status === 500) {
+            errorMessage = 'Server error. Our team has been notified. Please try again later.';
+          } else if (response.status === 404) {
+            errorMessage = 'API endpoint not found. Please check your configuration.';
+          }
+
+          const error = new Error(errorMessage);
+          error.status = response.status;
+          error.data = data;
+          throw error;
+        }
+
+        return data;
+      } catch (error) {
+        // If it has an HTTP status, it means the server is awake and answered, so throw immediately
+        if (error.status) throw error;
         
-        if (response.status === 429) {
-          errorMessage = 'Too many requests. Please wait a moment before trying again.';
-        } else if (response.status === 500) {
-          errorMessage = 'Server error. Our team has been notified. Please try again later.';
-        } else if (response.status === 404) {
-          errorMessage = 'API endpoint not found. Please check your configuration.';
+        // DNS failure, connection refused, or timeout (server is sleeping or offline)
+        console.warn(`[API Connection Attempt ${attempt + 1}/${maxRetries} Failed]`, error);
+        
+        attempt++;
+        if (attempt >= maxRetries) {
+          throw new Error('Could not connect to the secure server. Please check your internet connection or try again later.');
         }
 
-        const error = new Error(errorMessage);
-        error.status = response.status;
-        error.data = data;
-        throw error;
+        // Wait 2 seconds before retrying to give the Render server time to boot up
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
+    }
+  }
 
-      return data;
-    } catch (error) {
-      // If it's already an error with a status, it's a server error we already handled
-      if (error.status) throw error;
-      
-      // Actual fetch failure (DNS, connection refused, CORS)
-      console.error('[API Network Error]', error);
-      throw new Error('Could not connect to the server. Please check your internet or API URL.');
+  /**
+   * Ping the server to wake it up in the background.
+   */
+  async pingServer() {
+    try {
+      console.log('[API Warmup] Triggering server background pre-warmup...');
+      fetch(`${this.baseURL}/auth/health`, { method: 'GET' }).catch(() => {});
+    } catch (err) {
+      // Ignore background errors
     }
   }
 

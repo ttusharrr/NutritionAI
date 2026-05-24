@@ -144,7 +144,8 @@ from utils.ip_updater import update_config_files
 
 # Automatically update IP address in config files on startup
 # Run before app creation so environment variables are updated
-if os.environ.get("FLASK_ENV") == "development":
+# Trigger automatically when running locally (not on Render/Vercel) to simplify local mobile/web dev
+if os.environ.get("FLASK_ENV") == "development" or (not os.environ.get("RENDER") and not os.environ.get("VERCEL")):
     update_config_files()
 
 app = create_app()

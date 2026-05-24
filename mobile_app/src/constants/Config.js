@@ -1,6 +1,6 @@
 export const CONFIG = {
   // Production backend on Render — accessible from anywhere
-  BASE_URL: 'https://nutritionai.onrender.com/api',
+  BASE_URL: 'http://10.75.239.24:5000/api',
 
   // Google OAuth client IDs
   // Web client ID (used by Expo Go)

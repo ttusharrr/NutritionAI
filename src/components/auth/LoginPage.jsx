@@ -3,7 +3,7 @@
  * Features: account lockout feedback, unverified redirect, remember me.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
@@ -18,7 +18,41 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Dynamic server wake-up/loading message timer
+  useEffect(() => {
+    let timer1, timer2, timer3, timer4;
+    if (loading) {
+      setStatusMessage('⚡ Connecting to secure servers...');
+      
+      timer1 = setTimeout(() => {
+        setStatusMessage('🚀 Waking up cloud database...');
+      }, 3000);
+
+      timer2 = setTimeout(() => {
+        setStatusMessage('🔐 Establishing encrypted connection...');
+      }, 7000);
+
+      timer3 = setTimeout(() => {
+        setStatusMessage('📡 Optimizing data routes (Render cold-start)...');
+      }, 12000);
+
+      timer4 = setTimeout(() => {
+        setStatusMessage('✨ Finalizing authentication protocol...');
+      }, 20000);
+    } else {
+      setStatusMessage('');
+    }
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+  }, [loading]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -190,6 +224,38 @@ export default function LoginPage() {
         >
           {loading ? <div className="btn-spinner" /> : 'Sign In'}
         </motion.button>
+
+        {loading && statusMessage && (
+          <motion.div 
+            className="loading-status-container"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center', 
+              gap: '8px', 
+              marginTop: '16px',
+              fontSize: '13px',
+              fontWeight: '500',
+              color: '#2dd4bf',
+              backgroundColor: 'rgba(45, 212, 191, 0.05)',
+              padding: '10px 16px',
+              borderRadius: '12px',
+              border: '1px solid rgba(45, 212, 191, 0.1)',
+            }}
+          >
+            <span className="pulse-dot" style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: '#2dd4bf',
+              boxShadow: '0 0 8px #2dd4bf',
+              display: 'inline-block',
+            }} />
+            <span>{statusMessage}</span>
+          </motion.div>
+        )}
       </form>
 
       <div className="auth-footer">

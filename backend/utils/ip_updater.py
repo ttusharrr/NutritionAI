@@ -29,17 +29,17 @@ def update_config_files():
         try:
             with open(config_js_path, "r") as f:
                 content = f.read()
-            
-            # Regex to find the BASE_URL line
+
+            # Regex to find any format of BASE_URL (http, https, render, local) and update it
             new_content = re.sub(
-                r"BASE_URL:\s*'http://[^:]+:5000/api'",
+                r"BASE_URL:\s*['\"][^'\"]+['\"]",
                 f"BASE_URL: 'http://{ip}:5000/api'",
                 content
             )
             
             with open(config_js_path, "w") as f:
                 f.write(new_content)
-            print(f"[IP AUTO-UPDATE] Updated mobile_app Config.js with {ip}")
+            print(f"[IP AUTO-UPDATE] Updated mobile_app Config.js with http://{ip}:5000/api")
         except Exception as e:
             print(f"[IP AUTO-UPDATE ERROR] Failed to update Config.js: {e}")
     else:

@@ -11,6 +11,7 @@ const authApi = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  timeout: 10000, // 10s individual request timeout
 });
 
 // Intercept requests to add token
@@ -21,6 +22,33 @@ authApi.interceptors.request.use(async (config) => {
   }
   return config;
 });
+
+// Intercept responses to handle Render cold starts (network retries)
+authApi.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const { config, response } = error;
+    
+    // If there is no response (meaning it's a network / connection error, not an HTTP error)
+    if (!response) {
+      config.__retryCount = config.__retryCount || 0;
+      const maxRetries = 25; // 25 attempts * 2s = 50s total wait time
+      
+      if (config.__retryCount < maxRetries) {
+        config.__retryCount += 1;
+        console.warn(`[Axios Network Error] Attempt ${config.__retryCount}/${maxRetries} failed. Server might be sleeping. Retrying in 2s...`);
+        
+        // Wait 2 seconds
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        
+        // Resolve the retry by making the request again
+        return authApi(config);
+      }
+    }
+    
+    return Promise.reject(error);
+  }
+);
 
 export const login = async (email, password) => {
   const response = await authApi.post('/auth/login', { email, password });

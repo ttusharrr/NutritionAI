@@ -13,9 +13,12 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Initialize auth state from localStorage
+  // Initialize auth state from localStorage and ping the server
   useEffect(() => {
     const initAuth = async () => {
+      // Fire-and-forget background ping to warm up the backend server immediately on launch
+      authApi.pingServer();
+
       const token = authApi.getToken();
       const storedUser = localStorage.getItem('nutriai_user');
 

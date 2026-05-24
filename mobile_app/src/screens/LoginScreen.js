@@ -28,7 +28,41 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState('');
   const [error, setError] = useState('');
+
+  // Dynamic server wake-up/loading message timer
+  useEffect(() => {
+    let timer1, timer2, timer3, timer4;
+    if (loading) {
+      setStatusMessage('Connecting to secure servers...');
+      
+      timer1 = setTimeout(() => {
+        setStatusMessage('Waking up cloud database...');
+      }, 3000);
+
+      timer2 = setTimeout(() => {
+        setStatusMessage('Establishing encrypted connection...');
+      }, 7000);
+
+      timer3 = setTimeout(() => {
+        setStatusMessage('Optimizing routes (Render cold-start)...');
+      }, 12000);
+
+      timer4 = setTimeout(() => {
+        setStatusMessage('Finalizing authentication protocol...');
+      }, 20000);
+    } else {
+      setStatusMessage('');
+    }
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
+    };
+  }, [loading]);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -153,6 +187,13 @@ export default function LoginScreen({ navigation }) {
               onPress={handleLogin} 
               loading={loading} 
             />
+
+            {loading && statusMessage !== '' && (
+              <View style={styles.statusContainer}>
+                <ActivityIndicator size="small" color={COLORS.primary} />
+                <Text style={styles.statusText}>{statusMessage}</Text>
+              </View>
+            )}
 
             <View style={styles.separator}>
               <View style={styles.line} />
@@ -287,5 +328,23 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     fontSize: 14,
     fontWeight: '600',
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(45, 212, 191, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(45, 212, 191, 0.15)',
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 16,
+  },
+  statusText: {
+    color: COLORS.primary,
+    fontSize: 13,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 });

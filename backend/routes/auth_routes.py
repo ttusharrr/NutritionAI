@@ -427,32 +427,57 @@ def google_auth():
 
     # Verify the Google token
     try:
-        # Verify token with Google's API
-        google_response = http_requests.get(
-            f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}",
-            timeout=5
+        from google.oauth2 import id_token
+        from google.auth.transport import requests as google_requests
+
+        print("[GOOGLE AUTH] Attempting offline cryptographic verification...")
+        id_info = id_token.verify_oauth2_token(
+            credential,
+            google_requests.Request()
         )
 
-        if google_response.status_code != 200:
-            return jsonify({"error": "Invalid Google token"}), 401
+        google_email = id_info.get("email", "").lower()
+        google_name = id_info.get("name", "")
+        google_id = id_info.get("sub")
+        avatar_url = id_info.get("picture")
+        aud = id_info.get("aud")
 
-        google_data = google_response.json()
-
-        # Verify audience matches our client ID
-        if google_data.get("aud") not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
+        # Verify audience matches one of our client IDs
+        if aud not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
             return jsonify({"error": "Token was not issued for this application"}), 401
 
-        google_email = google_data.get("email", "").lower()
-        google_name = google_data.get("name", "")
-        google_id = google_data.get("sub")
-        avatar_url = google_data.get("picture")
-
         if not google_email:
-            return jsonify({"error": "Could not retrieve email from Google"}), 400
+            return jsonify({"error": "Could not retrieve email from Google token"}), 400
 
-    except Exception as e:
-        print(f"[GOOGLE AUTH ERROR] {str(e)}")
-        return jsonify({"error": "Failed to verify Google token"}), 500
+    except Exception as offline_err:
+        print(f"[GOOGLE AUTH] Offline verification failed: {offline_err}. Falling back to online verification...")
+        try:
+            # Fallback to online verification
+            google_response = http_requests.get(
+                f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}",
+                timeout=10
+            )
+
+            if google_response.status_code != 200:
+                return jsonify({"error": "Invalid Google token"}), 401
+
+            google_data = google_response.json()
+            google_email = google_data.get("email", "").lower()
+            google_name = google_data.get("name", "")
+            google_id = google_data.get("sub")
+            avatar_url = google_data.get("picture")
+            aud = google_data.get("aud")
+
+            # Verify audience matches one of our client IDs
+            if aud not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
+                return jsonify({"error": "Token was not issued for this application"}), 401
+
+            if not google_email:
+                return jsonify({"error": "Could not retrieve email from Google"}), 400
+
+        except Exception as online_err:
+            print(f"[GOOGLE AUTH ERROR] Both offline and online verification failed: {str(online_err)}")
+            return jsonify({"error": "Failed to verify Google token"}), 500
 
     db = get_db()
 
