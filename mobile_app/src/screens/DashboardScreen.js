@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   StyleSheet, 
   View, 
@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING } from '../theme/colors';
-import { getRecommendations, logout } from '../api/authApi';
+import { getRecommendations } from '../api/authApi';
 import authApi from '../api/authApi';
 
 const REGIONS = [
@@ -32,26 +32,24 @@ const REGIONS = [
   { id: 'International', label: 'International', icon: '🌍' },
 ];
 
-export default function DashboardScreen({ navigation }) {
+export default function DashboardScreen({ navigation, isTab }) {
   const [user, setUser] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [regionModalVisible, setRegionModalVisible] = useState(false);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const userStr = await AsyncStorage.getItem('user');
       if (userStr) {
         const userData = JSON.parse(userStr);
         setUser(userData);
-        
         if (!userData.profile_completed || !userData.profile?.age) {
           navigation.navigate('ProfileSetup');
           return;
         }
       }
-      
       const response = await getRecommendations();
       setData(response);
     } catch (err) {
@@ -60,24 +58,17 @@ export default function DashboardScreen({ navigation }) {
       setLoading(false);
       setRefreshing(false);
     }
-  };
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadData();
-    });
-    return unsubscribe;
   }, [navigation]);
 
-  const onRefresh = () => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', loadData);
+    return unsubscribe;
+  }, [navigation, loadData]);
+
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadData();
-  };
-
-  const handleLogout = async () => {
-    await logout();
-    navigation.replace('Landing');
-  };
+  }, [loadData]);
 
   const handleRegionChange = async (regionId) => {
     setRegionModalVisible(false);
@@ -106,8 +97,7 @@ export default function DashboardScreen({ navigation }) {
   const bmiData = targets.bmi_data || user?.daily_nutrition?.bmi_data || { value: 0, status: 'N/A' };
   const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region)) || REGIONS[0];
   const firstName = user?.name?.split(' ')[0] || 'Explorer';
-
-  const getBMIColor = (status) => {
+  const getBMIColor = useCallback((status) => {
     switch (status) {
       case 'Underweight': return '#fbbf24';
       case 'Normal': return '#22c55e';
@@ -115,11 +105,11 @@ export default function DashboardScreen({ navigation }) {
       case 'Obese': return '#ef4444';
       default: return COLORS.textTertiary;
     }
-  };
+  }, []);
 
-  const getBMIPosition = (value) => {
+  const getBMIPosition = useCallback((value) => {
     return Math.min(Math.max(((value || 0) - 15) / 25 * 100, 2), 98);
-  };
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
@@ -137,15 +127,11 @@ export default function DashboardScreen({ navigation }) {
         contentContainerStyle={{ paddingBottom: 120 }}
       >
         <SafeAreaView>
-          {/* Nav Bar - Parity with Web */}
+          {/* Greeting Bar (no logout - it's in the drawer now) */}
           <View style={styles.navBar}>
             <View>
-              <Text style={styles.brandText}>Nutri<Text style={{ color: COLORS.primary }}>AI</Text></Text>
-              <Text style={styles.greetingTitle}>Welcome, {firstName}!</Text>
+              <Text style={styles.greetingTitle}>Welcome back, {firstName} 👋</Text>
             </View>
-            <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
-              <Ionicons name="log-out-outline" size={22} color={COLORS.error} />
-            </TouchableOpacity>
           </View>
 
           {/* Region Selector */}
@@ -356,8 +342,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 24,
+    marginTop: 16,
+    marginBottom: 20,
   },
   brandText: {
     color: '#fff',
@@ -366,10 +352,10 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   greetingTitle: {
-    color: COLORS.textSecondary,
-    fontSize: 14,
-    fontWeight: '600',
-    marginTop: 2,
+    color: COLORS.text,
+    fontSize: 22,
+    fontWeight: '800',
+    letterSpacing: -0.5,
   },
   nebula1: {
     position: 'absolute',

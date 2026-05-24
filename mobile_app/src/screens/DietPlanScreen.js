@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
   StyleSheet, 
   View, 
@@ -16,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING } from '../theme/colors';
 import { getRecommendations, getRecipe } from '../api/authApi';
 
-export default function DietPlanScreen() {
+export default function DietPlanScreen({ navigation, isTab }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -24,7 +24,7 @@ export default function DietPlanScreen() {
   const [recipe, setRecipe] = useState(null);
   const [loadingRecipe, setLoadingRecipe] = useState(false);
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       const response = await getRecommendations();
       setData(response);
@@ -34,21 +34,21 @@ export default function DietPlanScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [loadData]);
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadData();
-  };
+  }, [loadData]);
 
-  const handleRegenerate = () => {
+  const handleRegenerate = useCallback(() => {
     setLoading(true);
     loadData();
-  };
+  }, [loadData]);
 
   const openRecipe = async (meal) => {
     setSelectedMeal(meal);
@@ -94,11 +94,11 @@ export default function DietPlanScreen() {
       </View>
 
       <SafeAreaView style={{ flex: 1 }}>
-        {/* Header - Parity with Web/Dashboard */}
+        {/* Compact top bar inside the tab */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.brandText}>Nutri<Text style={{ color: COLORS.primary }}>AI</Text></Text>
-            <Text style={styles.greetingTitle}>Meal Protocol</Text>
+            <Text style={styles.pageTitle}>Meal Protocol</Text>
+            <Text style={styles.pageSubtitle}>AI-generated for your goals</Text>
           </View>
           <TouchableOpacity style={styles.regenBtn} onPress={handleRegenerate}>
             <Ionicons name="refresh" size={18} color={COLORS.primary} />
@@ -321,6 +321,18 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '900',
     letterSpacing: -1,
+  },
+  pageTitle: {
+    color: COLORS.text,
+    fontSize: 20,
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  pageSubtitle: {
+    color: COLORS.textTertiary,
+    fontSize: 13,
+    fontWeight: '500',
+    marginTop: 2,
   },
   greetingTitle: {
     color: COLORS.textSecondary,
