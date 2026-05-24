@@ -85,18 +85,7 @@ export default function DashboardScreen({ navigation, isTab }) {
     }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }
-
-  const targets = data?.user_targets || user?.daily_nutrition || { daily_calories: 2000, macros: { protein: 0, carbs: 0, fat: 0 }};
-  const bmiData = targets.bmi_data || user?.daily_nutrition?.bmi_data || { value: 0, status: 'N/A' };
-  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region)) || REGIONS[0];
-  const firstName = user?.name?.split(' ')[0] || 'Explorer';
+  // These hooks MUST be before any early return (Rules of Hooks)
   const getBMIColor = useCallback((status) => {
     switch (status) {
       case 'Underweight': return '#fbbf24';
@@ -110,6 +99,19 @@ export default function DashboardScreen({ navigation, isTab }) {
   const getBMIPosition = useCallback((value) => {
     return Math.min(Math.max(((value || 0) - 15) / 25 * 100, 2), 98);
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
+
+  const targets = data?.user_targets || user?.daily_nutrition || { daily_calories: 2000, macros: { protein: 0, carbs: 0, fat: 0 }};
+  const bmiData = targets.bmi_data || user?.daily_nutrition?.bmi_data || { value: 0, status: 'N/A' };
+  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region)) || REGIONS[0];
+  const firstName = user?.name?.split(' ')[0] || 'Explorer';
 
   return (
     <View style={styles.mainContainer}>
