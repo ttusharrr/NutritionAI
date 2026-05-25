@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING } from '../theme/colors';
-import { verifyOtp, resendOtp } from '../api/authApi';
+import { verifyOtp, resendOtp, reportClientError } from '../api/authApi';
 import { PremiumBackground, PremiumButton } from '../components/AuthComponents';
 
 const OTP_LENGTH = 6;
@@ -99,6 +99,10 @@ export default function VerifyOtpScreen({ route, navigation }) {
         });
       }, 1500);
     } catch (err) {
+      console.error('[Verify OTP Error]', err.response?.status, err.response?.data, err.message);
+      const errMsg = err.response?.data?.error || err.userMessage || err.message;
+      reportClientError('verify_otp_backend', `Email: ${email} | Status: ${err.response?.status} | Error: ${errMsg}`, 'error');
+
       setError(err.response?.data?.error || 'Invalid verification code');
       setOtp(Array(OTP_LENGTH).fill(''));
       setTimeout(() => inputRefs.current[0]?.focus(), 100);
@@ -120,6 +124,10 @@ export default function VerifyOtpScreen({ route, navigation }) {
       setSuccess('New code sent! Check your email.');
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
+      console.error('[Resend OTP Error]', err.response?.status, err.response?.data, err.message);
+      const errMsg = err.response?.data?.error || err.userMessage || err.message;
+      reportClientError('resend_otp_backend', `Email: ${email} | Status: ${err.response?.status} | Error: ${errMsg}`, 'error');
+
       setError('Failed to resend code. Please try again.');
     }
   };

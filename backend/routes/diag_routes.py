@@ -1,13 +1,16 @@
+import os
 import socket
-import smtplib
-import ssl
-from flask import Blueprint, jsonify
+import logging
+from flask import Blueprint, jsonify, request
 from config import Config
+
+logger = logging.getLogger('nutriai.diag')
 
 diag_bp = Blueprint("diagnostics", __name__, url_prefix="/api/diag")
 
 @diag_bp.route("/network-check", methods=["GET"])
 def network_check():
+    """Network diagnostics for debugging email and API connectivity."""
     results = {}
     
     # 1. DNS Check
@@ -32,15 +35,22 @@ def network_check():
         results["port_587"] = {"status": "open"}
     except Exception as e:
         results["port_587"] = {"status": "closed/blocked", "error": str(e)}
-        
-    # 4. SMTP Auth Check (Port 465)
-    try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=5) as server:
-            server.login(Config.SENDER_EMAIL, Config.EMAIL_PASSWORD)
-            results["auth_465"] = {"status": "success"}
-    except Exception as e:
-        results["auth_465"] = {"status": "failed", "error": str(e)}
 
+    # 4. Gmail API Token check
+    gmail_token_present = bool(os.getenv("GMAIL_TOKEN_JSON"))
+    token_file_exists = os.path.exists(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "token.json"))
+    results["gmail_api"] = {
+        "env_token_set": gmail_token_present,
+        "local_token_file": token_file_exists,
+    }
+
+    # 5. Google OAuth Config check
+    results["google_oauth"] = {
+        "web_client_id_set": bool(Config.GOOGLE_CLIENT_ID),
+        "android_client_id_set": bool(Config.GOOGLE_ANDROID_CLIENT_ID),
+    }
+
+    logger.info(f"[DIAG] Network check completed: {results}")
     return jsonify(results), 200
 
 @diag_bp.route("/ai-check", methods=["GET"])
@@ -72,5 +82,53 @@ def ai_check():
     except Exception as e:
         status["test_call"] = "failed"
         status["error"] = str(e)
-        
+
+    logger.info(f"[DIAG] AI check completed: {status}")
     return jsonify(status), 200
+
+@diag_bp.route("/config-check", methods=["GET"])
+def config_check():
+    """Check critical configuration values are set (no secrets exposed)."""
+    config_status = {
+        "mongo_uri_set": bool(Config.MONGO_URI and "mongodb" in Config.MONGO_URI),
+        "jwt_secret_set": bool(Config.JWT_SECRET_KEY and Config.JWT_SECRET_KEY != "fallback-secret-key"),
+        "google_web_client_id_set": bool(Config.GOOGLE_CLIENT_ID),
+        "google_android_client_id_set": bool(Config.GOOGLE_ANDROID_CLIENT_ID),
+        "frontend_url": Config.FRONTEND_URL,
+        "flask_env": os.environ.get("FLASK_ENV", "not set"),
+        "is_render": bool(os.environ.get("RENDER")),
+        "is_vercel": bool(os.environ.get("VERCEL")),
+        "access_token_expires_seconds": int(Config.JWT_ACCESS_TOKEN_EXPIRES.total_seconds()),
+        "refresh_token_expires_seconds": int(Config.JWT_REFRESH_TOKEN_EXPIRES.total_seconds()),
+    }
+    logger.info(f"[DIAG] Config check: {config_status}")
+    return jsonify(config_status), 200
+
+@diag_bp.route("/log", methods=["POST"])
+def log_client_error():
+    """Receive client-side logs/errors and output them to the server console (Render logs)."""
+    try:
+        data = request.get_json() or {}
+        level = data.get("level", "error").lower()
+        message = data.get("message", "No message provided")
+        context = data.get("context", "unknown")
+        device_info = data.get("device_info", {})
+
+        log_msg = f"[CLIENT LOG - {context.upper()}] {message} | Device: {device_info}"
+
+        if level == "debug":
+            logger.debug(log_msg)
+        elif level == "info":
+            logger.info(log_msg)
+        elif level == "warning":
+            logger.warning(log_msg)
+        elif level == "critical":
+            logger.critical(log_msg)
+        else:
+            logger.error(log_msg)
+
+        return jsonify({"status": "logged"}), 200
+    except Exception as e:
+        logger.error(f"[DIAG ERROR] Failed to process client log: {e}")
+        return jsonify({"error": "Failed to log"}), 500
+

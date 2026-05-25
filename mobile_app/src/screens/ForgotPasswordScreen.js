@@ -32,7 +32,16 @@ export default function ForgotPasswordScreen({ navigation }) {
       await forgotPassword(email);
       setSent(true);
     } catch (err) {
-      setError(err.response?.data?.error || 'Something went wrong. Please try again.');
+      console.error('[ForgotPassword Error]', err.response?.status, err.response?.data, err.message);
+      if (err.response?.data?.error) {
+        setError(err.response.data.error);
+      } else if (err.userMessage) {
+        setError(err.userMessage);
+      } else if (!err.response) {
+        setError('Cannot reach the server. Please check your internet connection.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

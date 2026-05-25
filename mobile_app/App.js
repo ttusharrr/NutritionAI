@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
+import { View, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { COLORS } from './src/theme/colors';
 import { CONFIG } from './src/constants/Config';
@@ -27,16 +29,56 @@ import MainTabsScreen from './src/components/MainTabsScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  // Wake up Render backend immediately when app launches
+  const [isReady, setIsReady] = useState(false);
+  const [initialRoute, setInitialRoute] = useState('Landing');
+
   useEffect(() => {
-    fetch(`${CONFIG.BASE_URL}/auth/health`, { method: 'GET' }).catch(() => {});
+    // Wake up Render backend immediately when app launches
+    console.log(`[NutriAI] Warming up backend: ${CONFIG.BASE_URL}`);
+    fetch(`${CONFIG.BASE_URL}/auth/health`, { method: 'GET' })
+      .then((res) => {
+        console.log(`[NutriAI] Backend warm-up response: ${res.status}`);
+      })
+      .catch((err) => {
+        console.warn(`[NutriAI] Backend warm-up failed (will retry on login): ${err.message}`);
+      });
+
+    // Check if user has a stored token (persistent login)
+    const checkAuth = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const user = await AsyncStorage.getItem('user');
+        if (token && user) {
+          console.log('[NutriAI] Found stored auth token, navigating to Main');
+          setInitialRoute('Main');
+        } else {
+          console.log('[NutriAI] No stored auth token, showing Landing');
+          setInitialRoute('Landing');
+        }
+      } catch (e) {
+        console.error('[NutriAI] Error checking stored auth:', e);
+        setInitialRoute('Landing');
+      } finally {
+        setIsReady(true);
+      }
+    };
+    checkAuth();
   }, []);
+
+  // Show a loading indicator while checking auth state
+  if (!isReady) {
+    return (
+      <View style={{ flex: 1, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
       <StatusBar style="light" />
       <Stack.Navigator
-        initialRouteName="Landing"
+        initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: COLORS.background },

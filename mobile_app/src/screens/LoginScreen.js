@@ -13,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { GoogleSignin, statusCodes } from '../utils/GoogleSigninSafe';
 import { COLORS, SPACING } from '../theme/colors';
-import { login, loginWithGoogle } from '../api/authApi';
+import { login, loginWithGoogle, reportClientError } from '../api/authApi';
 import { CONFIG } from '../constants/Config';
 import { PremiumBackground, GlassInput, PremiumButton, SocialButton } from '../components/AuthComponents';
 
@@ -74,9 +74,13 @@ export default function LoginScreen({ navigation }) {
       if (idToken) {
         await handleGoogleLogin(idToken);
       } else {
+        console.error('[Google Sign-In] No ID token returned:', JSON.stringify(userInfo));
+        reportClientError('google_signin_client', 'No ID token returned from Google SDK', 'warning');
         setError('Google did not return an ID token. Please try again.');
       }
     } catch (err) {
+      console.error('[Google Sign-In Error]', err.code, err.message);
+      reportClientError('google_signin_client', `Code: ${err.code} | Message: ${err.message}`, 'warning');
       if (err.code === statusCodes.SIGN_IN_CANCELLED) {
         // User cancelled — do nothing
       } else if (err.code === statusCodes.IN_PROGRESS) {
@@ -84,7 +88,7 @@ export default function LoginScreen({ navigation }) {
       } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         setError('Google Play Services not available on this device.');
       } else {
-        setError(err.message || 'Google Sign-In failed');
+        setError(err.message || 'Google Sign-In failed. Please try again.');
       }
     } finally {
       setLoading(false);
@@ -93,13 +97,26 @@ export default function LoginScreen({ navigation }) {
 
   const handleGoogleLogin = async (idToken) => {
     try {
-      await loginWithGoogle(idToken);
+      const result = await loginWithGoogle(idToken);
+      console.log('[Google Login] Success:', result.message);
       navigation.reset({
         index: 0,
         routes: [{ name: 'Main' }],
       });
     } catch (err) {
-      setError(err.response?.data?.error || 'Google authentication failed');
+      console.error('[Google Login Backend Error]', err.response?.status, err.response?.data);
+      const serverError = err.response?.data?.error;
+      const details = err.response?.data?.details;
+      const errMsg = serverError ? `${serverError}${details ? ` (${details})` : ''}` : (err.userMessage || err.message);
+      reportClientError('google_login_backend', `Status: ${err.response?.status} | Error: ${errMsg}`, 'error');
+      
+      if (serverError) {
+        setError(`${serverError}${details ? ` (${details})` : ''}`);
+      } else if (err.userMessage) {
+        setError(err.userMessage);
+      } else {
+        setError('Google authentication failed. Server may be temporarily unavailable.');
+      }
     }
   };
 
@@ -122,7 +139,22 @@ export default function LoginScreen({ navigation }) {
         });
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Could not connect to server');
+      console.error('[Login Error]', err.response?.status, err.response?.data, err.message);
+      const errMsg = err.response?.data?.error || err.userMessage || err.message;
+      reportClientError('login_backend', `Email: ${email} | Status: ${err.response?.status} | Error: ${errMsg}`, 'error');
+      
+      if (err.response?.data?.error) {
+        // Server returned a specific error message
+        setError(err.response.data.error);
+      } else if (err.userMessage) {
+        // Custom network error message from our interceptor
+        setError(err.userMessage);
+      } else if (!err.response) {
+        // No response at all — network/connectivity issue
+        setError('Cannot reach the server. Please check your internet connection and try again.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

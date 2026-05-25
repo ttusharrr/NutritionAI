@@ -1,5 +1,6 @@
 """Authentication routes — all auth endpoints."""
 import os
+import logging
 
 import random
 import secrets
@@ -25,6 +26,8 @@ from utils.email_service import send_otp_email, send_password_reset_email
 from config import Config
 
 import requests as http_requests
+
+logger = logging.getLogger('nutriai.auth')
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -63,6 +66,7 @@ def health_check():
 @auth_bp.route("/register", methods=["POST"])
 def register():
     """Register a new user with email and password."""
+    logger.info(f"[REGISTER] Registration attempt from {request.remote_addr}")
     data = request.get_json()
     if not data:
         return jsonify({"error": "Request body is required"}), 400
@@ -112,7 +116,7 @@ def register():
             
             # Send OTP email
             send_email_async_aware(send_otp_email, email, otp_code, name.split()[0])
-            print(f"[OTP] Resent Registration OTP for {email}: {otp_code}")
+            logger.info(f"[OTP] Resent Registration OTP for {email}: {otp_code}")
             
             return jsonify({
                 "message": "Verification email resent. Please check your inbox.",
@@ -140,7 +144,7 @@ def register():
     email_sent = True
 
     # Also log to console as fallback
-    print(f"[OTP] Registration OTP for {email}: {otp_code}")
+    logger.info(f"[OTP] Registration OTP for {email}: {otp_code}")
 
     # Construct response message
     message = "Account created successfully. Please verify your email."
@@ -276,7 +280,7 @@ def resend_otp():
     # Send OTP email using environment-aware helper
     send_email_async_aware(send_otp_email, email, otp_code, name)
     
-    print(f"[OTP] Resent OTP for {email}: {otp_code}")
+    logger.info(f"[OTP] Resent OTP for {email}: {otp_code}")
     
     email_sent = True
 
@@ -292,8 +296,10 @@ def resend_otp():
 @auth_bp.route("/login", methods=["POST"])
 def login():
     """Login with email and password."""
+    logger.info(f"[LOGIN] Login attempt from {request.remote_addr}")
     data = request.get_json()
     if not data:
+        logger.warning(f"[LOGIN] Empty request body from {request.remote_addr}")
         return jsonify({"error": "Request body is required"}), 400
 
     email = data.get("email", "").strip().lower()
@@ -372,7 +378,7 @@ def login():
         # Send OTP email using environment-aware helper
         send_email_async_aware(send_otp_email, email, otp_code, name)
         
-        print(f"[OTP] Login verification OTP for {email}: {otp_code}")
+        logger.info(f"[OTP] Login verification OTP for {email}: {otp_code}")
         email_sent = True
 
         message = "Please verify your email first. A new code has been sent."
@@ -419,10 +425,12 @@ def login():
 @auth_bp.route("/google", methods=["POST"])
 def google_auth():
     """Authenticate with Google OAuth credential token."""
+    logger.info(f"[GOOGLE AUTH] Google auth attempt from {request.remote_addr}")
     data = request.get_json()
     credential = data.get("credential")
 
     if not credential:
+        logger.warning("[GOOGLE AUTH] No credential provided")
         return jsonify({"error": "Google credential is required"}), 400
 
     # Verify the Google token
@@ -430,7 +438,7 @@ def google_auth():
         from google.oauth2 import id_token
         from google.auth.transport import requests as google_requests
 
-        print("[GOOGLE AUTH] Attempting offline cryptographic verification...")
+        logger.info("[GOOGLE AUTH] Attempting offline cryptographic verification...")
         id_info = id_token.verify_oauth2_token(
             credential,
             google_requests.Request()
@@ -443,14 +451,16 @@ def google_auth():
         aud = id_info.get("aud")
 
         # Verify audience matches one of our client IDs
-        if aud not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
-            return jsonify({"error": "Token was not issued for this application"}), 401
+        valid_client_ids = [cid for cid in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID] if cid]
+        if aud not in valid_client_ids:
+            logger.error(f"[GOOGLE AUTH] Audience mismatch: token aud={aud}, expected one of {valid_client_ids}")
+            return jsonify({"error": "Token was not issued for this application", "details": f"Token audience: {aud[:30]}..."}), 401
 
         if not google_email:
             return jsonify({"error": "Could not retrieve email from Google token"}), 400
 
     except Exception as offline_err:
-        print(f"[GOOGLE AUTH] Offline verification failed: {offline_err}. Falling back to online verification...")
+        logger.warning(f"[GOOGLE AUTH] Offline verification failed: {offline_err}. Falling back to online verification...")
         try:
             # Fallback to online verification
             google_response = http_requests.get(
@@ -469,15 +479,17 @@ def google_auth():
             aud = google_data.get("aud")
 
             # Verify audience matches one of our client IDs
-            if aud not in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID]:
-                return jsonify({"error": "Token was not issued for this application"}), 401
+            valid_client_ids = [cid for cid in [Config.GOOGLE_CLIENT_ID, Config.GOOGLE_ANDROID_CLIENT_ID, Config.GOOGLE_IOS_CLIENT_ID] if cid]
+            if aud not in valid_client_ids:
+                logger.error(f"[GOOGLE AUTH] Online: Audience mismatch: token aud={aud}, expected one of {valid_client_ids}")
+                return jsonify({"error": "Token was not issued for this application", "details": f"Token audience: {aud[:30]}..."}), 401
 
             if not google_email:
                 return jsonify({"error": "Could not retrieve email from Google"}), 400
 
         except Exception as online_err:
-            print(f"[GOOGLE AUTH ERROR] Both offline and online verification failed: {str(online_err)}")
-            return jsonify({"error": "Failed to verify Google token"}), 500
+            logger.error(f"[GOOGLE AUTH] ❌ Both offline and online verification FAILED: {str(online_err)}")
+            return jsonify({"error": "Failed to verify Google token. Please try again.", "details": str(online_err)[:200]}), 500
 
     db = get_db()
 
@@ -569,12 +581,12 @@ def forgot_password():
     # Send password reset email using environment-aware helper
     send_email_async_aware(send_password_reset_email, email, reset_link, name)
 
-    print(f"[RESET] Password reset token for {email}: {reset_token}")
-    print(f"[RESET] Reset link: {reset_link}")
+    logger.info(f"[RESET] Password reset token generated for {email}")
+    logger.info(f"[RESET] Reset link: {reset_link}")
 
     return jsonify({
         "message": success_msg,
-        "email_sent": email_sent,
+        "email_sent": True,
     }), 200
 
 
