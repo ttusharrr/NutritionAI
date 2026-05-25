@@ -15,31 +15,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING } from '../theme/colors';
-import { getRecommendations } from '../api/authApi';
+import { getRecommendations, getTodayWater, logWater } from '../api/authApi';
 import authApi from '../api/authApi';
-
-const REGIONS = [
-  { id: 'Punjab', label: 'Punjab', icon: '🌾' },
-  { id: 'J&K', label: 'Jammu & Kashmir', icon: '🏔️' },
-  { id: 'Himachal', label: 'Himachal Pradesh', icon: '🌲' },
-  { id: 'Tamil Nadu', label: 'Tamil Nadu', icon: '🛕' },
-  { id: 'Maharashtra', label: 'Maharashtra', icon: '🦁' },
-  { id: 'Gujarat', label: 'Gujarat', icon: '🌊' },
-  { id: 'West Bengal', label: 'West Bengal', icon: '🐯' },
-  { id: 'Karnataka', label: 'Karnataka', icon: '🐘' },
-  { id: 'Kerala', label: 'Kerala', icon: '🌴' },
-  { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
-  { id: 'International', label: 'International', icon: '🌍' },
-];
 
 export default function DashboardScreen({ navigation, isTab }) {
   const [user, setUser] = useState(null);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [regionModalVisible, setRegionModalVisible] = useState(false);
+  const [waterData, setWaterData] = useState({ total_ml: 0, goal_ml: 2500, progress: 0, logs: [] });
+  const [waterLogging, setWaterLogging] = useState(false);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (forceRefresh = false) => {
+    const shouldForce = forceRefresh === true;
     try {
       const userStr = await AsyncStorage.getItem('user');
       if (userStr) {
@@ -50,8 +38,16 @@ export default function DashboardScreen({ navigation, isTab }) {
           return;
         }
       }
-      const response = await getRecommendations();
+      const response = await getRecommendations(shouldForce);
       setData(response);
+      try {
+        const waterRes = await getTodayWater();
+        if (waterRes) {
+          setWaterData(waterRes);
+        }
+      } catch (waterErr) {
+        console.error('Error loading water log:', waterErr);
+      }
     } catch (err) {
       console.error('Error loading dashboard:', err);
     } finally {
@@ -61,29 +57,14 @@ export default function DashboardScreen({ navigation, isTab }) {
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', loadData);
+    const unsubscribe = navigation.addListener('focus', () => loadData(false));
     return unsubscribe;
   }, [navigation, loadData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    loadData();
+    loadData(true);
   }, [loadData]);
-
-  const handleRegionChange = async (regionId) => {
-    setRegionModalVisible(false);
-    try {
-      const response = await authApi.post('/auth/update-region', { region: regionId });
-      if (response.data.user) {
-        await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
-        setUser(response.data.user);
-      }
-      setRefreshing(true);
-      loadData();
-    } catch (err) {
-      console.error('Failed to update region:', err);
-    }
-  };
 
   // These hooks MUST be before any early return (Rules of Hooks)
   const getBMIColor = useCallback((status) => {
@@ -100,6 +81,21 @@ export default function DashboardScreen({ navigation, isTab }) {
     return Math.min(Math.max(((value || 0) - 15) / 25 * 100, 2), 98);
   }, []);
 
+  const handleLogWater = useCallback(async (amount) => {
+    setWaterLogging(true);
+    try {
+      await logWater(amount);
+      const updated = await getTodayWater();
+      if (updated) {
+        setWaterData(updated);
+      }
+    } catch (err) {
+      console.error('Failed to log water:', err);
+    } finally {
+      setWaterLogging(false);
+    }
+  }, []);
+
   if (loading) {
     return (
       <View style={styles.centered}>
@@ -110,7 +106,6 @@ export default function DashboardScreen({ navigation, isTab }) {
 
   const targets = data?.user_targets || user?.daily_nutrition || { daily_calories: 2000, macros: { protein: 0, carbs: 0, fat: 0 }};
   const bmiData = targets.bmi_data || user?.daily_nutrition?.bmi_data || { value: 0, status: 'N/A' };
-  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region)) || REGIONS[0];
   const firstName = user?.name?.split(' ')[0] || 'Explorer';
 
   return (
@@ -135,16 +130,6 @@ export default function DashboardScreen({ navigation, isTab }) {
               <Text style={styles.greetingTitle}>Welcome back, {firstName} 👋</Text>
             </View>
           </View>
-
-          {/* Region Selector */}
-          <TouchableOpacity 
-            style={styles.regionSelector}
-            onPress={() => setRegionModalVisible(true)}
-          >
-            <Ionicons name="globe-outline" size={18} color={COLORS.primary} />
-            <Text style={styles.regionText}>{currentRegion.icon} {currentRegion.label}</Text>
-            <Ionicons name="chevron-down" size={16} color={COLORS.textTertiary} />
-          </TouchableOpacity>
 
           {/* Calorie Hero - Parity with Web */}
           <View style={styles.missionHero}>
@@ -238,6 +223,60 @@ export default function DashboardScreen({ navigation, isTab }) {
             </View>
           </View>
 
+          {/* Water Intake Section */}
+          <View style={styles.waterSection}>
+            <Text style={styles.sectionTitle}>💧 Water Intake</Text>
+            <View style={styles.waterCard}>
+              <View style={styles.waterHeaderRow}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.waterMainValue}>
+                    {waterData.total_ml || 0} <Text style={styles.waterUnit}>/ {waterData.goal_ml || 2500} ml</Text>
+                  </Text>
+                  <Text style={styles.waterStatusText}>
+                    {(waterData.progress || 0) >= 100 ? '🎉 Goal Achieved!' : `${Math.max(0, (waterData.goal_ml || 2500) - (waterData.total_ml || 0))} ml left to hit target`}
+                  </Text>
+                </View>
+                <View style={styles.waterProgressCircleOuter}>
+                  <View style={[styles.waterProgressCircleInner, { height: `${Math.min(100, waterData.progress || 0)}%`, position: 'absolute', bottom: 0, left: 0, right: 0 }]} />
+                  <Text style={styles.waterProgressPercent}>{Math.round(waterData.progress || 0)}%</Text>
+                </View>
+              </View>
+
+              {/* Quick Add Buttons */}
+              <View style={styles.waterQuickAddRow}>
+                {[150, 250, 500].map((amt) => (
+                  <TouchableOpacity
+                    key={amt}
+                    style={styles.waterQuickBtn}
+                    disabled={waterLogging}
+                    onPress={() => handleLogWater(amt)}
+                  >
+                    <Ionicons name="water-outline" size={14} color={COLORS.primary} />
+                    <Text style={styles.waterQuickBtnText}>+{amt}ml</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* Logs List */}
+              {waterData.logs && waterData.logs.length > 0 && (
+                <View style={styles.waterLogsSection}>
+                  <Text style={styles.waterLogsTitle}>Recent Logs</Text>
+                  {waterData.logs.slice(0, 3).map((log, idx) => {
+                    const time = new Date(log.logged_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    return (
+                      <View key={idx} style={styles.waterLogItem}>
+                        <View style={styles.waterLogLeft}>
+                          <Ionicons name="water" size={16} color={COLORS.primary} />
+                          <Text style={styles.waterLogText}>{log.amount_ml} ml</Text>
+                        </View>
+                        <Text style={styles.waterLogTime}>{time}</Text>
+                      </View>
+                    );
+                  })}
+                </View>
+              )}
+            </View>
+          </View>
         </SafeAreaView>
       </ScrollView>
 
@@ -254,41 +293,7 @@ export default function DashboardScreen({ navigation, isTab }) {
         </LinearGradient>
       </TouchableOpacity>
 
-      {/* Region Modal */}
-      <Modal
-        visible={regionModalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setRegionModalVisible(false)}
-      >
-        <TouchableOpacity 
-          style={styles.modalOverlay} 
-          activeOpacity={1} 
-          onPress={() => setRegionModalVisible(false)}
-        >
-          <View style={styles.modalContent}>
-            <View style={styles.modalHandle} />
-            <Text style={styles.modalTitle}>Select Regional Cuisine</Text>
-            <ScrollView style={styles.regionList}>
-              {REGIONS.map(region => (
-                <TouchableOpacity
-                  key={region.id}
-                  style={[styles.regionItem, currentRegion.id === region.id && styles.regionItemActive]}
-                  onPress={() => handleRegionChange(region.id)}
-                >
-                  <Text style={styles.regionItemIcon}>{region.icon}</Text>
-                  <Text style={[styles.regionItemText, currentRegion.id === region.id && styles.regionItemTextActive]}>
-                    {region.label}
-                  </Text>
-                  {currentRegion.id === region.id && (
-                    <Ionicons name="checkmark-circle" size={20} color={COLORS.primary} />
-                  )}
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
-          </View>
-        </TouchableOpacity>
-      </Modal>
+
     </View>
   );
 }
@@ -701,6 +706,200 @@ const styles = StyleSheet.create({
   },
   regionItemTextActive: {
     color: COLORS.primary,
+    fontWeight: '700',
+  },
+  /* Water Section */
+  waterSection: {
+    marginBottom: 32,
+  },
+  waterCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    padding: 24,
+  },
+  waterHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  waterMainValue: {
+    color: COLORS.text,
+    fontSize: 28,
+    fontWeight: '900',
+  },
+  waterUnit: {
+    color: COLORS.textSecondary,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  waterStatusText: {
+    color: COLORS.textTertiary,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 4,
+  },
+  waterProgressCircleOuter: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: 'rgba(255,255,255,0.03)',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  waterProgressCircleInner: {
+    backgroundColor: 'rgba(45, 212, 191, 0.15)',
+  },
+  waterProgressPercent: {
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: '800',
+    zIndex: 1,
+  },
+  waterQuickAddRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 20,
+  },
+  waterQuickBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(45, 212, 191, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(45, 212, 191, 0.15)',
+    borderRadius: 12,
+    paddingVertical: 10,
+  },
+  waterQuickBtnText: {
+    color: COLORS.primary,
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  waterLogsSection: {
+    borderTopWidth: 1,
+    borderTopColor: COLORS.border,
+    paddingTop: 16,
+  },
+  waterLogsTitle: {
+    color: COLORS.textSecondary,
+    fontSize: 12,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: 10,
+  },
+  waterLogItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+  },
+  waterLogLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  waterLogText: {
+    color: COLORS.text,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  waterLogTime: {
+    color: COLORS.textTertiary,
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  /* Reminders Section */
+  remindersSection: {
+    marginBottom: 32,
+  },
+  reminderHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  manageRemindersText: {
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  remindersCard: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    padding: 20,
+  },
+  reminderItemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
+  },
+  reminderItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  reminderEmoji: {
+    fontSize: 24,
+  },
+  reminderLabel: {
+    color: COLORS.text,
+    fontSize: 14,
+    fontWeight: '700',
+  },
+  reminderTime: {
+    color: COLORS.textTertiary,
+    fontSize: 12,
+    fontWeight: '500',
+    marginTop: 2,
+  },
+  activeReminderBadge: {
+    backgroundColor: 'rgba(168, 85, 247, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(168, 85, 247, 0.2)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 8,
+  },
+  activeReminderBadgeText: {
+    color: COLORS.secondary,
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  noRemindersContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 20,
+    gap: 10,
+  },
+  noRemindersText: {
+    color: COLORS.textTertiary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  enableRemindersBtn: {
+    backgroundColor: COLORS.primary + '15',
+    borderWidth: 1,
+    borderColor: COLORS.primary + '30',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 12,
+  },
+  enableRemindersBtnText: {
+    color: COLORS.primary,
+    fontSize: 12,
     fontWeight: '700',
   },
 });

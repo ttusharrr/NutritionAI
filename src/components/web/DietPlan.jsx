@@ -182,6 +182,24 @@ export default function DietPlan() {
                           </div>
                         )}
                       </div>
+
+                      {/* Glycemic Index Badge */}
+                      {meal.glycemic_index !== undefined && (
+                        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', marginTop: '-8px' }}>
+                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
+                            meal.gi_category === 'Low' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                            meal.gi_category === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
+                            'bg-rose-500/10 text-rose-400 border-rose-500/20'
+                          }`}>
+                            <span className={`w-1.5 h-1.5 mr-1.5 rounded-full ${
+                              meal.gi_category === 'Low' ? 'bg-emerald-400 animate-pulse' :
+                              meal.gi_category === 'Medium' ? 'bg-amber-400 animate-pulse' :
+                              'bg-rose-400 animate-pulse'
+                            }`} />
+                            GI {meal.glycemic_index} ({meal.gi_category} Load)
+                          </span>
+                        </div>
+                      )}
                       
                       <div className="macro-meter-group">
                         <div className="macro-meter-item">

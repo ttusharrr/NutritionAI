@@ -1,11 +1,56 @@
-from flask import Blueprint, jsonify, current_app
+from flask import Blueprint, jsonify, current_app, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
+from datetime import datetime, timezone
+import hashlib
+import json
+import threading
+import time
 from utils.nutrition_calc import calculate_daily_requirements
 from utils.nutrition_matcher import get_recommendations, load_regional_recipes
 from utils.ai_agent import MealAgent
+from utils.gi_estimator import estimate_glycemic_index
 
 nutrition_bp = Blueprint('nutrition', __name__, url_prefix='/api/nutrition')
+
+def generate_insights_async(app, db, user_id, profile, daily_plan, profile_hash, nutrition_targets, region):
+    # This runs in a background thread with application context
+    with app.app_context():
+        try:
+            ai_agent = MealAgent()
+            print(f"[AI AGENT ASYNC] Launching background LLM insights call for user: {user_id}")
+            ai_insights = ai_agent.generate_daily_insights(profile, daily_plan)
+            if isinstance(ai_insights, dict):
+                # Update the daily plan recommendations dict
+                for slot, data in ai_insights.items():
+                    if slot in daily_plan and isinstance(data, dict):
+                        daily_plan[slot]['agent_hint'] = data.get('insight', daily_plan[slot]['agent_hint'])
+                        daily_plan[slot]['core_item'] = data.get('core_item', daily_plan[slot]['core_item'])
+                
+                updated_response = {
+                    "user_targets": nutrition_targets,
+                    "recommendations": daily_plan,
+                    "region_available": True,
+                    "message": f"Full-day regional meal plan generated for {region}."
+                }
+                
+                db.users.update_one(
+                    {"_id": ObjectId(user_id)},
+                    {
+                        "$set": {
+                            "meal_plan_cache": {
+                                "profile_hash": profile_hash,
+                                "data": updated_response,
+                                "cached_at": datetime.now(timezone.utc)
+                            }
+                        }
+                    }
+                )
+                print(f"[AI AGENT ASYNC SUCCESS] Saved background LLM insights to cache for user: {user_id}")
+            else:
+                print("[AI AGENT ASYNC WARNING] Invalid AI insights format, skipping cache update.")
+        except Exception as e:
+            print(f"[AI AGENT ASYNC ERROR] Background reasoning failed: {e}")
 
 @nutrition_bp.route('/recommend', methods=['GET'])
 @jwt_required()
@@ -32,9 +77,34 @@ def recommend_meals():
     profile = user.get('profile', {})
     region = profile.get('region', 'Punjab')
     
-    # Initialize AI Agent (Hardened)
-    ai_agent = MealAgent()
+    # Check force_refresh query param
+    force_refresh = request.args.get('force_refresh', 'false').lower() == 'true'
     
+    # Create profile hash to detect any input profile/biometric/region changes
+    profile_data_to_hash = {
+        "age": profile.get("age"),
+        "gender": profile.get("gender"),
+        "weight": profile.get("weight"),
+        "height": profile.get("height"),
+        "activity_level": profile.get("activity_level"),
+        "dietary_goal": profile.get("dietary_goal"),
+        "dietary_type": profile.get("dietary_type", "both"),
+        "region": region,
+        "diseases": sorted(profile.get("diseases", [])),
+        "allergies": sorted(profile.get("allergies", [])),
+        "restrictions": sorted(profile.get("restrictions", [])),
+    }
+    profile_json = json.dumps(profile_data_to_hash, sort_keys=True)
+    profile_hash = hashlib.sha256(profile_json.encode('utf-8')).hexdigest()
+    
+    # Check cache eligibility
+    cached_plan = user.get('meal_plan_cache')
+    if not force_refresh and cached_plan and cached_plan.get('profile_hash') == profile_hash:
+        print(f"[NUTRITION CACHE HIT] Serving cached meal plan for user: {user_id}")
+        return jsonify(cached_plan.get('data')), 200
+    
+    import time
+    t_start = time.time()
     print(f"[NUTRITION] Generating plan for user: {user_id} in region: {region}")
 
     # Layer 1 & 2: Calculate Requirements
@@ -45,12 +115,26 @@ def recommend_meals():
     
     if not available_recipes:
         print(f"[NUTRITION WARNING] No recipes found for region: {region}")
-        return jsonify({
+        response_data = {
             "user_targets": nutrition_targets,
             "recommendations": {},
             "region_available": False,
             "message": f"Our nutritional database for {region} is currently under development. Please check back soon for local specialties!"
-        }), 200
+        }
+        # Cache even the empty/fallback response to avoid repeated LLM calls
+        db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$set": {
+                    "meal_plan_cache": {
+                        "profile_hash": profile_hash,
+                        "data": response_data,
+                        "cached_at": datetime.now(timezone.utc)
+                    }
+                }
+            }
+        )
+        return jsonify(response_data), 200
 
     # Professional Caloric Splitting Ratios (Including Sides & Drinks)
     slots = {
@@ -98,11 +182,26 @@ def recommend_meals():
             multiplier = rec.get('scale_multiplier', 1)
             base_g = rec.get('base_serving_g', 100)
             
+            # Calculate Glycemic Index dynamically
+            from utils.gi_estimator import estimate_glycemic_index
+            gi_val, gi_cat = estimate_glycemic_index(rec['name'], nutrients, rec.get('ingredients', []))
+            
+            default_hints = {
+                "breakfast": "High protein/fiber starting meal to stabilize blood sugar and fuel your morning.",
+                "lunch": "Nutrient-dense mid-day meal structured to maintain energy and focus.",
+                "snacks": "Light calorie-controlled snack to bridge the gap and prevent cravings.",
+                "dinner": "Lean, easy-to-digest dinner optimized for muscle recovery and sleep.",
+                "sides": "Vitamin and fiber booster to support digestion and gut microbiome.",
+                "drinks": "Low glycemic hydration pick to maintain metabolic rate and fluid balance."
+            }
+
             daily_plan[slot] = {
                 "id": rec['id'],
                 "name": rec['name'],
                 "category": rec.get('category', 'Dish'),
                 "quantity_grams": round(base_g * multiplier), 
+                "glycemic_index": gi_val,
+                "gi_category": gi_cat,
                 "macros": {
                     "calories": round(nutrients.get('calories', 0)),
                     "protein": round(nutrients.get('protein', 0)),
@@ -112,34 +211,45 @@ def recommend_meals():
                 "ingredients": rec.get('ingredients', []),
                 "sub_region": rec.get('sub_region', region),
                 "target_calories": round(nutrition_targets['daily_calories'] * ratio),
-                "agent_hint": f"Professional {slot} pick. Balanced to your target.",
+                "agent_hint": default_hints.get(slot, f"Professional {slot} pick. Balanced to your target."),
                 "core_item": "Healthy Food"
             }
 
-    # Layer 5: Agentic Reasoning (The "Brain")
-    # Batch the whole plan to the LLM for expert insights
-    print(f"[NUTRITION] Entering Layer 5: Agentic Reasoning...")
-    try:
-        ai_insights = ai_agent.generate_daily_insights(profile, daily_plan)
-        if type(ai_insights) is dict:
-            print(f"[NUTRITION] Successfully integrated {len(ai_insights)} AI insights.")
-            for slot, data in ai_insights.items():
-                if slot in daily_plan and type(data) is dict:
-                    daily_plan[slot]['agent_hint'] = data.get('insight', daily_plan[slot]['agent_hint'])
-                    daily_plan[slot]['core_item'] = data.get('core_item', 'Healthy Base Item')
-        else:
-            print("[NUTRITION] AI insights format invalid, using defaults.")
-    except Exception as e:
-        print(f"[NUTRITION ERROR] Agentic Reasoning Layer Failed: {e}")
-
-    print("[NUTRITION] Meal plan generation complete.")
-
-    return jsonify({
+    # Serve the baseline recommendations immediately to eliminate UI latency
+    response_data = {
         "user_targets": nutrition_targets,
         "recommendations": daily_plan,
         "region_available": True,
         "message": f"Full-day regional meal plan generated for {region}."
-    }), 200
+    }
+
+    # Save the initial plan to the database cache
+    try:
+        db.users.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$set": {
+                    "meal_plan_cache": {
+                        "profile_hash": profile_hash,
+                        "data": response_data,
+                        "cached_at": datetime.now(timezone.utc)
+                    }
+                }
+            }
+        )
+        print(f"[NUTRITION CACHE SAVE] Cached initial meal plan for user: {user_id}")
+    except Exception as e:
+        print(f"[NUTRITION CACHE ERROR] Failed to save initial cache: {e}")
+
+    # Launch background thread to query the LLM and enrich the cache asynchronously
+    app = current_app._get_current_object()
+    threading.Thread(
+        target=generate_insights_async,
+        args=(app, db, user_id, profile, daily_plan, profile_hash, nutrition_targets, region)
+    ).start()
+
+    print(f"[NUTRITION] Initial plan served in {time.time() - t_start:.2f}s. Spawning background thread for AI insights.")
+    return jsonify(response_data), 200
 
 @nutrition_bp.route('/recipes/jk', methods=['GET'])
 def get_jk_recipes():

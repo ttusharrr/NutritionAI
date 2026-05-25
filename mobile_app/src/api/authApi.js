@@ -100,8 +100,9 @@ export const setupProfile = async (profileData) => {
   return response.data;
 };
 
-export const getRecommendations = async () => {
-  const response = await authApi.get('/nutrition/recommend');
+export const getRecommendations = async (forceRefresh = false) => {
+  const url = forceRefresh ? '/nutrition/recommend?force_refresh=true' : '/nutrition/recommend';
+  const response = await authApi.get(url);
   return response.data;
 };
 
@@ -126,6 +127,38 @@ export const changePassword = async (currentPassword, newPassword) => {
 export const logout = async () => {
   await AsyncStorage.removeItem('token');
   await AsyncStorage.removeItem('user');
+};
+
+// ─── Water Intake APIs ───
+export const logWater = async (amount_ml = 250) => {
+  const response = await authApi.post('/water/log', { amount_ml });
+  return response.data;
+};
+
+export const getTodayWater = async () => {
+  const response = await authApi.get('/water/today');
+  return response.data;
+};
+
+export const getWaterHistory = async (days = 7) => {
+  const response = await authApi.get(`/water/history?days=${days}`);
+  return response.data;
+};
+
+export const setWaterGoal = async (goal_ml) => {
+  const response = await authApi.put('/water/goal', { goal_ml });
+  return response.data;
+};
+
+// ─── Reminder APIs ───
+export const getReminders = async () => {
+  const response = await authApi.get('/auth/reminders');
+  return response.data;
+};
+
+export const updateReminders = async (reminders) => {
+  const response = await authApi.put('/auth/reminders', { reminders });
+  return response.data;
 };
 
 export default authApi;

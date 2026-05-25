@@ -1,0 +1,39 @@
+# Dependencies - EAS installs these on the server
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# Native build folders
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+/ios
+/android
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# OS
+.DS_Store
+
+# Local env files
+.env*.local
+.env
+
+# TypeScript
+*.tsbuildinfo
+
+# Git
+.git/

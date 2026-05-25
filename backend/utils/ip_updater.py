@@ -30,11 +30,21 @@ def update_config_files():
             with open(config_js_path, "r") as f:
                 content = f.read()
 
-            # Regex to find any format of BASE_URL (http, https, render, local) and update it
+            def g_1_2_3_lambda(match):
+                return f"{match.group(1)}http://{ip}:5000/api{match.group(3)}"
+
+            # Regex to find any format of BASE_URL and update the development URL
             new_content = re.sub(
-                r"BASE_URL:\s*['\"][^'\"]+['\"]",
-                f"BASE_URL: 'http://{ip}:5000/api'",
+                r"(__DEV__\s*\?\s*['\"])([^'\"]+)(['\"])",
+                g_1_2_3_lambda,
                 content
+            )
+            
+            # If it's a simple assignment
+            new_content = re.sub(
+                r"(BASE_URL:\s*['\"])([^'\"]+)(['\"])",
+                g_1_2_3_lambda,
+                new_content
             )
             
             with open(config_js_path, "w") as f:

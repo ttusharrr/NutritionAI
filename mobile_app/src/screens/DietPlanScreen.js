@@ -15,6 +15,22 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS, SPACING } from '../theme/colors';
 import { getRecommendations, getRecipe } from '../api/authApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import authApi from '../api/authApi';
+
+const REGIONS = [
+  { id: 'Punjab', label: 'Punjab', icon: '🌾' },
+  { id: 'J&K', label: 'Jammu & Kashmir', icon: '🏔️' },
+  { id: 'Himachal', label: 'Himachal Pradesh', icon: '🌲' },
+  { id: 'Tamil Nadu', label: 'Tamil Nadu', icon: '🛕' },
+  { id: 'Maharashtra', label: 'Maharashtra', icon: '🦁' },
+  { id: 'Gujarat', label: 'Gujarat', icon: '🌊' },
+  { id: 'West Bengal', label: 'West Bengal', icon: '🐯' },
+  { id: 'Karnataka', label: 'Karnataka', icon: '🐘' },
+  { id: 'Kerala', label: 'Kerala', icon: '🌴' },
+  { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
+  { id: 'International', label: 'International', icon: '🌍' },
+];
 
 export default function DietPlanScreen({ navigation, isTab }) {
   const [data, setData] = useState(null);
@@ -23,10 +39,17 @@ export default function DietPlanScreen({ navigation, isTab }) {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [recipe, setRecipe] = useState(null);
   const [loadingRecipe, setLoadingRecipe] = useState(false);
+  const [user, setUser] = useState(null);
+  const [regionModalVisible, setRegionModalVisible] = useState(false);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (forceRefresh = false) => {
+    const shouldForce = forceRefresh === true;
     try {
-      const response = await getRecommendations();
+      const userStr = await AsyncStorage.getItem('user');
+      if (userStr) {
+        setUser(JSON.parse(userStr));
+      }
+      const response = await getRecommendations(shouldForce);
       setData(response);
     } catch (err) {
       console.error('Error loading diet plan:', err);
@@ -37,18 +60,34 @@ export default function DietPlanScreen({ navigation, isTab }) {
   }, []);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    const unsubscribe = navigation.addListener('focus', () => loadData(false));
+    return unsubscribe;
+  }, [navigation, loadData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    loadData();
+    loadData(true);
   }, [loadData]);
 
   const handleRegenerate = useCallback(() => {
     setLoading(true);
-    loadData();
+    loadData(true);
   }, [loadData]);
+
+  const handleRegionChange = async (regionId) => {
+    setRegionModalVisible(false);
+    try {
+      const response = await authApi.post('/auth/update-region', { region: regionId });
+      if (response.data.user) {
+        await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+        setUser(response.data.user);
+      }
+      setLoading(true);
+      loadData(true);
+    } catch (err) {
+      console.error('Failed to update region:', err);
+    }
+  };
 
   const openRecipe = async (meal) => {
     setSelectedMeal(meal);
@@ -82,6 +121,7 @@ export default function DietPlanScreen({ navigation, isTab }) {
 
   const recommendations = data?.recommendations || {};
   const userTargets = data?.user_targets || null;
+  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region)) || REGIONS[0];
 
   return (
     <View style={styles.container}>
@@ -105,6 +145,18 @@ export default function DietPlanScreen({ navigation, isTab }) {
             <Text style={styles.regenText}>Regenerate</Text>
           </TouchableOpacity>
         </View>
+
+        {/* Region Selector */}
+        {user && (
+          <TouchableOpacity 
+            style={styles.regionSelector}
+            onPress={() => setRegionModalVisible(true)}
+          >
+            <Ionicons name="globe-outline" size={18} color={COLORS.primary} />
+            <Text style={styles.regionText}>{currentRegion.icon} {currentRegion.label}</Text>
+            <Ionicons name="chevron-down" size={16} color={COLORS.textTertiary} />
+          </TouchableOpacity>
+        )}
 
         {/* Daily Objective Summary */}
         {userTargets && (
@@ -163,6 +215,29 @@ export default function DietPlanScreen({ navigation, isTab }) {
                     <View style={styles.coreTag}>
                       <View style={styles.coreDot} />
                       <Text style={styles.coreText}>{meal.core_item} Base</Text>
+                    </View>
+                  )}
+                  {meal.glycemic_index !== undefined && (
+                    <View style={[styles.giBadgeMobile, {
+                      backgroundColor: meal.gi_category === 'Low' ? 'rgba(16, 185, 129, 0.08)' :
+                                       meal.gi_category === 'Medium' ? 'rgba(245, 158, 11, 0.08)' :
+                                       'rgba(239, 68, 68, 0.08)',
+                      borderColor: meal.gi_category === 'Low' ? 'rgba(16, 185, 129, 0.2)' :
+                                   meal.gi_category === 'Medium' ? 'rgba(245, 158, 11, 0.2)' :
+                                   'rgba(239, 68, 68, 0.2)'
+                    }]}>
+                      <View style={[styles.giDotMobile, {
+                        backgroundColor: meal.gi_category === 'Low' ? '#10B981' :
+                                         meal.gi_category === 'Medium' ? '#F59E0B' :
+                                         '#EF4444'
+                      }]} />
+                      <Text style={[styles.giTextMobile, {
+                        color: meal.gi_category === 'Low' ? '#10B981' :
+                               meal.gi_category === 'Medium' ? '#F59E0B' :
+                               '#EF4444'
+                      }]}>
+                        GI {meal.glycemic_index} ({meal.gi_category} Load)
+                      </Text>
                     </View>
                   )}
                 </View>
@@ -270,6 +345,42 @@ export default function DietPlanScreen({ navigation, isTab }) {
             </TouchableOpacity>
           </View>
         </View>
+      </Modal>
+
+      {/* Region Modal */}
+      <Modal
+        visible={regionModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setRegionModalVisible(false)}
+      >
+        <TouchableOpacity 
+          style={styles.modalOverlay} 
+          activeOpacity={1} 
+          onPress={() => setRegionModalVisible(false)}
+        >
+          <View style={styles.regionModalContent}>
+            <View style={styles.modalHandle} />
+            <Text style={styles.regionModalTitle}>Select Regional Cuisine</Text>
+            <ScrollView style={styles.regionList}>
+              {REGIONS.map(region => (
+                <TouchableOpacity
+                  key={region.id}
+                  style={[styles.regionItem, currentRegion.id === region.id && styles.regionItemActive]}
+                  onPress={() => handleRegionChange(region.id)}
+                >
+                  <Text style={region.icon ? styles.regionItemIcon : null}>{region.icon}</Text>
+                  <Text style={[styles.regionItemText, currentRegion.id === region.id && styles.regionItemTextActive]}>
+                    {region.label}
+                  </Text>
+                  {currentRegion.id === region.id && (
+                    <Ionicons name="checkmark-circle" size={20} color={COLORS.primary} />
+                  )}
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </TouchableOpacity>
       </Modal>
     </SafeAreaView>
   </View>
@@ -714,5 +825,92 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     fontWeight: '800',
+  },
+  giBadgeMobile: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignSelf: 'flex-start',
+    marginTop: 8,
+  },
+  giDotMobile: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  giTextMobile: {
+    fontSize: 11,
+    fontWeight: '700',
+  },
+  /* Region Selector Styles */
+  regionSelector: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: COLORS.surface,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginBottom: 20,
+  },
+  regionText: {
+    flex: 1,
+    color: COLORS.text,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  regionModalContent: {
+    backgroundColor: COLORS.surface,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '70%',
+    paddingBottom: 40,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  regionModalTitle: {
+    color: COLORS.text,
+    fontSize: 20,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginTop: 16,
+    marginBottom: 20,
+  },
+  regionList: {
+    paddingHorizontal: 20,
+  },
+  regionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 8,
+    backgroundColor: 'rgba(255,255,255,0.02)',
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  regionItemActive: {
+    backgroundColor: 'rgba(45, 212, 191, 0.08)',
+    borderColor: 'rgba(45, 212, 191, 0.2)',
+  },
+  regionItemIcon: {
+    fontSize: 20,
+    marginRight: 16,
+  },
+  regionItemText: {
+    flex: 1,
+    color: COLORS.textSecondary,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  regionItemTextActive: {
+    color: COLORS.primary,
+    fontWeight: '700',
   },
 });

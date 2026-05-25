@@ -19,6 +19,7 @@ import AboutScreen from './src/screens/AboutScreen';
 import ChatScreen from './src/screens/ChatScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import ReminderSettingsScreen from './src/screens/ReminderSettingsScreen';
 
 // Main WhatsApp-style tab container
 import MainTabsScreen from './src/components/MainTabsScreen';
@@ -62,6 +63,11 @@ export default function App() {
         <Stack.Screen
           name="Settings"
           component={SettingsScreen}
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name="ReminderSettings"
+          component={ReminderSettingsScreen}
           options={{ animation: 'slide_from_right' }}
         />
         <Stack.Screen

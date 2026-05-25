@@ -2,6 +2,7 @@
 
 import os
 import sys
+import re
 
 # Add backend directory to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -35,13 +36,13 @@ def create_app():
                 "http://localhost:3000",
                 "https://nutrition-ai-nine.vercel.app",
                 # Allow all vercel.app and onrender.com domains for easier deployment
-                r"https://.*\.vercel\.app",
-                r"http://.*\.vercel\.app",
-                r"https://.*\.onrender\.com",
+                re.compile(r"https://.*\.vercel\.app"),
+                re.compile(r"http://.*\.vercel\.app"),
+                re.compile(r"https://.*\.onrender\.com"),
                 # Allow local network IP origins on any port for development
-                r"http://10\.\d+\.\d+\.\d+(:\d+)?",
-                r"http://192\.168\.\d+\.\d+(:\d+)?",
-                r"http://172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+(:\d+)?"
+                re.compile(r"http://10\.\d+\.\d+\.\d+(:\d+)?"),
+                re.compile(r"http://192\.168\.\d+\.\d+(:\d+)?"),
+                re.compile(r"http://172\.(1[6-9]|2\d|3[0-1])\.\d+\.\d+(:\d+)?")
             ],
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization"],
@@ -72,6 +73,7 @@ def create_app():
         db.users.create_index("email", unique=True)
         db.revoked_tokens.create_index("jti", unique=True)
         db.revoked_tokens.create_index("revoked_at", expireAfterSeconds=86400 * 30)  # Auto-delete after 30 days
+        db.water_logs.create_index([("user_id", 1), ("date", -1)])
 
         print(f"[DB] Connected to MongoDB: {db.name}")
     except Exception as e:
@@ -118,9 +120,11 @@ def create_app():
     from routes.auth_routes import auth_bp
     from routes.diag_routes import diag_bp
     from routes.nutrition_routes import nutrition_bp
+    from routes.water_routes import water_bp
     app.register_blueprint(auth_bp)
     app.register_blueprint(diag_bp)
     app.register_blueprint(nutrition_bp)
+    app.register_blueprint(water_bp)
 
     # Apply rate limits to sensitive endpoints (Relaxed for development)
     limiter.limit("20 per minute")(auth_bp)

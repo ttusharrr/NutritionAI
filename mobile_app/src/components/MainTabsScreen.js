@@ -13,14 +13,16 @@ import DrawerMenu from './DrawerMenu';
 // Lazy screens – imported normally (Expo Go doesn't support React.lazy)
 import DashboardScreen from '../screens/DashboardScreen';
 import DietPlanScreen from '../screens/DietPlanScreen';
+import ReminderSettingsScreen from '../screens/ReminderSettingsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const { width } = Dimensions.get('window');
 
 const TABS = [
-  { key: 'home',    label: 'Home',      icon: 'home',      iconOut: 'home-outline' },
-  { key: 'diet',    label: 'Diet Plan', icon: 'clipboard', iconOut: 'clipboard-outline' },
-  { key: 'profile', label: 'Profile',   icon: 'person',    iconOut: 'person-outline' },
+  { key: 'home',      label: 'Home',      icon: 'home',          iconOut: 'home-outline' },
+  { key: 'diet',      label: 'Diet Plan', icon: 'clipboard',     iconOut: 'clipboard-outline' },
+  { key: 'reminders', label: 'Reminders', icon: 'notifications', iconOut: 'notifications-outline' },
+  { key: 'profile',   label: 'Profile',   icon: 'person',        iconOut: 'person-outline' },
 ];
 
 export default function MainTabsScreen({ navigation }) {
@@ -62,8 +64,8 @@ export default function MainTabsScreen({ navigation }) {
 
   const tabWidth = width / TABS.length;
   const indicatorTranslate = indicatorAnim.interpolate({
-    inputRange: [0, 1, 2],
-    outputRange: [0, tabWidth, tabWidth * 2],
+    inputRange: TABS.map((_, i) => i),
+    outputRange: TABS.map((_, i) => tabWidth * i),
   });
 
   return (
@@ -132,6 +134,9 @@ export default function MainTabsScreen({ navigation }) {
         </View>
         <View key="diet" style={styles.page}>
           <DietPlanScreen navigation={navigation} isTab />
+        </View>
+        <View key="reminders" style={styles.page}>
+          <ReminderSettingsScreen navigation={navigation} isTab />
         </View>
         <View key="profile" style={styles.page}>
           <ProfileScreen navigation={navigation} isTab />

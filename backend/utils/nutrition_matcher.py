@@ -118,7 +118,9 @@ def get_recommendations(user_macros, region="All", filters=None, exclude_ids=Non
             "calories": target_cals,
             "protein": base_nutrients.get('protein', 0) * scale_multiplier,
             "carbs": base_nutrients.get('carbs', 0) * scale_multiplier,
-            "fats": base_nutrients.get('fats', 0) * scale_multiplier
+            "fats": base_nutrients.get('fats', 0) * scale_multiplier,
+            "sugar": base_nutrients.get('sugar', 0) * scale_multiplier,
+            "sodium": base_nutrients.get('sodium', 0) * scale_multiplier
         }
         
         dist = calculate_distance(user_macros, scaled_nutrients)

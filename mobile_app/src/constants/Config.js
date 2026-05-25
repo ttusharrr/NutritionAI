@@ -1,6 +1,8 @@
 export const CONFIG = {
-  // Production backend on Render — accessible from anywhere
-  BASE_URL: 'http://10.75.239.24:5000/api',
+  // Dynamic API URL: use local Flask server during development, and production Render backend for builds
+  BASE_URL: __DEV__ 
+    ? 'http://10.75.239.24:5000/api' 
+    : 'https://nutritionai.onrender.com/api',
 
   // Google OAuth client IDs
   // Web client ID (used by Expo Go)

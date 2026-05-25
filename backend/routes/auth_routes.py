@@ -870,3 +870,72 @@ def logout():
     })
 
     return jsonify({"message": "Logged out successfully"}), 200
+
+
+# ─────────────────────────────────────────────────────────────────
+# GET REMINDERS
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/reminders", methods=["GET"])
+@jwt_required()
+def get_reminders():
+    """Get user's meal reminder settings."""
+    db = get_db()
+    user_id = get_jwt_identity()
+    user = db.users.find_one({"_id": ObjectId(user_id)})
+
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    default_reminders = {
+        "enabled": False,
+        "breakfast": {"time": "08:00", "enabled": False},
+        "lunch": {"time": "13:00", "enabled": False},
+        "dinner": {"time": "20:00", "enabled": False},
+        "snacks": {"time": "16:00", "enabled": False},
+        "drinks": {"time": "10:00", "enabled": False},
+    }
+
+    return jsonify({
+        "reminders": user.get("reminders", default_reminders)
+    }), 200
+
+
+# ─────────────────────────────────────────────────────────────────
+# UPDATE REMINDERS
+# ─────────────────────────────────────────────────────────────────
+@auth_bp.route("/reminders", methods=["PUT"])
+@jwt_required()
+def update_reminders():
+    """Update user's meal reminder settings."""
+    db = get_db()
+    user_id = get_jwt_identity()
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "Request body is required"}), 400
+
+    reminders = data.get("reminders", {})
+
+    # Validate time format for each slot
+    valid_slots = ["breakfast", "lunch", "dinner", "snacks", "drinks"]
+    for slot in valid_slots:
+        if slot in reminders:
+            slot_data = reminders[slot]
+            if "time" in slot_data:
+                try:
+                    datetime.strptime(slot_data["time"], "%H:%M")
+                except ValueError:
+                    return jsonify({"error": f"Invalid time format for {slot}. Use HH:MM"}), 400
+
+    db.users.update_one(
+        {"_id": ObjectId(user_id)},
+        {"$set": {"reminders": reminders, "updated_at": datetime.now(timezone.utc)}}
+    )
+
+    # Return updated user
+    user = db.users.find_one({"_id": ObjectId(user_id)})
+
+    return jsonify({
+        "message": "Reminders updated successfully",
+        "user": sanitize_user(user)
+    }), 200

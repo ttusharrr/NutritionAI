@@ -30,6 +30,17 @@ def create_user_document(name, email, password_hash, auth_provider="local"):
             "restrictions": [],
         },
 
+        "reminders": {
+            "enabled": False,
+            "breakfast": {"time": "08:00", "enabled": False},
+            "lunch": {"time": "13:00", "enabled": False},
+            "dinner": {"time": "20:00", "enabled": False},
+            "snacks": {"time": "16:00", "enabled": False},
+            "drinks": {"time": "10:00", "enabled": False},
+        },
+
+        "water_goal_ml": 2500,
+
         "security": {
             "failed_login_attempts": 0,
             "lockout_until": None,
@@ -77,6 +88,8 @@ def sanitize_user(user):
         "profile_completed": user.get("profile_completed", False),
         "profile": profile,
         "daily_nutrition": nutrition,
+        "reminders": user.get("reminders", {}),
+        "water_goal_ml": user.get("water_goal_ml", 2500),
         "created_at": user.get("created_at", ""),
     }
 

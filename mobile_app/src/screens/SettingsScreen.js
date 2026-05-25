@@ -279,6 +279,18 @@ export default function SettingsScreen({ navigation }) {
             </View>
           </View>
 
+          {/* Reminders Section */}
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Notifications</Text>
+            <TouchableOpacity style={styles.actionRow} onPress={() => navigation.navigate('ReminderSettings')}>
+              <View style={styles.actionIconWrap}>
+                <Ionicons name="notifications-outline" size={20} color={COLORS.primary} />
+              </View>
+              <Text style={styles.actionText}>Meal & Drink Reminders</Text>
+              <Ionicons name="chevron-forward" size={18} color={COLORS.textTertiary} />
+            </TouchableOpacity>
+          </View>
+
           {/* Quick Actions */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Quick Actions</Text>
