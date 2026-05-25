@@ -56,7 +56,10 @@ export default function DrawerMenu({ visible, onClose, navigation, user }) {
         onPress: async () => {
           onClose();
           await logout();
-          navigation.replace('Landing');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Landing' }],
+          });
         },
       },
     ]);

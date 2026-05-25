@@ -94,7 +94,10 @@ export default function LoginScreen({ navigation }) {
   const handleGoogleLogin = async (idToken) => {
     try {
       await loginWithGoogle(idToken);
-      navigation.replace('Main');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     } catch (err) {
       setError(err.response?.data?.error || 'Google authentication failed');
     }
@@ -113,7 +116,10 @@ export default function LoginScreen({ navigation }) {
       if (data.requires_verification) {
         navigation.navigate('VerifyOtp', { email });
       } else {
-        navigation.replace('Main');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Could not connect to server');

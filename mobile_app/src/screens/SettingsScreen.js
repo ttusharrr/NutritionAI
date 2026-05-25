@@ -92,7 +92,10 @@ export default function SettingsScreen({ navigation }) {
         style: 'destructive',
         onPress: async () => {
           await logout();
-          navigation.replace('Login');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Landing' }],
+          });
         },
       },
     ]);

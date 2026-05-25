@@ -93,7 +93,10 @@ export default function VerifyOtpScreen({ route, navigation }) {
       await verifyOtp(email, otpCode);
       setSuccess('Email verified successfully!');
       setTimeout(() => {
-        navigation.replace('Main');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
       }, 1500);
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid verification code');

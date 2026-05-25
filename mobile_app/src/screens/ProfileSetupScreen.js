@@ -74,7 +74,10 @@ export default function ProfileSetupScreen({ navigation }) {
       if (data.user) {
         await AsyncStorage.setItem('user', JSON.stringify(data.user));
       }
-      navigation.replace('Main');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save profile');
     } finally {
@@ -332,7 +335,7 @@ export default function ProfileSetupScreen({ navigation }) {
           </View>
 
           {/* Skip */}
-          <TouchableOpacity style={styles.skipBtn} onPress={() => navigation.replace('Main')}>
+          <TouchableOpacity style={styles.skipBtn} onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Main' }] })}>
             <Text style={styles.skipText}>Skip for now</Text>
           </TouchableOpacity>
         </ScrollView>

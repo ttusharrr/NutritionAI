@@ -77,7 +77,10 @@ export default function RegisterScreen({ navigation }) {
   const handleGoogleLogin = async (idToken) => {
     try {
       await loginWithGoogle(idToken);
-      navigation.replace('Main');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     } catch (err) {
       setError(err.response?.data?.error || 'Google authentication failed');
     }

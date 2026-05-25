@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { COLORS, SPACING } from '../theme/colors';
 import { useVideoPlayer, VideoView } from 'expo-video';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const videoSource = require('../../assets/texture_map.mp4');
 
@@ -29,6 +30,22 @@ export default function LandingScreen({ navigation }) {
   });
 
   useEffect(() => {
+    // Check if user is already logged in
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Main' }],
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    checkLoginStatus();
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
