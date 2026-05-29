@@ -135,9 +135,9 @@ def get_recommendations(user_macros, region="All", filters=None, exclude_ids=Non
     # 3. Sort by raw distance
     scored_recipes.sort(key=lambda x: x['match_score'])
     
-    # Randomization: Pick randomly from the top 5 closest matches to provide variety
+    # Randomization: Pick randomly from the top 10 closest matches to provide variety
     if scored_recipes and top_n == 1:
-        pool_size = min(5, len(scored_recipes))
+        pool_size = min(10, len(scored_recipes))
         best_match = random.choice(scored_recipes[:pool_size])
         return [best_match]
         
