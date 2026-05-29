@@ -330,8 +330,9 @@ class AuthAPI {
   /**
    * Fetch personalized meal recommendations.
    */
-  async getRecommendations(signal) {
-    return this.request('/nutrition/recommend', { method: 'GET', signal });
+  async getRecommendations(signal, forceRefresh = false) {
+    const url = forceRefresh ? '/nutrition/recommend?force_refresh=true' : '/nutrition/recommend';
+    return this.request(url, { method: 'GET', signal });
   }
 
 
@@ -358,6 +359,41 @@ class AuthAPI {
     return this.request('/auth/change-password', {
       method: 'POST',
       body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }),
+    });
+  }
+
+  // ─── Water Intake APIs ──────────────────────────────────────
+  async logWater(amount_ml = 250) {
+    return this.request('/water/log', {
+      method: 'POST',
+      body: JSON.stringify({ amount_ml }),
+    });
+  }
+
+  async getTodayWater() {
+    return this.request('/water/today', { method: 'GET' });
+  }
+
+  async getWaterHistory(days = 7) {
+    return this.request(`/water/history?days=${days}`, { method: 'GET' });
+  }
+
+  async setWaterGoal(goal_ml) {
+    return this.request('/water/goal', {
+      method: 'PUT',
+      body: JSON.stringify({ goal_ml }),
+    });
+  }
+
+  // ─── Reminder APIs ──────────────────────────────────────────
+  async getReminders() {
+    return this.request('/auth/reminders', { method: 'GET' });
+  }
+
+  async updateReminders(reminders) {
+    return this.request('/auth/reminders', {
+      method: 'PUT',
+      body: JSON.stringify({ reminders }),
     });
   }
 

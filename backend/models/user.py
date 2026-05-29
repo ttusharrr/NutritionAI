@@ -76,7 +76,13 @@ def sanitize_user(user):
     if user is None:
         return None
     profile = user.get("profile", {})
-    nutrition = calculate_daily_requirements(profile) if user.get("profile_completed") else None
+    
+    if user.get("profile_completed"):
+        nutrition = user.get("nutrition_targets")
+        if not nutrition:
+            nutrition = calculate_daily_requirements(profile)
+    else:
+        nutrition = None
 
     return {
         "id": str(user["_id"]),

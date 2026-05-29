@@ -7,7 +7,7 @@ export const CONFIG = {
   // Use production URL by default — EAS builds always use this
   // Toggle to LOCAL_DEV_URL only when running locally with `npx expo start`
   BASE_URL: __DEV__
-    ? 'http://10.75.239.24:5000/api'
+    ? 'http://172.25.149.24:5000/api'
     : 'https://nutritionai.onrender.com/api',
 
   // Google OAuth client IDs

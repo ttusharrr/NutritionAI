@@ -107,9 +107,14 @@ def recommend_meals():
     t_start = time.time()
     print(f"[NUTRITION] Generating plan for user: {user_id} in region: {region}")
 
-    # Layer 1 & 2: Calculate Requirements
-    nutrition_targets = calculate_daily_requirements(profile)
-    print(f"[NUTRITION] Targets calculated: {nutrition_targets['daily_calories']} kcal")
+    # Layer 1 & 2: Get Requirements from DB (Calculate if missing for older accounts)
+    nutrition_targets = user.get("nutrition_targets")
+    if not nutrition_targets:
+        nutrition_targets = calculate_daily_requirements(profile)
+        db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"nutrition_targets": nutrition_targets}})
+        print(f"[NUTRITION] Targets calculated and saved to DB: {nutrition_targets['daily_calories']} kcal")
+    else:
+        print(f"[NUTRITION] Targets fetched from DB: {nutrition_targets['daily_calories']} kcal")
     
     available_recipes = load_regional_recipes(region)
     

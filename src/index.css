@@ -3595,3 +3595,234 @@ input[type="range"]::-webkit-slider-thumb:hover {
   border-color: var(--accent-cyan);
   box-shadow: var(--shadow-glow-cyan);
 }
+
+/* ── Water Intake Web Styles ─────────────────────────────────── */
+.health-insights-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+  .health-insights-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.water-card-web {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.water-card-web:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+}
+
+.water-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.water-info-col {
+  flex: 1;
+}
+
+.water-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.water-main-value {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.water-unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.water-status-text {
+  font-size: 12px;
+  color: var(--accent-cyan);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.water-progress-circle-outer {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid rgba(45, 212, 191, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(10, 14, 26, 0.3);
+}
+
+.water-progress-circle-inner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.6) 0%, rgba(168, 85, 247, 0.6) 100%);
+  transition: height 0.6s var(--ease-out-expo);
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+}
+
+.water-progress-percent {
+  position: relative;
+  z-index: 10;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.water-quick-add-row {
+  display: flex;
+  gap: 10px;
+}
+
+.water-quick-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: rgba(240, 244, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.water-quick-btn:hover:not(:disabled) {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.water-quick-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.water-logs-section {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+
+.water-logs-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+
+.water-log-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.water-log-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.water-log-text {
+  font-weight: 500;
+}
+
+.water-log-time {
+  color: var(--text-tertiary);
+}
+
+/* ── Glycemic Index (GI) Badges ──────────────────────────────── */
+.gi-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  gap: 6px;
+  margin-bottom: 16px;
+  margin-top: -8px;
+  align-self: flex-start;
+}
+
+.gi-badge.gi-low {
+  background: rgba(16, 185, 129, 0.1);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.gi-badge.gi-medium {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.gi-badge.gi-high {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.gi-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: gi-pulse 2s infinite;
+}
+
+.gi-badge.gi-low .gi-dot { background-color: #34d399; }
+.gi-badge.gi-medium .gi-dot { background-color: #fbbf24; }
+.gi-badge.gi-high .gi-dot { background-color: #f87171; }
+
+@keyframes gi-pulse {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+

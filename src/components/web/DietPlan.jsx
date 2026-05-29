@@ -30,10 +30,10 @@ export default function DietPlan() {
   const [recipe, setRecipe] = useState(null);
   const [loadingRecipe, setLoadingRecipe] = useState(false);
 
-  const fetchRecommendations = async () => {
+  const fetchRecommendations = async (forceRefresh = false) => {
     setLoadingMeals(true);
     try {
-      const data = await authApi.getRecommendations();
+      const data = await authApi.getRecommendations(undefined, forceRefresh);
       setRecommendations(data.recommendations || {});
       setUserTargets(data.user_targets || null);
       setRegionAvailable(data.region_available !== false);
@@ -86,6 +86,10 @@ export default function DietPlan() {
     { id: 'Himachal', label: 'Himachal Pradesh', icon: '🌲' },
     { id: 'Tamil Nadu', label: 'Tamil Nadu', icon: '🛕' },
     { id: 'Maharashtra', label: 'Maharashtra', icon: '🦁' },
+    { id: 'Gujarat', label: 'Gujarat', icon: '🌊' },
+    { id: 'West Bengal', label: 'West Bengal', icon: '🐯' },
+    { id: 'Karnataka', label: 'Karnataka', icon: '🐘' },
+    { id: 'Kerala', label: 'Kerala', icon: '🌴' },
     { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
     { id: 'International', label: 'International', icon: '🌍' },
   ];
@@ -125,7 +129,7 @@ export default function DietPlan() {
                   <motion.div className="region-dropdown" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}>
                     {REGIONS.map(reg => (
                       <button key={reg.id} className="dropdown-item" onClick={() => handleRegionChange(reg.id)}>
-                        {reg.icon} {reg.label}
+                        <span className="emoji">{reg.icon}</span> {reg.label}
                       </button>
                     ))}
                   </motion.div>
@@ -143,7 +147,7 @@ export default function DietPlan() {
       <main className="dashboard-main">
         <header className="section-header">
           <h1 className="section-title"><HiOutlineClipboardList /> Your {currentRegion.label} Meal Plan</h1>
-          <button className="view-all" onClick={fetchRecommendations} disabled={loadingMeals}>
+          <button className="view-all" onClick={() => fetchRecommendations(true)} disabled={loadingMeals}>
             {loadingMeals ? 'Syncing...' : 'Regenerate'}
           </button>
         </header>
@@ -164,7 +168,7 @@ export default function DietPlan() {
                   const pPerc = (meal.macros.protein / totalMacros) * 100;
                   const cPerc = (meal.macros.carbs / totalMacros) * 100;
                   const fPerc = (meal.macros.fat / totalMacros) * 100;
-
+ 
                   return (
                     <motion.div 
                       key={slot.id} 
@@ -185,21 +189,16 @@ export default function DietPlan() {
 
                       {/* Glycemic Index Badge */}
                       {meal.glycemic_index !== undefined && (
-                        <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', marginTop: '-8px' }}>
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold border ${
-                            meal.gi_category === 'Low' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                            meal.gi_category === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
-                            'bg-rose-500/10 text-rose-400 border-rose-500/20'
-                          }`}>
-                            <span className={`w-1.5 h-1.5 mr-1.5 rounded-full ${
-                              meal.gi_category === 'Low' ? 'bg-emerald-400 animate-pulse' :
-                              meal.gi_category === 'Medium' ? 'bg-amber-400 animate-pulse' :
-                              'bg-rose-400 animate-pulse'
-                            }`} />
-                            GI {meal.glycemic_index} ({meal.gi_category} Load)
-                          </span>
+                        <div className={`gi-badge ${
+                          meal.gi_category === 'Low' ? 'gi-low' :
+                          meal.gi_category === 'Medium' ? 'gi-medium' :
+                          'gi-high'
+                        }`}>
+                          <span className="gi-dot" />
+                          <span>GI {meal.glycemic_index} ({meal.gi_category} Load)</span>
                         </div>
                       )}
+                      
                       
                       <div className="macro-meter-group">
                         <div className="macro-meter-item">

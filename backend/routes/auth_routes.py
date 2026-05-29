@@ -23,6 +23,7 @@ from models.user import (
 )
 from utils.validators import validate_email, validate_password, validate_name, validate_otp
 from utils.email_service import send_otp_email, send_password_reset_email
+from utils.nutrition_calc import calculate_daily_requirements
 from config import Config
 
 import requests as http_requests
@@ -726,6 +727,15 @@ def profile_setup():
     # Remove None values
     profile_data = {k: v for k, v in profile_data.items() if v is not None}
 
+    # Calculate and store nutrition targets
+    current_profile = user.get("profile", {})
+    for k in ["age", "gender", "weight", "height", "activity_level", "dietary_goal", "dietary_type", "region", "diseases", "allergies", "restrictions"]:
+        if k in data and data[k] is not None:
+            current_profile[k] = data[k]
+            
+    nutrition_targets = calculate_daily_requirements(current_profile)
+    profile_data["nutrition_targets"] = nutrition_targets
+
     db.users.update_one({"_id": ObjectId(user_id)}, {"$set": profile_data})
 
     updated_user = db.users.find_one({"_id": ObjectId(user_id)})
@@ -802,6 +812,15 @@ def update_profile():
         return jsonify({"error": "No valid fields to update"}), 400
 
     update_query["updated_at"] = datetime.now(timezone.utc)
+
+    # Calculate and store nutrition targets
+    current_profile = user.get("profile", {})
+    for field in allowed_fields:
+        if field in data:
+            current_profile[field] = data[field]
+            
+    nutrition_targets = calculate_daily_requirements(current_profile)
+    update_query["nutrition_targets"] = nutrition_targets
 
     db.users.update_one({"_id": ObjectId(user_id)}, {"$set": update_query})
     

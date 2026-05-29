@@ -16,7 +16,8 @@ import {
   HiOutlineGlobe,
   HiOutlineUserCircle,
   HiOutlineClipboardList,
-  HiOutlineMenuAlt3
+  HiOutlineMenuAlt3,
+  HiOutlineBeaker
 } from 'react-icons/hi';
 import { useAuth } from '../../context/AuthContext';
 import authApi from '../../api/authApi';
@@ -28,6 +29,37 @@ export default function Dashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [loadingRegion, setLoadingRegion] = useState(false);
+
+  // Water Intake State
+  const [waterData, setWaterData] = useState({ total_ml: 0, goal_ml: 2500, progress: 0, logs: [] });
+  const [waterLogging, setWaterLogging] = useState(false);
+
+  const fetchWaterData = async () => {
+    try {
+      const res = await authApi.getTodayWater();
+      if (res) {
+        setWaterData(res);
+      }
+    } catch (err) {
+      console.error('Failed to load water:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchWaterData();
+  }, []);
+
+  const handleLogWater = async (amount) => {
+    setWaterLogging(true);
+    try {
+      await authApi.logWater(amount);
+      await fetchWaterData();
+    } catch (err) {
+      console.error('Failed to log water:', err);
+    } finally {
+      setWaterLogging(false);
+    }
+  };
 
   // Close region dropdown on click outside
   useEffect(() => {
@@ -221,7 +253,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Health Insights (BMI) Row */}
+        {/* Health Insights (BMI) & Water Intake Row */}
         <motion.div 
           className="health-insights-row"
           initial={{ opacity: 0, y: 20 }}
@@ -264,6 +296,60 @@ export default function Dashboard() {
                 <span style={{ left: '100%' }}>40+</span>
               </div>
             </div>
+          </div>
+
+          <div className="water-card-web">
+            <div className="water-header-row">
+              <div className="water-info-col">
+                <span className="water-title">
+                  💧 Water Intake
+                </span>
+                <div className="water-main-value">
+                  {waterData.total_ml || 0} <span className="water-unit">/ {waterData.goal_ml || 2500} ml</span>
+                </div>
+                <div className="water-status-text">
+                  {(waterData.progress || 0) >= 100 ? '🎉 Goal Achieved!' : `${Math.max(0, (waterData.goal_ml || 2500) - (waterData.total_ml || 0))} ml left`}
+                </div>
+              </div>
+              <div className="water-progress-circle-outer">
+                <div className="water-progress-circle-inner" style={{ height: `${Math.min(100, waterData.progress || 0)}%` }} />
+                <span className="water-progress-percent">{Math.round(waterData.progress || 0)}%</span>
+              </div>
+            </div>
+
+            {/* Quick Add Buttons */}
+            <div className="water-quick-add-row">
+              {[150, 250, 500].map((amt) => (
+                <button
+                  key={amt}
+                  className="water-quick-btn"
+                  disabled={waterLogging}
+                  onClick={() => handleLogWater(amt)}
+                >
+                  <HiOutlineBeaker size={14} style={{ color: 'var(--accent-cyan)' }} />
+                  <span>+{amt}ml</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Logs List */}
+            {waterData.logs && waterData.logs.length > 0 && (
+              <div className="water-logs-section">
+                <div className="water-logs-title">Recent Logs</div>
+                {waterData.logs.slice(0, 2).map((log, idx) => {
+                  const time = new Date(log.logged_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  return (
+                    <div key={idx} className="water-log-item">
+                      <div className="water-log-left">
+                        <HiOutlineBeaker size={14} style={{ color: 'var(--accent-cyan)' }} />
+                        <span className="water-log-text">{log.amount_ml} ml</span>
+                      </div>
+                      <span className="water-log-time">{time}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         </motion.div>
 
