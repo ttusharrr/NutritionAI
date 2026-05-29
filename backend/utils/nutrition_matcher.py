@@ -75,7 +75,12 @@ def get_recommendations(user_macros, region="All", filters=None, exclude_ids=Non
             target_type = filters['meal_type']
             if target_type == 'snacks': target_type = 'snack'
             
-            slot_matches = [r for r in filtered_recipes if r.get('meal_type') == target_type]
+            if target_type == 'dinner':
+                # Workaround: Dinner dataset is very small (19 dishes), so allow lunch dishes for dinner slots
+                slot_matches = [r for r in filtered_recipes if r.get('meal_type') in ['dinner', 'lunch']]
+            else:
+                slot_matches = [r for r in filtered_recipes if r.get('meal_type') == target_type]
+                
             if slot_matches:
                 filtered_recipes = slot_matches
 
