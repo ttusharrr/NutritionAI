@@ -1,0 +1,6677 @@
+
+
+====================================
+FILE: D:\my_project\src\components\web\AboutPage.jsx D:\my_project\src\components\web\ChatBot.jsx D:\my_project\src\components\web\Dashboard.jsx D:\my_project\src\components\web\DietPlan.jsx D:\my_project\src\components\web\LandingPage.jsx D:\my_project\src\components\web\ProfilePage.jsx D:\my_project\src\components\web\SettingsPage.jsx D:\my_project\src\components\web\Sidebar.jsx
+====================================
+
+/**
+ * AboutPage — Premium About page for NutriAI.
+ * Showcases mission, features, and technology stack.
+ */
+
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import {
+  HiOutlineArrowLeft,
+  HiOutlineLightningBolt,
+  HiOutlineGlobe,
+  HiOutlineHeart,
+  HiOutlineShieldCheck,
+  HiOutlineChip,
+  HiOutlineSparkles,
+  HiOutlineUserGroup,
+  HiOutlineBeaker,
+} from 'react-icons/hi';
+
+const fadeUp = {
+  initial: { opacity: 0, y: 30 },
+  animate: { opacity: 1, y: 0 },
+};
+
+const stagger = {
+  animate: { transition: { staggerChildren: 0.1 } },
+};
+
+export default function AboutPage() {
+  const navigate = useNavigate();
+
+  const features = [
+    {
+      icon: HiOutlineChip,
+      title: 'AI-Powered Analysis',
+      desc: 'Advanced GPT-4o-mini integration for personalized dietary recommendations based on your unique biometrics.',
+      color: 'var(--accent-cyan)',
+    },
+    {
+      icon: HiOutlineGlobe,
+      title: 'Regional Cuisines',
+      desc: 'Authentic meal plans from 10+ Indian regions including Punjab, J&K, Tamil Nadu, Kerala, and more.',
+      color: 'var(--accent-purple)',
+    },
+    {
+      icon: HiOutlineHeart,
+      title: 'Health-First Approach',
+      desc: 'Scientifically calculated BMR, TDEE, and macro splits tailored to your fitness goals.',
+      color: 'var(--accent-pink)',
+    },
+    {
+      icon: HiOutlineShieldCheck,
+      title: 'Secure & Private',
+      desc: 'Bank-grade encryption, JWT authentication, and zero third-party data sharing.',
+      color: 'var(--success)',
+    },
+    {
+      icon: HiOutlineLightningBolt,
+      title: 'Real-Time Insights',
+      desc: 'Instant nutritional breakdowns with protein, carbs, and fat calculations per meal.',
+      color: 'var(--accent-amber)',
+    },
+    {
+      icon: HiOutlineSparkles,
+      title: 'Smart Chatbot',
+      desc: 'An AI nutrition assistant that answers your diet questions with expert-level knowledge.',
+      color: 'var(--accent-blue)',
+    },
+  ];
+
+  const techStack = [
+    { name: 'React', role: 'Web Frontend' },
+    { name: 'React Native', role: 'Mobile App' },
+    { name: 'Flask', role: 'Backend API' },
+    { name: 'MongoDB', role: 'Database' },
+    { name: 'OpenAI GPT-4o', role: 'AI Engine' },
+    { name: 'JWT', role: 'Authentication' },
+  ];
+
+  return (
+    <div className="dashboard-scene">
+      <nav className="dashboard-nav">
+        <div className="nav-container">
+          <motion.div
+            className="brand-logo"
+            style={{ fontSize: '24px' }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            NutriAI
+          </motion.div>
+          <button
+            className="region-btn"
+            onClick={() => navigate(-1)}
+            style={{ gap: '8px' }}
+          >
+            <HiOutlineArrowLeft size={18} />
+            <span>Back</span>
+          </button>
+        </div>
+      </nav>
+
+      <main className="dashboard-main" style={{ maxWidth: '960px' }}>
+        {/* Hero Section */}
+        <motion.header
+          className="welcome-header"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          style={{ textAlign: 'center', marginBottom: '64px' }}
+        >
+          <div className="about-hero-badge">
+            <HiOutlineBeaker size={14} />
+            <span>About NutriAI</span>
+          </div>
+          <h1 className="greeting" style={{ fontSize: 'clamp(28px, 5vw, 44px)' }}>
+            Nutrition, Reimagined with{' '}
+            <span style={{ background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Artificial Intelligence
+            </span>
+          </h1>
+          <p className="welcome-sub" style={{ maxWidth: '600px', margin: '16px auto 0', fontSize: '17px', lineHeight: '1.7' }}>
+            NutriAI is an intelligent nutrition platform that combines cutting-edge AI with 
+            regional food science to deliver hyper-personalized meal plans for every body type, 
+            dietary preference, and fitness goal.
+          </p>
+        </motion.header>
+
+        {/* Mission Statement */}
+        <motion.section
+          className="about-mission-section"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          <div className="about-glass-panel">
+            <div className="about-mission-icon-row">
+              <div className="about-mission-icon">
+                <HiOutlineUserGroup size={28} />
+              </div>
+            </div>
+            <h2 className="about-section-title">Our Mission</h2>
+            <p className="about-section-text">
+              We believe that personalized nutrition should not be a luxury. Our mission is to democratize 
+              access to expert-level dietary guidance by leveraging AI to understand your unique body, 
+              cultural food preferences, and health objectives — delivering actionable, science-backed 
+              meal plans that actually work.
+            </p>
+          </div>
+        </motion.section>
+
+        {/* Features Grid */}
+        <motion.section
+          style={{ marginBottom: '64px' }}
+          variants={stagger}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.h2
+            className="about-section-title"
+            style={{ textAlign: 'center', marginBottom: '32px' }}
+            variants={fadeUp}
+          >
+            What Makes Us Different
+          </motion.h2>
+          <div className="about-features-grid">
+            {features.map((feat, idx) => (
+              <motion.div
+                key={feat.title}
+                className="about-feature-card"
+                variants={fadeUp}
+                transition={{ delay: idx * 0.08 }}
+                whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              >
+                <div
+                  className="about-feature-icon"
+                  style={{ color: feat.color, background: `${feat.color}15` }}
+                >
+                  <feat.icon size={24} />
+                </div>
+                <h3 className="about-feature-title">{feat.title}</h3>
+                <p className="about-feature-desc">{feat.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Tech Stack */}
+        <motion.section
+          style={{ marginBottom: '64px' }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <h2 className="about-section-title" style={{ textAlign: 'center', marginBottom: '32px' }}>
+            Built With Modern Tech
+          </h2>
+          <div className="about-tech-grid">
+            {techStack.map((tech, idx) => (
+              <motion.div
+                key={tech.name}
+                className="about-tech-chip"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6 + idx * 0.07 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <span className="about-tech-name">{tech.name}</span>
+                <span className="about-tech-role">{tech.role}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+
+        {/* Footer */}
+        <motion.footer
+          className="about-footer"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <p>Made with ❤️ for health-conscious individuals everywhere.</p>
+          <p className="about-version">NutriAI v1.0.0 — © {new Date().getFullYear()}</p>
+        </motion.footer>
+      </main>
+
+      <div className="dashboard-decor-1" />
+      <div className="dashboard-decor-2" />
+    </div>
+  );
+}
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { HiOutlineChatAlt2, HiX, HiPaperAirplane } from 'react-icons/hi';
+import authApi from '../../api/authApi';
+
+export default function ChatBot() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { role: 'assistant', content: "Hi! I'm your NutriAI Expert. How can I help you today?" }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isTyping]);
+
+  const handleSend = async () => {
+    if (!input.trim()) return;
+    
+    const userMsg = { role: 'user', content: input.trim() };
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setIsTyping(true);
+
+    try {
+      const response = await authApi.chat(userMsg.content, messages);
+      setMessages(prev => [...prev, { role: 'assistant', content: response.response }]);
+    } catch (err) {
+      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting to my servers right now." }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <>
+      <button 
+        className="chatbot-trigger"
+        onClick={() => setIsOpen(true)}
+        style={{ display: isOpen ? 'none' : 'flex' }}
+      >
+        <HiOutlineChatAlt2 size={24} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            className="chatbot-window"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+          >
+            <div className="chatbot-header">
+              <div className="chatbot-title">
+                <span className="bot-avatar">🤖</span>
+                <h3>NutriAI Expert</h3>
+              </div>
+              <button className="chatbot-close" onClick={() => setIsOpen(false)}>
+                <HiX size={20} />
+              </button>
+            </div>
+
+            <div className="chatbot-messages">
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`chat-bubble-wrapper ${msg.role}`}>
+                  <div className={`chat-bubble ${msg.role}`}>
+                    {msg.content}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="chat-bubble-wrapper assistant">
+                  <div className="chat-bubble assistant typing-indicator">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            <div className="chatbot-input-area">
+              <input 
+                type="text"
+                placeholder="Ask me about nutrition..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyPress}
+              />
+              <button onClick={handleSend} disabled={!input.trim() || isTyping}>
+                <HiPaperAirplane size={18} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+/**
+ * Dashboard — Advanced industry-ready nutrition oversight.
+ * Displays calories, macros, and region selection.
+ */
+
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  HiOutlineLogout, 
+  HiChevronDown, 
+  HiOutlineFire, 
+  HiOutlineLightningBolt,
+  HiOutlineHeart,
+  HiOutlineCube,
+  HiOutlineGlobe,
+  HiOutlineUserCircle,
+  HiOutlineClipboardList,
+  HiOutlineMenuAlt3,
+  HiOutlineBeaker
+} from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import authApi from '../../api/authApi';
+import Sidebar from './Sidebar';
+
+export default function Dashboard() {
+  const navigate = useNavigate();
+  const { user, logout, updateUser } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isRegionOpen, setIsRegionOpen] = useState(false);
+  const [loadingRegion, setLoadingRegion] = useState(false);
+
+  // Water Intake State
+  const [waterData, setWaterData] = useState({ total_ml: 0, goal_ml: 2500, progress: 0, logs: [] });
+  const [waterLogging, setWaterLogging] = useState(false);
+
+  const fetchWaterData = async () => {
+    try {
+      const res = await authApi.getTodayWater();
+      if (res) {
+        setWaterData(res);
+      }
+    } catch (err) {
+      console.error('Failed to load water:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchWaterData();
+  }, []);
+
+  const handleLogWater = async (amount) => {
+    setWaterLogging(true);
+    try {
+      await authApi.logWater(amount);
+      await fetchWaterData();
+    } catch (err) {
+      console.error('Failed to log water:', err);
+    } finally {
+      setWaterLogging(false);
+    }
+  };
+
+  // Close region dropdown on click outside
+  useEffect(() => {
+    const handleClick = () => setIsRegionOpen(false);
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  const handleRegionChange = async (region) => {
+    if (region === currentRegion.id) return;
+    setLoadingRegion(true);
+    try {
+      const data = await authApi.updateRegion(region);
+      updateUser(data.user);
+    } catch (err) {
+      console.error('Failed to update region:', err);
+    } finally {
+      setLoadingRegion(false);
+      setIsRegionOpen(false);
+    }
+  };
+
+  const REGIONS = [
+    { id: 'Punjab', label: 'Punjab', icon: '🌾' },
+    { id: 'J&K', label: 'Jammu & Kashmir', icon: '🏔️' },
+    { id: 'Himachal', label: 'Himachal Pradesh', icon: '🌲' },
+    { id: 'Tamil Nadu', label: 'Tamil Nadu', icon: '🛕' },
+    { id: 'Maharashtra', label: 'Maharashtra', icon: '🦁' },
+    { id: 'Gujarat', label: 'Gujarat', icon: '🌊' },
+    { id: 'West Bengal', label: 'West Bengal', icon: '🐯' },
+    { id: 'Karnataka', label: 'Karnataka', icon: '🐘' },
+    { id: 'Kerala', label: 'Kerala', icon: '🌴' },
+    { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
+    { id: 'International', label: 'International', icon: '🌍' },
+  ];
+
+  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region || 'Punjab')) || REGIONS[0];
+
+  const nutrition = user?.daily_nutrition || {
+    daily_calories: 0,
+    macros: { protein: 0, carbs: 0, fat: 0 },
+    bmi_data: { value: 0, status: 'N/A' }
+  };
+
+  const getBMIColor = (status) => {
+    switch (status) {
+      case 'Underweight': return 'var(--accent-amber)';
+      case 'Normal': return 'var(--success)';
+      case 'Overweight': return 'var(--accent-pink)';
+      case 'Obese': return 'var(--error)';
+      default: return 'var(--text-tertiary)';
+    }
+  };
+
+  return (
+    <div className="dashboard-scene">
+      <nav className="dashboard-nav">
+        <div className="nav-container">
+          <motion.div 
+            className="brand-logo" 
+            style={{ fontSize: '24px' }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            NutriAI
+          </motion.div>
+
+          <div className="nav-actions">
+            {/* Region Selector */}
+            <div className="region-selector-wrapper" onClick={e => e.stopPropagation()}>
+              <motion.button
+                className="region-btn"
+                onClick={() => setIsRegionOpen(!isRegionOpen)}
+                whileTap={{ scale: 0.97 }}
+              >
+                <HiOutlineGlobe size={18} />
+                <span>{currentRegion.label}</span>
+                <HiChevronDown className={`chevron ${isRegionOpen ? 'open' : ''}`} />
+              </motion.button>
+
+              <AnimatePresence>
+                {isRegionOpen && (
+                  <motion.div 
+                    className="region-dropdown"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="dropdown-header">Select Regional Cuisine</div>
+                    {REGIONS.map(reg => (
+                      <button 
+                        key={reg.id} 
+                        className={`dropdown-item ${currentRegion.id === reg.id ? 'active' : ''}`}
+                        onClick={() => handleRegionChange(reg.id)}
+                        disabled={loadingRegion}
+                      >
+                        <span className="emoji">{reg.icon}</span>
+                        {reg.label}
+                        {currentRegion.id === reg.id && <div className="active-dot" />}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <button className="menu-trigger" onClick={() => setIsSidebarOpen(true)}>
+              <HiOutlineMenuAlt3 size={24} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main className="dashboard-main">
+        {/* Welcome Section */}
+        <header className="welcome-header">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <h1 className="greeting">Welcome, {user?.name?.split(' ')[0] || 'Explorer'}!</h1>
+            <p className="welcome-sub">Here is your nutritional blueprint for today.</p>
+          </motion.div>
+        </header>
+
+        {/* Nutritional Grid */}
+        <div className="nutrition-grid">
+          {/* Main Calorie Card */}
+          <motion.div 
+            className="nutrition-card calorie-hero"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.1 }}
+          >
+            <div className="card-flare" />
+            <div className="card-label">Daily Target</div>
+            <div className="calorie-value">
+              <HiOutlineFire className="fire-icon" />
+              {nutrition.daily_calories.toLocaleString()}
+            </div>
+            <div className="card-unit">kcal / day</div>
+            
+            <div className="goal-tag">
+              {user?.profile?.dietary_goal?.replace('_', ' ') || 'Maintain'}
+            </div>
+          </motion.div>
+
+          {/* Macro Breakdown */}
+          <div className="macro-cards">
+            {[
+              { label: 'Protein', value: nutrition.macros.protein, unit: 'g', icon: HiOutlineLightningBolt, color: 'var(--accent-cyan)' },
+              { label: 'Carbs', value: nutrition.macros.carbs, unit: 'g', icon: HiOutlineCube, color: 'var(--accent-purple)' },
+              { label: 'Fats', value: nutrition.macros.fat, unit: 'g', icon: HiOutlineHeart, color: 'var(--accent-pink)' },
+            ].map((macro, idx) => (
+              <motion.div 
+                key={macro.label}
+                className="macro-card"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + idx * 0.1 }}
+                whileHover={{ y: -5 }}
+              >
+                <div className="macro-icon-wrapper" style={{ color: macro.color, background: `${macro.color}15` }}>
+                  <macro.icon size={20} />
+                </div>
+                <div>
+                  <div className="macro-label">{macro.label}</div>
+                  <div className="macro-value-row">
+                    <span className="macro-v">{macro.value}</span>
+                    <span className="macro-u">{macro.unit}</span>
+                  </div>
+                </div>
+                {/* Visual line */}
+                <div className="macro-progress-bg">
+                  <motion.div 
+                    className="macro-progress-fill" 
+                    style={{ background: macro.color }}
+                    initial={{ width: 0 }}
+                    animate={{ width: '65%' }}
+                    transition={{ duration: 1, delay: 0.5 + idx * 0.1 }}
+                  />
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Health Insights (BMI) & Water Intake Row */}
+        <motion.div 
+          className="health-insights-row"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="bmi-strip">
+            <div className="bmi-info">
+              <span className="bmi-label">Body Mass Index (BMI)</span>
+              <div className="bmi-val-group">
+                <span className="bmi-value">{nutrition.bmi_data?.value || '0.0'}</span>
+                <span className="bmi-tag" style={{ 
+                  background: `${getBMIColor(nutrition.bmi_data?.status)}20`,
+                  color: getBMIColor(nutrition.bmi_data?.status),
+                  borderColor: `${getBMIColor(nutrition.bmi_data?.status)}40`
+                }}>
+                  {nutrition.bmi_data?.status || 'Calculating'}
+                </span>
+              </div>
+            </div>
+            
+            <div className="bmi-visual-meter">
+              <div className="meter-segments">
+                <div className="segment under" />
+                <div className="segment normal" />
+                <div className="segment over" />
+                <div className="segment obese" />
+              </div>
+              <motion.div 
+                className="meter-pointer" 
+                initial={{ left: '0%' }}
+                animate={{ left: `${Math.min(Math.max((nutrition.bmi_data?.value - 15) / 25 * 100, 2), 98)}%` }}
+                transition={{ duration: 1.5, type: 'spring' }}
+              />
+              <div className="meter-labels">
+                <span style={{ left: '0%' }}>15</span>
+                <span style={{ left: '16%' }}>18.5</span>
+                <span style={{ left: '40%' }}>25</span>
+                <span style={{ left: '60%' }}>30</span>
+                <span style={{ left: '100%' }}>40+</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="water-card-web">
+            <div className="water-header-row">
+              <div className="water-info-col">
+                <span className="water-title">
+                  💧 Water Intake
+                </span>
+                <div className="water-main-value">
+                  {waterData.total_ml || 0} <span className="water-unit">/ {waterData.goal_ml || 2500} ml</span>
+                </div>
+                <div className="water-status-text">
+                  {(waterData.progress || 0) >= 100 ? '🎉 Goal Achieved!' : `${Math.max(0, (waterData.goal_ml || 2500) - (waterData.total_ml || 0))} ml left`}
+                </div>
+              </div>
+              <div className="water-progress-circle-outer">
+                <div className="water-progress-circle-inner" style={{ height: `${Math.min(100, waterData.progress || 0)}%` }} />
+                <span className="water-progress-percent">{Math.round(waterData.progress || 0)}%</span>
+              </div>
+            </div>
+
+            {/* Quick Add Buttons */}
+            <div className="water-quick-add-row">
+              {[150, 250, 500].map((amt) => (
+                <button
+                  key={amt}
+                  className="water-quick-btn"
+                  disabled={waterLogging}
+                  onClick={() => handleLogWater(amt)}
+                >
+                  <HiOutlineBeaker size={14} style={{ color: 'var(--accent-cyan)' }} />
+                  <span>+{amt}ml</span>
+                </button>
+              ))}
+            </div>
+
+            {/* Logs List */}
+            {waterData.logs && waterData.logs.length > 0 && (
+              <div className="water-logs-section">
+                <div className="water-logs-title">Recent Logs</div>
+                {waterData.logs.slice(0, 2).map((log, idx) => {
+                  const time = new Date(log.logged_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                  return (
+                    <div key={idx} className="water-log-item">
+                      <div className="water-log-left">
+                        <HiOutlineBeaker size={14} style={{ color: 'var(--accent-cyan)' }} />
+                        <span className="water-log-text">{log.amount_ml} ml</span>
+                      </div>
+                      <span className="water-log-time">{time}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Regional Focus Section */}
+        <motion.section 
+          className="regional-focus-section"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          style={{ marginTop: '30px' }}
+        >
+          <div className="section-header">
+            <h2 className="section-title" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiOutlineGlobe className="text-cyan" /> 
+              Regional Cuisine Focus
+            </h2>
+            <p className="welcome-sub" style={{ marginBottom: '20px' }}>
+              Explore nutritional protocols based on authentic Indian regions.
+            </p>
+          </div>
+
+          <div className="region-cards-scroll">
+            {REGIONS.map((reg, idx) => (
+              <motion.div
+                key={reg.id}
+                className={`region-focus-card ${currentRegion.id === reg.id ? 'active' : ''}`}
+                onClick={() => handleRegionChange(reg.id)}
+                whileHover={{ y: -5, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7 + idx * 0.05 }}
+              >
+                <div className="region-icon">{reg.icon}</div>
+                <div className="region-info">
+                  <div className="region-name">{reg.label}</div>
+                  <div className="region-status">
+                    {currentRegion.id === reg.id ? 'Current Focus' : 'Explore Cuisine'}
+                  </div>
+                </div>
+                {currentRegion.id === reg.id && <div className="active-glow" />}
+              </motion.div>
+            ))}
+          </div>
+
+          <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'center' }}>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => navigate('/diet-plan')}
+              style={{ padding: '12px 32px' }}
+            >
+              View Full {currentRegion.label} Diet Plan
+            </button>
+          </div>
+        </motion.section>
+      </main>
+
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+
+      {/* Background Decor */}
+      <div className="dashboard-decor-1" />
+      <div className="dashboard-decor-2" />
+    </div>
+  );
+}
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  HiOutlineMenuAlt3,
+  HiOutlineGlobe,
+  HiChevronDown,
+  HiOutlineClipboardList,
+  HiX,
+  HiOutlineFire,
+  HiOutlineLightningBolt,
+  HiOutlineSparkles,
+  HiOutlineBookOpen
+} from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import authApi from '../../api/authApi';
+import Sidebar from './Sidebar';
+
+export default function DietPlan() {
+  const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isRegionOpen, setIsRegionOpen] = useState(false);
+  const [loadingRegion, setLoadingRegion] = useState(false);
+  const [recommendations, setRecommendations] = useState({});
+  const [userTargets, setUserTargets] = useState(null);
+  const [regionAvailable, setRegionAvailable] = useState(true);
+  const [loadingMeals, setLoadingMeals] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState(null);
+  const [recipe, setRecipe] = useState(null);
+  const [loadingRecipe, setLoadingRecipe] = useState(false);
+
+  const fetchRecommendations = async (forceRefresh = false) => {
+    setLoadingMeals(true);
+    try {
+      const data = await authApi.getRecommendations(undefined, forceRefresh);
+      setRecommendations(data.recommendations || {});
+      setUserTargets(data.user_targets || null);
+      setRegionAvailable(data.region_available !== false);
+    } catch (err) {
+      console.error('Failed to fetch recommendations:', err);
+      setRecommendations({});
+    } finally {
+      setLoadingMeals(false);
+    }
+  };
+
+  const fetchRecipe = async (mealName) => {
+    setLoadingRecipe(true);
+    setRecipe(null);
+    try {
+      const data = await authApi.getRecipe(mealName);
+      setRecipe(data.recipe);
+    } catch (err) {
+      console.error('Failed to fetch recipe:', err);
+    } finally {
+      setLoadingRecipe(false);
+    }
+  };
+
+  const openRecipe = (meal) => {
+    setSelectedMeal(meal);
+    fetchRecipe(meal.name);
+  };
+
+  useEffect(() => {
+    fetchRecommendations();
+  }, [user?.profile?.region, user?.profile?.dietary_goal, user?.profile?.dietary_type]);
+
+  const handleRegionChange = async (region) => {
+    setLoadingRegion(true);
+    try {
+      const data = await authApi.updateRegion(region);
+      updateUser(data.user);
+    } catch (err) {
+      console.error('Failed to update region:', err);
+    } finally {
+      setLoadingRegion(false);
+      setIsRegionOpen(false);
+    }
+  };
+
+  const REGIONS = [
+    { id: 'Punjab', label: 'Punjab', icon: '🌾' },
+    { id: 'J&K', label: 'Jammu & Kashmir', icon: '🏔️' },
+    { id: 'Himachal', label: 'Himachal Pradesh', icon: '🌲' },
+    { id: 'Tamil Nadu', label: 'Tamil Nadu', icon: '🛕' },
+    { id: 'Maharashtra', label: 'Maharashtra', icon: '🦁' },
+    { id: 'Gujarat', label: 'Gujarat', icon: '🌊' },
+    { id: 'West Bengal', label: 'West Bengal', icon: '🐯' },
+    { id: 'Karnataka', label: 'Karnataka', icon: '🐘' },
+    { id: 'Kerala', label: 'Kerala', icon: '🌴' },
+    { id: 'Delhi', label: 'Delhi', icon: '🏛️' },
+    { id: 'International', label: 'International', icon: '🌍' },
+  ];
+
+  const mealSlots = [
+    { id: 'breakfast', label: 'Breakfast', icon: '🍳' },
+    { id: 'lunch', label: 'Lunch', icon: '🍲' },
+    { id: 'snacks', label: 'Snacks', icon: '🍎' },
+    { id: 'dinner', label: 'Dinner', icon: '🥘' },
+    { id: 'sides', label: 'Sides', icon: '🥗' },
+    { id: 'drinks', label: 'Drinks', icon: '🍹' }
+  ];
+
+  const currentRegion = REGIONS.find(r => r.id === (user?.profile?.region || 'Punjab')) || REGIONS[0];
+
+  return (
+    <div className="dashboard-scene">
+      <nav className="dashboard-nav">
+        <div className="nav-container">
+          <div className="brand-logo" style={{ cursor: 'pointer' }} onClick={() => navigate('/dashboard')}>
+            NutriAI
+          </div>
+
+          <div className="nav-actions">
+            <div className="region-selector-wrapper" onClick={e => e.stopPropagation()}>
+              <motion.button
+                className="region-btn"
+                whileHover={{ scale: 1.02 }}
+                onClick={() => setIsRegionOpen(!isRegionOpen)}
+              >
+                <HiOutlineGlobe size={18} />
+                <span>{currentRegion.label}</span>
+                <HiChevronDown className={`chevron ${isRegionOpen ? 'open' : ''}`} />
+              </motion.button>
+              <AnimatePresence>
+                {isRegionOpen && (
+                  <motion.div className="region-dropdown" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}>
+                    {REGIONS.map(reg => (
+                      <button key={reg.id} className="dropdown-item" onClick={() => handleRegionChange(reg.id)}>
+                        <span className="emoji">{reg.icon}</span> {reg.label}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <button className="menu-trigger" onClick={() => setIsSidebarOpen(true)}>
+              <HiOutlineMenuAlt3 size={24} />
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <main className="dashboard-main">
+        <header className="section-header">
+          <h1 className="section-title"><HiOutlineClipboardList /> Your {currentRegion.label} Meal Plan</h1>
+          <button className="view-all" onClick={() => fetchRecommendations(true)} disabled={loadingMeals}>
+            {loadingMeals ? 'Syncing...' : 'Regenerate'}
+          </button>
+        </header>
+
+        <section className="diet-section">
+          <div className="recommendations-container">
+            {loadingMeals ? (
+              <div style={{ padding: '40px', textAlign: 'center' }}>
+                <div className="btn-spinner" style={{ margin: '0 auto', width: '40px', height: '40px', borderTopColor: 'var(--accent-cyan)' }} />
+              </div>
+            ) : regionAvailable ? (
+              <div className="meals-grid-professional">
+                {mealSlots.map((slot) => {
+                  const meal = recommendations[slot.id];
+                  if (!meal) return null;
+                  
+                  const totalMacros = meal.macros.protein + meal.macros.carbs + meal.macros.fat;
+                  const pPerc = (meal.macros.protein / totalMacros) * 100;
+                  const cPerc = (meal.macros.carbs / totalMacros) * 100;
+                  const fPerc = (meal.macros.fat / totalMacros) * 100;
+ 
+                  return (
+                    <motion.div 
+                      key={slot.id} 
+                      className="meal-card-professional" 
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 * mealSlots.indexOf(slot) }}
+                    >
+                      <div className="meal-slot-label">{slot.label} Protocol</div>
+                      <div className="meal-header-group">
+                        <h3 className="meal-title-prof">{meal.name}</h3>
+                        {meal.core_item && (
+                          <div className="core-product-tag">
+                            <span className="dot"></span> {meal.core_item} Base
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Glycemic Index Badge */}
+                      {meal.glycemic_index !== undefined && (
+                        <div className={`gi-badge ${
+                          meal.gi_category === 'Low' ? 'gi-low' :
+                          meal.gi_category === 'Medium' ? 'gi-medium' :
+                          'gi-high'
+                        }`}>
+                          <span className="gi-dot" />
+                          <span>GI {meal.glycemic_index} ({meal.gi_category} Load)</span>
+                        </div>
+                      )}
+                      
+                      
+                      <div className="macro-meter-group">
+                        <div className="macro-meter-item">
+                          <div className="macro-meter-header">
+                            <span>Protein</span>
+                            <span>{meal.macros.protein}g</span>
+                          </div>
+                          <div className="macro-progress-bg">
+                            <motion.div className="macro-progress-fill" style={{ width: `${pPerc}%`, background: 'var(--accent-cyan)' }} initial={{ width: 0 }} animate={{ width: `${pPerc}%` }} />
+                          </div>
+                        </div>
+                        <div className="macro-meter-item">
+                          <div className="macro-meter-header">
+                            <span>Carbohydrates</span>
+                            <span>{meal.macros.carbs}g</span>
+                          </div>
+                          <div className="macro-progress-bg">
+                            <motion.div className="macro-progress-fill" style={{ width: `${cPerc}%`, background: 'var(--accent-amber)' }} initial={{ width: 0 }} animate={{ width: `${cPerc}%` }} />
+                          </div>
+                        </div>
+                        <div className="macro-meter-item">
+                          <div className="macro-meter-header">
+                            <span>Lipids / Fats</span>
+                            <span>{meal.macros.fat}g</span>
+                          </div>
+                          <div className="macro-progress-bg">
+                            <motion.div className="macro-progress-fill" style={{ width: `${fPerc}%`, background: 'var(--accent-purple)' }} initial={{ width: 0 }} animate={{ width: `${fPerc}%` }} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="ai-reasoning-box">
+                        <div className="ai-reasoning-text">
+                          <HiOutlineSparkles style={{ marginRight: '6px', color: 'var(--accent-cyan)' }} />
+                          {meal.agent_hint}
+                        </div>
+                      </div>
+
+                      <div style={{ fontSize: '13px', color: 'var(--text-tertiary)', marginBottom: '20px', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>Match Precision: <strong style={{ color: 'var(--accent-cyan)' }}>{meal.match_score ? `${Math.round((1 - meal.match_score) * 100)}%` : 'Optimal'}</strong></span>
+                        {meal.quantity_grams && <span>Serv. Size: <strong>{meal.quantity_grams}g</strong></span>}
+                      </div>
+
+                      <button className="recipe-link-btn" onClick={() => openRecipe(meal)}>
+                        <HiOutlineBookOpen size={18} />
+                        View Preparation Intel
+                      </button>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="region-unsupported-card">
+                <div className="unsupported-content text-center">
+                  <div className="unsupported-icon">🚀</div>
+                  <h3 className="mb-2">Expanding Regional Dataset</h3>
+                  <p className="text-secondary">Our experts are currently mapping standard protocols for {currentRegion.label}.</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      <AnimatePresence>
+        {selectedMeal && (
+          <div className="modal-overlay" onClick={() => setSelectedMeal(null)}>
+            <motion.div 
+              className="recipe-modal" 
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 30 }}
+              onClick={e => e.stopPropagation()}
+            >
+              {loadingRecipe ? (
+                <div style={{ padding: '80px', textAlign: 'center' }}>
+                  <div className="btn-spinner" style={{ margin: '0 auto 24px', width: '40px', height: '40px', borderTopColor: 'var(--accent-cyan)' }} />
+                  <p style={{ color: 'var(--text-secondary)', letterSpacing: '1px' }}>AI IS SYNTHESIZING RECIPE DATA...</p>
+                </div>
+              ) : recipe ? (
+                <>
+                  <div className="recipe-header">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                      <span className="premium-label" style={{ background: 'var(--accent-cyan)', color: '#0a0e1a', padding: '2px 8px', borderRadius: '4px', fontSize: '10px', fontWeight: 800 }}>PRO RECIPE</span>
+                    </div>
+                    <h2>{recipe.name}</h2>
+                    <div className="recipe-meta" style={{ marginTop: '16px' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><HiOutlineFire /> {recipe.calories} Energy Units</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><HiOutlineLightningBolt /> {recipe.prep_time} Prep</span>
+                    </div>
+                    <button className="chatbot-close" style={{ position: 'absolute', top: '32px', right: '32px' }} onClick={() => setSelectedMeal(null)}>
+                      <HiX size={24} />
+                    </button>
+                  </div>
+                  <div className="recipe-content">
+                    <div className="recipe-section">
+                      <h4><HiOutlineClipboardList /> Strategic Ingredients</h4>
+                      <div className="ingredient-list">
+                        {recipe.ingredients.map((ing, i) => (
+                          <div key={i} className="ingredient-item">{ing}</div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="recipe-section" style={{ marginTop: '32px' }}>
+                      <h4><HiOutlineMenuAlt3 /> Execution Steps</h4>
+                      <div className="instruction-steps">
+                        {recipe.instructions.map((step, i) => (
+                          <div key={i} className="instruction-step">
+                            <span style={{ color: 'var(--accent-cyan)', fontWeight: 800, marginRight: '12px' }}>{String(i + 1).padStart(2, '0')}</span>
+                            <span style={{ color: 'var(--text-secondary)' }}>{step}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="recipe-footer">
+                    <button className="btn btn-secondary" style={{ padding: '10px 24px', fontSize: '13px' }} onClick={() => setSelectedMeal(null)}>Close Intel</button>
+                  </div>
+                </>
+              ) : (
+                <div style={{ padding: '60px', textAlign: 'center' }}>
+                  <h3 style={{ color: 'var(--error)' }}>AI Transmission Failed</h3>
+                  <p style={{ marginTop: '12px' }}>We couldn't retrieve the preparation intelligence for this dish.</p>
+                  <button className="btn btn-primary" style={{ marginTop: '24px' }} onClick={() => fetchRecipe(selectedMeal.name)}>Retry Sync</button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+      <div className="dashboard-decor-1" />
+      <div className="dashboard-decor-2" />
+    </div>
+  );
+}
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FiArrowRight,
+  FiZap,
+  FiGlobe,
+  FiActivity,
+  FiShield,
+  FiMessageSquare,
+  FiChevronDown
+} from 'react-icons/fi';
+
+const LandingPage = () => {
+  const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+      // Parallax intensity
+      const scrolledVal = window.scrollY;
+      document.documentElement.style.setProperty('--scroll-y', `${scrolledVal}px`);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Intersection Observer for reveal animations
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-active');
+        }
+      });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal');
+    revealElements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div className="premium-landing">
+      {/* Immersive Background */}
+      <div className="nebula-glow nebula-1"></div>
+      <div className="nebula-glow nebula-2"></div>
+
+      {/* Navigation */}
+      <nav className={`premium-nav ${scrolled ? 'nav-scrolled' : ''}`}>
+        <div className="nav-container">
+          <div className="brand">
+            <span className="brand-logo">NUTRI<span className="brand-accent">AI</span></span>
+          </div>
+          <div className="nav-links">
+            <button className="nav-link" onClick={() => navigate('/auth/login')}>Login</button>
+            <button className="nav-btn" onClick={() => navigate('/auth/signup')}>
+              Join Protocol
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="immersive-hero">
+        <div className="hero-grid">
+          <div className="hero-text-area">
+            <div className="protocol-badge reveal">
+              <span className="pulse-dot"></span>
+              SYSTEM STATUS: OPTIMIZED
+            </div>
+            <h1 className="hero-headline reveal">
+              PERSONALIZED<br />
+              <span className="gradient-text">NUTRITION</span><br />
+              REDEFINED.
+            </h1>
+            <p className="hero-subtext reveal">
+              A high-precision diet protocol engineered through agentic reasoning and regional culinary intelligence.
+            </p>
+            <div className="hero-actions reveal">
+              <button className="cta-primary" onClick={() => navigate('/auth/signup')}>
+                GET STARTED <FiArrowRight className="cta-icon" />
+              </button>
+              <button className="cta-secondary" onClick={() => window.scrollTo(0, 1000)}>
+                EXPLORE PROTOCOL
+              </button>
+            </div>
+          </div>
+
+          <div className="hero-visual-area reveal">
+            <div className="video-wrapper">
+              <video
+                className="hero-video-clean"
+                autoPlay
+                muted
+                loop
+                playsInline
+              >
+                <source src="/texture_map.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+
+        <div className="scroll-indicator">
+          <FiChevronDown />
+        </div>
+      </section>
+
+      {/* Features - The Three Pillars */}
+      <section className="pillars-section">
+        <div className="pillars-header reveal">
+          <h2 className="pillars-title">The Three Pillars</h2>
+          <p className="pillars-subtitle">Precision engineering for your biological health.</p>
+        </div>
+
+        <div className="pillars-grid">
+          <div className="pillar-card reveal">
+            <div className="pillar-icon-box">
+              <FiGlobe />
+            </div>
+            <h3>Cultural Intelligence</h3>
+            <p>We've indexed over 10 regional Indian kitchens. Punjab to Kerala—localized for your DNA.</p>
+            <div className="pillar-border"></div>
+            <div className="pillar-glow"></div>
+          </div>
+
+          <div className="pillar-card reveal">
+            <div className="pillar-icon-box">
+              <FiZap />
+            </div>
+            <h3>Dynamic Protocol</h3>
+            <p>Real-time macro adjustments based on your daily activity and physiological feedback.</p>
+            <div className="pillar-border"></div>
+            <div className="pillar-glow"></div>
+          </div>
+
+          <div className="pillar-card reveal">
+            <div className="pillar-icon-box">
+              <FiMessageSquare />
+            </div>
+            <h3>Agentic Insights</h3>
+            <p>Your personal AI expert remains active 24/7 to adjust recipes and explain the science.</p>
+            <div className="pillar-border"></div>
+            <div className="pillar-glow"></div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Protocol Intelligence Section */}
+      <section className="protocol-intel-section">
+        <div className="intel-container">
+          <div className="intel-header reveal">
+            <h2 className="section-title">Agentic <span className="gradient-text">Reasoning</span></h2>
+            <p className="section-subtitle">A multi-layered protocol engineered for precision.</p>
+          </div>
+
+          <div className="intel-flow">
+            <div className="intel-node-wrapper reveal">
+              <div className="intel-node">
+                <FiActivity />
+              </div>
+              <h4>Biometrics</h4>
+              <p>Metabolic baseline analysis.</p>
+            </div>
+
+            <div className="intel-connector reveal"></div>
+
+            <div className="intel-node-wrapper reveal">
+              <div className="intel-node">
+                <FiGlobe />
+              </div>
+              <h4>Cultural DNA</h4>
+              <p>Regional culinary indexing.</p>
+            </div>
+
+            <div className="intel-connector reveal"></div>
+
+            <div className="intel-node-wrapper reveal">
+              <div className="intel-node">
+                <FiZap />
+              </div>
+              <h4>Protocol</h4>
+              <p>Dynamic macro allocation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Scientific Quote */}
+      <section className="scientific-quote reveal">
+        <div className="quote-wrap">
+          <FiShield className="shield-icon" />
+          <blockquote>
+            "NutriAI replaces the guesswork of dieting with a purely scientific, regionalized data protocol."
+          </blockquote>
+          <cite>— DR. ELENA VANCE, PROTOCOL LEAD</cite>
+        </div>
+      </section>
+
+      {/* Final CTA */}
+      <section className="final-cta reveal">
+        <div className="cta-card">
+          <h2>READY TO START YOUR PROTOCOL?</h2>
+          <p>Join thousands of users optimizing their health through NutriAI.</p>
+          <button className="cta-primary lg" onClick={() => navigate('/auth/signup')}>
+            CREATE YOUR ACCOUNT
+          </button>
+        </div>
+      </section>
+
+      <footer className="premium-footer">
+        <div className="footer-line"></div>
+        <div className="footer-inner">
+          <span className="brand-logo sm">NUTRI<span className="brand-accent">AI</span></span>
+          <p>© 2026 NUTRI-AI PROTOCOL. ALL DATA ENCRYPTED.</p>
+          <div className="footer-links">
+            <a href="#hero">Terms</a>
+            <a href="#hero">Privacy</a>
+          </div>
+        </div>
+      </footer>
+
+      <style dangerouslySetInnerHTML={{
+        __html: `
+        :root {
+          --brand-primary: #2dd4bf;
+          --brand-secondary: #a855f7;
+          --brand-black: #000000;
+          --brand-dark: #0a0e1a;
+          --text-gray: #94a3b8;
+          scroll-behavior: smooth;
+        }
+
+        .premium-landing {
+          background-color: var(--brand-black);
+          color: white;
+          font-family: 'Plus Jakarta Sans', sans-serif;
+          overflow-x: hidden;
+          min-height: 100vh;
+        }
+
+        /* Nebula Backgrounds */
+        .nebula-glow {
+          position: fixed;
+          width: 80vw;
+          height: 80vh;
+          border-radius: 50%;
+          filter: blur(140px);
+          opacity: 0.1;
+          pointer-events: none;
+          z-index: 0;
+        }
+        .nebula-1 { background: radial-gradient(circle, var(--brand-primary), transparent); top: -20%; left: -20%; }
+        .nebula-2 { background: radial-gradient(circle, var(--brand-secondary), transparent); bottom: -20%; right: -20%; }
+
+        /* Navigation */
+        .premium-nav {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 90px;
+          display: flex;
+          align-items: center;
+          padding: 0 8%;
+          z-index: 1000;
+          transition: all 0.4s ease;
+        }
+        .nav-scrolled {
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          height: 70px;
+        }
+        .nav-container { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        .brand-logo { font-size: 24px; font-weight: 900; letter-spacing: -1px; }
+        .brand-accent { color: var(--brand-primary); }
+        
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link { background: none; border: none; color: var(--text-gray); font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .nav-link:hover { color: white; }
+        .nav-btn {
+          background: white;
+          color: black;
+          border: none;
+          padding: 10px 24px;
+          border-radius: 99px;
+          font-weight: 700;
+          font-size: 14px;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+        .nav-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(255,255,255,0.2); }
+
+        /* Hero */
+        .immersive-hero {
+          min-height: 100vh;
+          padding: 140px 4% 60px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
+          z-index: 10;
+          overflow: hidden;
+        }
+        .hero-grid { 
+          display: grid; 
+          grid-template-columns: 0.7fr 1.3fr;
+          gap: 40px; 
+          align-items: center; 
+          max-width: 1200px;
+          margin: 0 auto;
+          width: 100%;
+        }
+        
+        .protocol-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 8px 16px;
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 99px;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 2px;
+          margin-bottom: 30px;
+        }
+        .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand-primary); box-shadow: 0 0 10px var(--brand-primary); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        .hero-headline { font-size: clamp(48px, 8vw, 100px); line-height: 0.9; font-weight: 900; letter-spacing: -4px; margin-bottom: 24px; }
+        .gradient-text { background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .hero-subtext { font-size: 20px; color: var(--text-gray); max-width: 550px; line-height: 1.6; margin-bottom: 40px; }
+        
+        .hero-actions { display: flex; gap: 20px; }
+        .cta-primary {
+          background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+          border: none;
+          padding: 18px 36px;
+          border-radius: 12px;
+          color: white;
+          font-weight: 800;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          cursor: pointer;
+          transition: 0.4s;
+        }
+        .cta-primary:hover { transform: translateY(-4px); box-shadow: 0 10px 40px rgba(45, 212, 191, 0.3); }
+        .cta-secondary { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 18px 36px; border-radius: 12px; color: white; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .cta-secondary:hover { background: rgba(255,255,255,0.1); }
+
+        .video-wrapper {
+          position: relative;
+          width: 115%;
+          margin-left: 5%;
+          overflow: hidden;
+          transform: translateY(calc(var(--scroll-y, 0px) * 0.1));
+          transition: transform 0.1s ease-out;
+          mask-image: linear-gradient(to right, transparent, black 10%);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 10%);
+        }
+        
+        .hero-video-clean {
+          width: 100%;
+          height: 600px;
+          display: block;
+          object-fit: cover;
+          opacity: 0.9;
+          filter: brightness(1.1) contrast(1.1);
+          border-radius: 0 40px 40px 0;
+        }
+        
+        .data-chip {
+          position: absolute;
+          background: rgba(0,0,0,0.8);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255,255,255,0.1);
+          padding: 10px 16px;
+          border-radius: 12px;
+          font-size: 12px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          white-space: nowrap;
+          z-index: 20;
+        }
+        .chip-1 { top: 10%; right: 0; animation: chipFloat 5s ease-in-out infinite; }
+        .chip-2 { bottom: 20%; left: -20px; animation: chipFloat 5s ease-in-out infinite reverse; }
+        @keyframes chipFloat { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(10px, -15px); } }
+
+        .scroll-indicator { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); color: var(--text-gray); font-size: 24px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+
+        /* Pillars Section */
+        .pillars-section { padding: 120px 8%; border-top: 1px solid rgba(255,255,255,0.05); background: linear-gradient(to bottom, #000, #050505); }
+        .pillars-header { text-align: center; margin-bottom: 80px; }
+        .pillars-title { font-size: 48px; font-weight: 900; margin-bottom: 20px; }
+        .pillars-subtitle { font-size: 20px; color: var(--text-gray); }
+
+        .pillars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .pillar-card {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.05);
+          padding: 60px 40px;
+          border-radius: 32px;
+          position: relative;
+          overflow: hidden;
+          transition: 0.4s;
+        }
+        .pillar-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.04); border-color: rgba(45, 212, 191, 0.2); }
+        .pillar-card h3 { font-size: 24px; font-weight: 800; margin-bottom: 16px; }
+        .pillar-card p { color: var(--text-gray); line-height: 1.6; }
+        .pillar-icon-box { font-size: 40px; color: var(--brand-primary); margin-bottom: 30px; }
+        .pillar-border { position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--brand-primary); transition: 0.4s; }
+        .pillar-card:hover .pillar-border { width: 100%; }
+        .pillar-glow {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(circle at center, rgba(45, 212, 191, 0.1), transparent 70%);
+          opacity: 0;
+          transition: 0.4s;
+          pointer-events: none;
+        }
+        .pillar-card:hover .pillar-glow { opacity: 1; }
+
+
+        /* Protocol Intel */
+        .protocol-intel-section { padding: 120px 8%; background: #000; position: relative; }
+        .intel-container { max-width: 1000px; margin: 0 auto; text-align: center; }
+        .intel-flow { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 80px; position: relative; }
+        
+        .intel-node-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 10; }
+        .intel-node {
+          width: 80px;
+          height: 80px;
+          background: rgba(45, 212, 191, 0.1);
+          border: 1px solid var(--brand-primary);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 32px;
+          color: var(--brand-primary);
+          margin-bottom: 24px;
+          box-shadow: 0 0 30px rgba(45, 212, 191, 0.2);
+          transition: 0.4s;
+        }
+        .intel-node-wrapper:hover .intel-node { transform: scale(1.1); box-shadow: 0 0 50px rgba(45, 212, 191, 0.4); }
+        .intel-node-wrapper h4 { font-size: 20px; font-weight: 800; margin-bottom: 12px; }
+        .intel-node-wrapper p { font-size: 14px; color: var(--text-gray); max-width: 200px; }
+        
+        .intel-connector {
+          flex: 1;
+          height: 2px;
+          background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary));
+          margin-top: 40px;
+          opacity: 0;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 1.5s var(--ease-out-expo), opacity 1.5s var(--ease-out-expo);
+        }
+        .intel-connector.reveal-active {
+          opacity: 0.3;
+          transform: scaleX(1);
+        }
+
+        @media (max-width: 768px) {
+          .intel-flow { flex-direction: column; align-items: center; gap: 60px; }
+          .intel-connector { width: 2px; height: 60px; margin: 0; }
+        }
+
+        /* Scientific Quote */
+        .scientific-quote { padding: 120px 8%; display: flex; justify-content: center; }
+        .quote-wrap { text-align: center; max-width: 800px; }
+        .shield-icon { font-size: 60px; color: rgba(255,255,255,0.1); margin-bottom: 40px; }
+        blockquote { font-size: 32px; font-weight: 700; line-height: 1.4; color: white; margin-bottom: 30px; }
+        cite { font-size: 14px; font-weight: 800; color: var(--brand-primary); letter-spacing: 2px; }
+
+        /* CTA */
+        .final-cta { padding: 80px 8%; }
+        .cta-card {
+          background: linear-gradient(135deg, #111, #000);
+          border: 1px solid rgba(255,255,255,0.1);
+          padding: 100px 40px;
+          border-radius: 40px;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+        .cta-card::after { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at center, rgba(45, 212, 191, 0.1), transparent); }
+        .cta-card h2 { font-size: 48px; font-weight: 900; margin-bottom: 20px; position: relative; z-index: 10; }
+        .cta-card p { font-size: 20px; color: var(--text-gray); margin-bottom: 40px; position: relative; z-index: 10; }
+        .cta-primary.lg { margin: 0 auto; padding: 24px 60px; font-size: 18px; position: relative; z-index: 10; }
+
+        /* Footer */
+        .premium-footer { padding: 60px 8%; }
+        .footer-line { height: 1px; background: rgba(255,255,255,0.05); margin-bottom: 40px; }
+        .footer-inner { display: flex; justify-content: space-between; align-items: center; }
+        .footer-inner p { color: var(--text-gray); font-size: 12px; }
+        .footer-links { display: flex; gap: 30px; }
+        .footer-links a { color: var(--text-gray); font-size: 12px; transition: 0.3s; }
+        .footer-links a:hover { color: white; }
+
+        @media (max-width: 968px) {
+          .hero-grid { grid-template-columns: 1fr; text-align: center; padding-top: 60px; }
+          .hero-subtext { margin-left: auto; margin-right: auto; }
+          .hero-actions { justify-content: center; }
+          .orb-wrapper { margin: 0 auto; max-width: 400px; }
+          .chip-2 { left: 0; }
+          .footer-inner { flex-direction: column; gap: 40px; }
+        }
+      `}} />
+    </div>
+  );
+};
+
+export default LandingPage;
+/**
+ * ProfilePage — Comprehensive user profile view and edit.
+ * Premium glassmorphism design.
+ */
+
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import {
+  HiOutlineArrowLeft,
+  HiOutlineUser,
+  HiOutlineClipboardList,
+  HiOutlinePencilAlt,
+  HiOutlineSave,
+  HiOutlineX
+} from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import authApi from '../../api/authApi';
+
+export default function ProfilePage() {
+  const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+  
+  // Profile editing state
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileData, setProfileData] = useState({
+    name: user?.name || '',
+    age: user?.profile?.age || '',
+    gender: user?.profile?.gender || '',
+    weight: user?.profile?.weight || '',
+    height: user?.profile?.height || '',
+    activity_level: user?.profile?.activity_level || '',
+    dietary_goal: user?.profile?.dietary_goal || '',
+    dietary_type: user?.profile?.dietary_type || '',
+    region: user?.profile?.region || '',
+    diseases: user?.profile?.diseases || [],
+    allergies: user?.profile?.allergies || '',
+  });
+
+  // Sync profile data when user is loaded or updated
+  useEffect(() => {
+    if (user) {
+      setProfileData({
+        name: user.name || '',
+        age: user.profile?.age || '',
+        gender: user.profile?.gender || '',
+        weight: user.profile?.weight || '',
+        height: user.profile?.height || '',
+        activity_level: user.profile?.activity_level || '',
+        dietary_goal: user.profile?.dietary_goal || '',
+        dietary_type: user.profile?.dietary_type || '',
+        region: user.profile?.region || '',
+        diseases: user.profile?.diseases || [],
+        allergies: user.profile?.allergies || '',
+      });
+    }
+  }, [user]);
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setSuccess('');
+
+    try {
+      const data = await authApi.updateProfile(profileData);
+      updateUser(data.user);
+      setSuccess('Profile updated successfully!');
+      setIsEditing(false);
+    } catch (err) {
+      setError(err.message || 'Failed to update profile.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="dashboard-scene">
+      <nav className="dashboard-nav">
+        <div className="nav-container">
+          <motion.div
+            className="brand-logo"
+            style={{ fontSize: '24px', cursor: 'pointer' }}
+            onClick={() => navigate('/dashboard')}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            NutriAI
+          </motion.div>
+          <button
+            className="region-btn"
+            onClick={() => navigate(-1)}
+            style={{ gap: '8px' }}
+          >
+            <HiOutlineArrowLeft size={18} />
+            <span>Back</span>
+          </button>
+        </div>
+      </nav>
+
+      <main className="dashboard-main" style={{ maxWidth: '800px' }}>
+        <motion.header
+          className="welcome-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="greeting">My Profile</h1>
+          <p className="welcome-sub">View and update your health data and preferences.</p>
+        </motion.header>
+
+        <AnimatePresence mode="wait">
+          {success && (
+            <motion.div
+              key="success"
+              className="alert alert-success"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <span>{success}</span>
+            </motion.div>
+          )}
+          {error && (
+            <motion.div
+              key="error"
+              className="alert alert-error"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+            >
+              <span>{error}</span>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <motion.section
+          className="settings-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="settings-card-header" style={{ justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiOutlineUser size={20} className="text-cyan" />
+              <h2>Personal Information</h2>
+            </div>
+            {!isEditing && (
+              <button 
+                className="btn-primary" 
+                onClick={() => setIsEditing(true)}
+                style={{ width: 'auto', padding: '8px 16px', fontSize: '13px' }}
+              >
+                <HiOutlinePencilAlt size={16} /> Edit Profile
+              </button>
+            )}
+          </div>
+
+          <AnimatePresence mode="wait">
+            {isEditing ? (
+              <motion.form 
+                key="edit-form"
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }} 
+                exit={{ opacity: 0 }}
+                onSubmit={handleUpdateProfile}
+                className="settings-form"
+              >
+                <div className="settings-info-grid editing">
+                  <div className="form-group">
+                    <label className="form-label">Full Name</label>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      value={profileData.name} 
+                      onChange={e => setProfileData({...profileData, name: e.target.value})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Age</label>
+                    <input 
+                      type="number" 
+                      className="form-input" 
+                      value={profileData.age} 
+                      onChange={e => setProfileData({...profileData, age: parseInt(e.target.value)})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Weight (kg)</label>
+                    <input 
+                      type="number" 
+                      className="form-input" 
+                      value={profileData.weight} 
+                      onChange={e => setProfileData({...profileData, weight: parseInt(e.target.value)})}
+                      required
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Height (cm)</label>
+                    <input 
+                      type="number" 
+                      className="form-input" 
+                      value={profileData.height} 
+                      onChange={e => setProfileData({...profileData, height: parseInt(e.target.value)})}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="divider" style={{ margin: '30px 0' }}><span>Health & Diet</span></div>
+
+                <div className="form-group">
+                  <label className="form-label">Medical Conditions</label>
+                  <div className="segmented-group cols-2">
+                    {[
+                      { value: 'BP', label: 'Blood Pressure' },
+                      { value: 'Diabetes', label: 'Diabetes' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        className={`segmented-btn ${profileData.diseases.includes(opt.value) ? 'active' : ''}`}
+                        onClick={() => {
+                          const newDiseases = profileData.diseases.includes(opt.value)
+                            ? profileData.diseases.filter(d => d !== opt.value)
+                            : [...profileData.diseases, opt.value];
+                          setProfileData({ ...profileData, diseases: newDiseases });
+                        }}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Food Allergies</label>
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="e.g. Peanuts, Milk (Leave empty if none)"
+                    value={profileData.allergies} 
+                    onChange={e => setProfileData({...profileData, allergies: e.target.value})}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Activity Level</label>
+                  <select 
+                    className="form-input form-input--no-icon"
+                    value={profileData.activity_level}
+                    onChange={e => setProfileData({...profileData, activity_level: e.target.value})}
+                  >
+                    <option value="sedentary">Sedentary (Little to no exercise)</option>
+                    <option value="lightly_active">Lightly Active (1-3 days/week)</option>
+                    <option value="moderately_active">Moderately Active (3-5 days/week)</option>
+                    <option value="very_active">Very Active (6-7 days/week)</option>
+                  </select>
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', marginTop: '30px' }}>
+                  <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: 'auto', padding: '12px 30px' }}>
+                    {loading ? <div className="btn-spinner" /> : <><HiOutlineSave size={18} /> Save Changes</>}
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn btn-secondary" 
+                    onClick={() => setIsEditing(false)}
+                    style={{ width: 'auto', padding: '12px 30px' }}
+                  >
+                    <HiOutlineX size={18} /> Cancel
+                  </button>
+                </div>
+              </motion.form>
+            ) : (
+              <motion.div 
+                key="view-info"
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="profile-info-display"
+              >
+                <div className="settings-info-grid">
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Full Name</span>
+                    <span className="settings-info-value">{user?.name}</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Age</span>
+                    <span className="settings-info-value">{user?.profile?.age} years</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Gender</span>
+                    <span className="settings-info-value" style={{ textTransform: 'capitalize' }}>{user?.profile?.gender}</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Weight</span>
+                    <span className="settings-info-value">{user?.profile?.weight} kg</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Height</span>
+                    <span className="settings-info-value">{user?.profile?.height} cm</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Region</span>
+                    <span className="settings-info-value">{user?.profile?.region || 'Global'}</span>
+                  </div>
+                </div>
+
+                <div className="divider" style={{ margin: '30px 0' }}><span>Health Insights</span></div>
+
+                <div className="settings-info-grid">
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Diseases</span>
+                    <span className="settings-info-value">
+                      {user?.profile?.diseases?.length > 0 ? user.profile.diseases.join(', ') : 'None Reported'}
+                    </span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Allergies</span>
+                    <span className="settings-info-value">{user?.profile?.allergies || 'None Reported'}</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Dietary Goal</span>
+                    <span className="settings-info-value" style={{ textTransform: 'capitalize' }}>{user?.profile?.dietary_goal?.replace('_', ' ')}</span>
+                  </div>
+                  <div className="settings-info-item">
+                    <span className="settings-info-label">Activity Level</span>
+                    <span className="settings-info-value" style={{ textTransform: 'capitalize' }}>{user?.profile?.activity_level?.replace('_', ' ')}</span>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.section>
+      </main>
+
+      <div className="dashboard-decor-1" />
+      <div className="dashboard-decor-2" />
+    </div>
+  );
+}
+/**
+ * SettingsPage — Account settings with password change for NutriAI.
+ * Premium glassmorphism design.
+ */
+
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
+import {
+  HiOutlineArrowLeft,
+  HiOutlineLockClosed,
+  HiOutlineEye,
+  HiOutlineEyeOff,
+  HiOutlineShieldCheck,
+  HiOutlineUser,
+  HiOutlineMail,
+  HiOutlineCheckCircle,
+  HiOutlineExclamationCircle,
+  HiOutlineClipboardList,
+  HiOutlineClock,
+  HiOutlineVolumeUp,
+} from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+import authApi from '../../api/authApi';
+
+export default function SettingsPage() {
+  const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
+
+  // Reminders Configuration State
+  const [reminders, setReminders] = useState({
+    enabled: false,
+    breakfast: { time: '08:00', enabled: false },
+    lunch: { time: '13:00', enabled: false },
+    dinner: { time: '20:00', enabled: false },
+    snacks: { time: '16:00', enabled: false },
+    drinks: { time: '10:00', enabled: false },
+  });
+  const [loadingReminders, setLoadingReminders] = useState(true);
+  const [savingReminders, setSavingReminders] = useState(false);
+  const [remindersSuccess, setRemindersSuccess] = useState('');
+  const [remindersError, setRemindersError] = useState('');
+
+  useEffect(() => {
+    const loadReminders = async () => {
+      try {
+        const data = await authApi.getReminders();
+        if (data?.reminders) {
+          setReminders(data.reminders);
+        }
+      } catch (err) {
+        console.error('Failed to load reminders:', err);
+      } finally {
+        setLoadingReminders(false);
+      }
+    };
+    loadReminders();
+  }, []);
+
+  const handleSaveReminders = async (e) => {
+    e.preventDefault();
+    setSavingReminders(true);
+    setRemindersSuccess('');
+    setRemindersError('');
+    try {
+      if (reminders.enabled && 'Notification' in window) {
+        const permission = await Notification.requestPermission();
+        if (permission !== 'granted') {
+          setRemindersError('Notification permission denied. Please allow notifications in browser settings.');
+          setSavingReminders(false);
+          return;
+        }
+      }
+
+      await authApi.updateReminders(reminders);
+      setRemindersSuccess('Reminders updated successfully!');
+      
+      if (reminders.enabled && 'Notification' in window && Notification.permission === 'granted') {
+        new Notification("✨ NutriAI Reminders Active!", {
+          body: "Your meal and hydration reminders are configured perfectly!",
+          icon: "/vite.svg"
+        });
+      }
+    } catch (err) {
+      setRemindersError(err.message || 'Failed to save reminders.');
+    } finally {
+      setSavingReminders(false);
+    }
+  };
+
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showCurrent, setShowCurrent] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
+
+  const isGoogleOnly = user?.auth_provider === 'google' && !user?.password_hash;
+
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (newPassword !== confirmPassword) {
+      setError('New passwords do not match.');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setError('Password must be at least 8 characters.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const data = await authApi.changePassword(currentPassword, newPassword);
+      setSuccess(data.message || 'Password updated successfully!');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setError(err.message || 'Failed to update password.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPasswordStrength = (pwd) => {
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (pwd.length >= 12) score++;
+    if (/[A-Z]/.test(pwd) && /[a-z]/.test(pwd)) score++;
+    if (/\d/.test(pwd)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(pwd)) score++;
+    return score;
+  };
+
+  const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Excellent'];
+  const strength = getPasswordStrength(newPassword);
+
+  return (
+    <div className="dashboard-scene">
+      <nav className="dashboard-nav">
+        <div className="nav-container">
+          <motion.div
+            className="brand-logo"
+            style={{ fontSize: '24px' }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            NutriAI
+          </motion.div>
+          <button
+            className="region-btn"
+            onClick={() => navigate(-1)}
+            style={{ gap: '8px' }}
+          >
+            <HiOutlineArrowLeft size={18} />
+            <span>Back</span>
+          </button>
+        </div>
+      </nav>
+
+      <main className="dashboard-main" style={{ maxWidth: '720px' }}>
+        <motion.header
+          className="welcome-header"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <h1 className="greeting">Settings</h1>
+          <p className="welcome-sub">Manage your account and security preferences.</p>
+        </motion.header>
+
+        {/* Profile Info Card */}
+        <motion.section
+          className="settings-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+        >
+          <div className="settings-card-header">
+            <HiOutlineUser size={20} />
+            <h2>Account Information</h2>
+          </div>
+          <div className="settings-info-grid">
+            <div className="settings-info-item">
+              <span className="settings-info-label">Name</span>
+              <span className="settings-info-value">{user?.name || 'N/A'}</span>
+            </div>
+            <div className="settings-info-item">
+              <span className="settings-info-label">Email</span>
+              <span className="settings-info-value">
+                <HiOutlineMail size={14} style={{ marginRight: '6px', opacity: 0.5 }} />
+                {user?.email || 'N/A'}
+              </span>
+            </div>
+            <div className="settings-info-item">
+              <span className="settings-info-label">Auth Method</span>
+              <span className="settings-info-value" style={{ textTransform: 'capitalize' }}>
+                {user?.auth_provider || 'Local'}
+              </span>
+            </div>
+            <div className="settings-info-item">
+              <span className="settings-info-label">Member Since</span>
+              <span className="settings-info-value">
+                {user?.created_at
+                  ? new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                  : 'N/A'}
+              </span>
+            </div>
+          </div>
+        </motion.section>
+
+
+
+        {/* Change Password Section */}
+        <motion.section
+          className="settings-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <div className="settings-card-header">
+            <HiOutlineShieldCheck size={20} />
+            <h2>Change Password</h2>
+          </div>
+
+          {isGoogleOnly && (
+            <div className="alert alert-info" style={{ marginBottom: '20px' }}>
+              <HiOutlineExclamationCircle className="alert-icon" />
+              <span>Your account uses Google Sign-In. Set a password here to enable email login too.</span>
+            </div>
+          )}
+
+          <AnimatePresence mode="wait">
+            {success && (
+              <motion.div
+                key="success"
+                className="alert alert-success"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <HiOutlineCheckCircle className="alert-icon" />
+                <span>{success}</span>
+              </motion.div>
+            )}
+            {error && (
+              <motion.div
+                key="error"
+                className="alert alert-error"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <HiOutlineExclamationCircle className="alert-icon" />
+                <span>{error}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <form onSubmit={handleChangePassword} className="settings-form">
+            {/* Current Password */}
+            <div className="form-group">
+              <label className="form-label">Current Password</label>
+              <div className="input-wrapper">
+                <span className="input-icon"><HiOutlineLockClosed /></span>
+                <input
+                  id="settings-current-password"
+                  type={showCurrent ? 'text' : 'password'}
+                  className="form-input"
+                  placeholder={isGoogleOnly ? 'Leave blank for Google accounts' : 'Enter current password'}
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required={!isGoogleOnly}
+                />
+                <button
+                  type="button"
+                  className="input-toggle"
+                  onClick={() => setShowCurrent(!showCurrent)}
+                >
+                  {showCurrent ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                </button>
+              </div>
+            </div>
+
+            {/* New Password */}
+            <div className="form-group">
+              <label className="form-label">New Password</label>
+              <div className="input-wrapper">
+                <span className="input-icon"><HiOutlineLockClosed /></span>
+                <input
+                  id="settings-new-password"
+                  type={showNew ? 'text' : 'password'}
+                  className="form-input"
+                  placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="input-toggle"
+                  onClick={() => setShowNew(!showNew)}
+                >
+                  {showNew ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                </button>
+              </div>
+              {/* Password Strength */}
+              {newPassword && (
+                <div className="password-strength">
+                  <div className="strength-bar">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <div
+                        key={i}
+                        className={`strength-segment ${strength >= i ? `active s${i}` : ''}`}
+                      />
+                    ))}
+                  </div>
+                  <span className={`strength-label s${strength}`}>
+                    {strengthLabels[strength]}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Confirm Password */}
+            <div className="form-group">
+              <label className="form-label">Confirm New Password</label>
+              <div className="input-wrapper">
+                <span className="input-icon"><HiOutlineLockClosed /></span>
+                <input
+                  id="settings-confirm-password"
+                  type={showConfirm ? 'text' : 'password'}
+                  className={`form-input ${confirmPassword && newPassword !== confirmPassword ? 'error' : ''}`}
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  className="input-toggle"
+                  onClick={() => setShowConfirm(!showConfirm)}
+                >
+                  {showConfirm ? <HiOutlineEyeOff /> : <HiOutlineEye />}
+                </button>
+              </div>
+              {confirmPassword && newPassword !== confirmPassword && (
+                <div className="form-error">
+                  <HiOutlineExclamationCircle />
+                  <span>Passwords do not match</span>
+                </div>
+              )}
+            </div>
+
+            <motion.button
+              type="submit"
+              className="btn btn-primary"
+              disabled={loading || !newPassword || !confirmPassword || newPassword !== confirmPassword}
+              whileTap={{ scale: 0.98 }}
+              style={{ marginTop: '8px' }}
+            >
+              {loading ? (
+                <>
+                  <div className="btn-spinner" />
+                  Updating...
+                </>
+              ) : (
+                <>
+                  <HiOutlineShieldCheck size={18} />
+                  Update Password
+                </>
+              )}
+            </motion.button>
+          </form>
+        </motion.section>
+
+        {/* Meal & Hydration Reminders Section */}
+        <motion.section
+          className="settings-card"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          style={{ marginTop: '24px' }}
+        >
+          <div className="settings-card-header" style={{ justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiOutlineClock size={20} className="text-cyan" />
+              <h2>Meal & Hydration Reminders</h2>
+            </div>
+            <div className="reminder-toggle-wrapper">
+              <label className="switch-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                  {reminders.enabled ? 'Reminders Enabled' : 'Reminders Disabled'}
+                </span>
+                <input
+                  type="checkbox"
+                  checked={reminders.enabled}
+                  onChange={(e) => setReminders({ ...reminders, enabled: e.target.checked })}
+                  style={{ display: 'none' }}
+                />
+                <div className={`switch-track ${reminders.enabled ? 'active' : ''}`} style={{
+                  width: '40px',
+                  height: '20px',
+                  borderRadius: '10px',
+                  background: reminders.enabled ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.1)',
+                  position: 'relative',
+                  transition: 'all 0.3s'
+                }}>
+                  <div className="switch-thumb" style={{
+                    width: '16px',
+                    height: '16px',
+                    borderRadius: '50%',
+                    background: '#fff',
+                    position: 'absolute',
+                    top: '2px',
+                    left: reminders.enabled ? '22px' : '2px',
+                    transition: 'all 0.3s'
+                  }} />
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <p className="welcome-sub" style={{ fontSize: '13px', marginBottom: '20px', marginTop: '4px' }}>
+            Configure local push notifications to stay on top of your daily nutrition protocol.
+          </p>
+
+          <AnimatePresence mode="wait">
+            {remindersSuccess && (
+              <motion.div
+                key="reminders-success"
+                className="alert alert-success"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <HiOutlineCheckCircle className="alert-icon" />
+                <span>{remindersSuccess}</span>
+              </motion.div>
+            )}
+            {remindersError && (
+              <motion.div
+                key="reminders-error"
+                className="alert alert-error"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+              >
+                <HiOutlineExclamationCircle className="alert-icon" />
+                <span>{remindersError}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {loadingReminders ? (
+            <div style={{ padding: '24px', textAlign: 'center' }}>
+              <div className="btn-spinner" style={{ margin: '0 auto' }} />
+            </div>
+          ) : (
+            <form onSubmit={handleSaveReminders} className="settings-form">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', opacity: reminders.enabled ? 1 : 0.5, pointerEvents: reminders.enabled ? 'all' : 'none', transition: 'all 0.3s' }}>
+                {[
+                  { key: 'breakfast', label: 'Breakfast Reminder', icon: '🍳', desc: 'Morning fuel alert' },
+                  { key: 'lunch', label: 'Lunch Reminder', icon: '🥗', desc: 'Mid-day nutrition boost' },
+                  { key: 'dinner', label: 'Dinner Reminder', icon: '🍽️', desc: 'Evening meal recovery' },
+                  { key: 'snacks', label: 'Snacks Reminder', icon: '🥜', desc: 'Healthy energy bites' },
+                  { key: 'drinks', label: 'Hydration Reminder', icon: '💧', desc: 'Water intake target' }
+                ].map((item) => (
+                  <div key={item.key} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: '12px 16px',
+                    background: 'rgba(255, 255, 255, 0.02)',
+                    border: '1px solid var(--border-subtle)',
+                    borderRadius: 'var(--radius-md)'
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ fontSize: '20px' }}>{item.icon}</span>
+                      <div>
+                        <div style={{ fontWeight: 600, fontSize: '14px' }}>{item.label}</div>
+                        <div style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>{item.desc}</div>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                      <input
+                        type="time"
+                        value={reminders[item.key]?.time || '08:00'}
+                        onChange={(e) => setReminders({
+                          ...reminders,
+                          [item.key]: { ...reminders[item.key], time: e.target.value }
+                        })}
+                        style={{
+                          background: 'var(--bg-input)',
+                          border: '1px solid var(--border-subtle)',
+                          color: '#fff',
+                          padding: '6px 12px',
+                          borderRadius: 'var(--radius-sm)',
+                          fontSize: '13px',
+                          outline: 'none'
+                        }}
+                      />
+                      
+                      <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                        <input
+                          type="checkbox"
+                          checked={reminders[item.key]?.enabled || false}
+                          onChange={(e) => setReminders({
+                            ...reminders,
+                            [item.key]: { ...reminders[item.key], enabled: e.target.checked }
+                          })}
+                          style={{ display: 'none' }}
+                        />
+                        <div className={`switch-track ${reminders[item.key]?.enabled ? 'active' : ''}`} style={{
+                          width: '32px',
+                          height: '16px',
+                          borderRadius: '8px',
+                          background: reminders[item.key]?.enabled ? 'var(--accent-cyan)' : 'rgba(255, 255, 255, 0.1)',
+                          position: 'relative',
+                          transition: 'all 0.3s'
+                        }}>
+                          <div className="switch-thumb" style={{
+                            width: '12px',
+                            height: '12px',
+                            borderRadius: '50%',
+                            background: '#fff',
+                            position: 'absolute',
+                            top: '2px',
+                            left: reminders[item.key]?.enabled ? '18px' : '2px',
+                            transition: 'all 0.3s'
+                          }} />
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <motion.button
+                type="submit"
+                className="btn btn-primary"
+                disabled={savingReminders}
+                whileTap={{ scale: 0.98 }}
+                style={{ marginTop: '20px', width: 'auto', padding: '12px 32px' }}
+              >
+                {savingReminders ? (
+                  <>
+                    <div className="btn-spinner" />
+                    Saving Reminders...
+                  </>
+                ) : (
+                  <>
+                    <HiOutlineVolumeUp size={18} />
+                    Save & Test Reminders
+                  </>
+                )}
+              </motion.button>
+            </form>
+          )}
+        </motion.section>
+      </main>
+
+      <div className="dashboard-decor-1" />
+      <div className="dashboard-decor-2" />
+    </div>
+  );
+}
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { 
+  HiOutlineX, 
+  HiOutlineHome, 
+  HiOutlineClipboardList, 
+  HiOutlineUserCircle,
+  HiOutlineCog,
+  HiOutlineInformationCircle,
+  HiOutlineLogout
+} from 'react-icons/hi';
+import { useAuth } from '../../context/AuthContext';
+
+export default function Sidebar({ isOpen, onClose }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { logout } = useAuth();
+
+  const menuItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: HiOutlineHome, path: '/dashboard' },
+    { id: 'diet-plan', label: 'Daily Diet Plan', icon: HiOutlineClipboardList, path: '/diet-plan' },
+    { id: 'profile', label: 'My Profile', icon: HiOutlineUserCircle, path: '/profile' },
+    { id: 'settings', label: 'Settings', icon: HiOutlineCog, path: '/settings' },
+    { id: 'about', label: 'About', icon: HiOutlineInformationCircle, path: '/about' },
+  ];
+
+  const sidebarVariants = {
+    open: { x: 0, transition: { type: 'spring', stiffness: 300, damping: 30 } },
+    closed: { x: '100%', transition: { type: 'spring', stiffness: 300, damping: 30 } }
+  };
+
+  const overlayVariants = {
+    open: { opacity: 1 },
+    closed: { opacity: 0 }
+  };
+
+  const handleNav = (path) => {
+    navigate(path);
+    onClose();
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/auth/login');
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div 
+            className="sidebar-overlay"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={overlayVariants}
+            onClick={onClose}
+          />
+          <motion.div 
+            className="sidebar-panel"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={sidebarVariants}
+          >
+            <div className="sidebar-header">
+              <h3>Menu</h3>
+              <button className="close-btn" onClick={onClose}>
+                <HiOutlineX size={24} />
+              </button>
+            </div>
+
+            <nav className="sidebar-nav-list">
+              {menuItems.map((item) => (
+                <button 
+                  key={item.id}
+                  className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
+                  onClick={() => handleNav(item.path)}
+                >
+                  <item.icon size={22} />
+                  <span>{item.label}</span>
+                </button>
+              ))}
+            </nav>
+
+            <div className="sidebar-footer">
+              <button className="sidebar-logout-btn" onClick={handleLogout}>
+                <HiOutlineLogout size={20} />
+                <span>Logout</span>
+              </button>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+
+====================================
+FILE: D:\my_project\src\App.css
+====================================
+
+.counter {
+  font-size: 16px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 2px solid transparent;
+  transition: border-color 0.3s;
+  margin-bottom: 24px;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.hero {
+  position: relative;
+
+  .base,
+  .framework,
+  .vite {
+    inset-inline: 0;
+    margin: 0 auto;
+  }
+
+  .base {
+    width: 170px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .framework,
+  .vite {
+    position: absolute;
+  }
+
+  .framework {
+    z-index: 1;
+    top: 34px;
+    height: 28px;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
+      scale(1.4);
+  }
+
+  .vite {
+    z-index: 0;
+    top: 107px;
+    height: 26px;
+    width: auto;
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
+      scale(0.8);
+  }
+}
+
+#center {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  place-content: center;
+  place-items: center;
+  flex-grow: 1;
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+    gap: 18px;
+  }
+}
+
+#next-steps {
+  display: flex;
+  border-top: 1px solid var(--border);
+  text-align: left;
+
+  & > div {
+    flex: 1 1 0;
+    padding: 32px;
+    @media (max-width: 1024px) {
+      padding: 24px 20px;
+    }
+  }
+
+  .icon {
+    margin-bottom: 16px;
+    width: 22px;
+    height: 22px;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+#docs {
+  border-right: 1px solid var(--border);
+
+  @media (max-width: 1024px) {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+#next-steps ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 8px;
+  margin: 32px 0 0;
+
+  .logo {
+    height: 18px;
+  }
+
+  a {
+    color: var(--text-h);
+    font-size: 16px;
+    border-radius: 6px;
+    background: var(--social-bg);
+    display: flex;
+    padding: 6px 12px;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: box-shadow 0.3s;
+
+    &:hover {
+      box-shadow: var(--shadow);
+    }
+    .button-icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    li {
+      flex: 1 1 calc(50% - 8px);
+    }
+
+    a {
+      width: 100%;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+  }
+}
+
+#spacer {
+  height: 88px;
+  border-top: 1px solid var(--border);
+  @media (max-width: 1024px) {
+    height: 48px;
+  }
+}
+
+.ticks {
+  position: relative;
+  width: 100%;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: -4.5px;
+    border: 5px solid transparent;
+  }
+
+  &::before {
+    left: 0;
+    border-left-color: var(--border);
+  }
+  &::after {
+    right: 0;
+    border-right-color: var(--border);
+  }
+}
+
+
+====================================
+FILE: D:\my_project\src\index.css
+====================================
+
+/* ═══════════════════════════════════════════════════════════════
+   NutriAI — Intelligent Ethereal Design System
+   Premium dark theme with glassmorphism, gradients & micro-animations
+   ═══════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ── CSS Custom Properties ────────────────────────────────────── */
+:root {
+  /* Core Palette */
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #0f1629;
+  --bg-tertiary: #151c32;
+  --bg-card: rgba(15, 22, 41, 0.65);
+  --bg-card-hover: rgba(20, 28, 50, 0.8);
+  --bg-input: rgba(15, 22, 41, 0.5);
+  --bg-input-focus: rgba(20, 30, 55, 0.7);
+
+  /* Accent Colors */
+  --accent-cyan: #2dd4bf;
+  --accent-cyan-dim: rgba(45, 212, 191, 0.15);
+  --accent-cyan-glow: rgba(45, 212, 191, 0.3);
+  --accent-purple: #a855f7;
+  --accent-purple-dim: rgba(168, 85, 247, 0.15);
+  --accent-purple-glow: rgba(168, 85, 247, 0.3);
+  --accent-blue: #3b82f6;
+  --accent-pink: #ec4899;
+  --accent-amber: #f59e0b;
+
+  /* Gradient Definitions */
+  --gradient-primary: linear-gradient(135deg, #2dd4bf, #a855f7);
+  --gradient-primary-reverse: linear-gradient(135deg, #a855f7, #2dd4bf);
+  --gradient-button: linear-gradient(135deg, #2dd4bf 0%, #22d3ee 25%, #a855f7 75%, #8b5cf6 100%);
+  --gradient-card: linear-gradient(135deg, rgba(45, 212, 191, 0.08), rgba(168, 85, 247, 0.08));
+  --gradient-bg: radial-gradient(ellipse at 20% 50%, rgba(45, 212, 191, 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.08) 0%, transparent 50%),
+                 radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+
+  /* Text */
+  --text-primary: #f0f4ff;
+  --text-secondary: rgba(240, 244, 255, 0.65);
+  --text-tertiary: rgba(240, 244, 255, 0.4);
+  --text-placeholder: rgba(240, 244, 255, 0.3);
+
+  /* Borders */
+  --border-subtle: rgba(240, 244, 255, 0.06);
+  --border-default: rgba(240, 244, 255, 0.1);
+  --border-active: rgba(45, 212, 191, 0.4);
+  --border-error: rgba(239, 68, 68, 0.5);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 48px rgba(0, 0, 0, 0.5);
+  --shadow-glow-cyan: 0 0 30px rgba(45, 212, 191, 0.15);
+  --shadow-glow-purple: 0 0 30px rgba(168, 85, 247, 0.15);
+  --shadow-glow-button: 0 4px 30px rgba(45, 212, 191, 0.25), 0 0 60px rgba(168, 85, 247, 0.15);
+
+  /* Glass */
+  --glass-bg: rgba(15, 22, 41, 0.55);
+  --glass-bg-heavy: rgba(10, 14, 26, 0.75);
+  --glass-blur: 24px;
+  --glass-border: rgba(240, 244, 255, 0.08);
+
+  /* Typography */
+  --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: 150ms var(--ease-out-expo);
+  --transition-normal: 300ms var(--ease-out-expo);
+  --transition-slow: 500ms var(--ease-out-expo);
+
+  /* Status */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+}
+
+/* ── Reset & Base ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--accent-purple);
+}
+
+::selection {
+  background: rgba(45, 212, 191, 0.3);
+  color: var(--text-primary);
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(240, 244, 255, 0.1);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(240, 244, 255, 0.2);
+}
+
+/* ── Auth Layout ──────────────────────────────────────────────── */
+.auth-scene {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  overflow: hidden;
+}
+
+.auth-scene::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-bg);
+  z-index: 0;
+}
+
+/* Animated floating orbs */
+.auth-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: orbFloat 20s ease-in-out infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.auth-orb--cyan {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.2), transparent 70%);
+  top: -10%;
+  left: -5%;
+  animation-delay: 0s;
+}
+
+.auth-orb--purple {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.15), transparent 70%);
+  bottom: -15%;
+  right: -10%;
+  animation-delay: -7s;
+}
+
+.auth-orb--blue {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.1), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -14s;
+}
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(15px, 35px) scale(1.02); }
+}
+
+/* Particle grid effect */
+.auth-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(240, 244, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240, 244, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  z-index: 0;
+}
+
+/* ── Glass Card ───────────────────────────────────────────────── */
+.glass-card {
+  position: relative;
+  z-index: 1;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240, 244, 255, 0.1), transparent);
+}
+
+/* Auth card specific */
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 48px 40px;
+  margin: 20px;
+}
+
+@media (max-width: 520px) {
+  .auth-card {
+    padding: 36px 24px;
+    margin: 16px;
+    border-radius: var(--radius-lg);
+  }
+}
+
+/* ── Brand ────────────────────────────────────────────────────── */
+.brand {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.brand-logo {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 800;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+.brand-tagline {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.brand-subtitle {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-weight: 400;
+}
+
+/* ── Form Elements ────────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 16px;
+  color: var(--text-tertiary);
+  font-size: 18px;
+  transition: color var(--transition-fast);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  outline: none;
+  transition: all var(--transition-normal);
+}
+
+.form-input::placeholder {
+  color: var(--text-placeholder);
+}
+
+.form-input:focus {
+  border-color: var(--border-active);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px var(--accent-cyan-dim), var(--shadow-glow-cyan);
+}
+
+.form-input:focus ~ .input-icon,
+.form-input:focus + .input-icon {
+  color: var(--accent-cyan);
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--accent-cyan);
+}
+
+.form-input.error {
+  border-color: var(--border-error);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-input--no-icon {
+  padding-left: 16px;
+}
+
+/* Password toggle */
+.input-toggle {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  font-size: 18px;
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  z-index: 1;
+}
+
+.input-toggle:hover {
+  color: var(--text-secondary);
+}
+
+/* Error text */
+.form-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--error);
+  animation: shakeIn 0.3s var(--ease-out-expo);
+}
+
+@keyframes shakeIn {
+  0% { transform: translateX(-8px); opacity: 0; }
+  50% { transform: translateX(4px); }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+/* ── Password Strength Meter ──────────────────────────────────── */
+.password-strength {
+  margin-top: 10px;
+}
+
+.strength-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.strength-segment {
+  flex: 1;
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  transition: background var(--transition-normal);
+}
+
+.strength-segment.active.s1 { background: var(--error); }
+.strength-segment.active.s2 { background: var(--warning); }
+.strength-segment.active.s3 { background: var(--accent-amber); }
+.strength-segment.active.s4 { background: var(--accent-cyan); }
+.strength-segment.active.s5 { background: var(--success); }
+
+.strength-label {
+  font-size: 11px;
+  font-weight: 500;
+  transition: color var(--transition-fast);
+}
+
+.strength-label.s0 { color: var(--text-tertiary); }
+.strength-label.s1 { color: var(--error); }
+.strength-label.s2 { color: var(--warning); }
+.strength-label.s3 { color: var(--accent-amber); }
+.strength-label.s4 { color: var(--accent-cyan); }
+.strength-label.s5 { color: var(--success); }
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.3px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Primary gradient button */
+.btn-primary {
+  width: 100%;
+  background: var(--gradient-button);
+  background-size: 200% 200%;
+  color: var(--bg-primary);
+  font-weight: 700;
+  box-shadow: var(--shadow-glow-button);
+  animation: gradientShift 4s ease infinite;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 40px rgba(45, 212, 191, 0.35), 0 0 80px rgba(168, 85, 247, 0.2);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Secondary / outline */
+.btn-secondary {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--border-active);
+  background: var(--accent-cyan-dim);
+}
+
+/* Social buttons */
+.btn-social {
+  width: 100%;
+  padding: 13px 24px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn-social:hover:not(:disabled) {
+  border-color: var(--border-default);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+
+.btn-social svg, .btn-social img {
+  width: 20px;
+  height: 20px;
+}
+
+/* Ghost / link button */
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--accent-cyan);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.btn-ghost:hover {
+  color: var(--accent-purple);
+}
+
+/* Spinner inside button */
+.btn-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(10, 14, 26, 0.3);
+  border-top-color: var(--bg-primary);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+.btn-spinner--light {
+  border-color: rgba(240, 244, 255, 0.2);
+  border-top-color: var(--text-primary);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Divider ──────────────────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+.divider span {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Links & Navigation ──────────────────────────────────────── */
+.auth-footer {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.auth-footer a, .auth-footer button {
+  color: var(--accent-cyan);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  transition: color var(--transition-fast);
+}
+
+.auth-footer a:hover, .auth-footer button:hover {
+  color: var(--accent-purple);
+}
+
+.auth-link-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -4px;
+  margin-bottom: 24px;
+}
+
+/* ── Checkbox / Toggle ────────────────────────────────────────── */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-default);
+  border-radius: 5px;
+  background: var(--bg-input);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  background: var(--gradient-primary);
+  border-color: transparent;
+}
+
+.checkbox-custom svg {
+  width: 12px;
+  height: 12px;
+  color: var(--bg-primary);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all var(--transition-fast);
+}
+
+.checkbox-input:checked + .checkbox-custom svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+/* ── OTP Input ────────────────────────────────────────────────── */
+.otp-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 32px 0;
+}
+
+.otp-input {
+  width: 52px;
+  height: 64px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Plus Jakarta Sans', monospace;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  outline: none;
+  transition: all var(--transition-normal);
+  caret-color: var(--accent-cyan);
+}
+
+.otp-input:focus {
+  border-color: var(--accent-cyan);
+  background: var(--bg-input-focus);
+  box-shadow: 0 0 0 3px var(--accent-cyan-dim), var(--shadow-glow-cyan);
+  transform: translateY(-2px);
+}
+
+.otp-input.filled {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+}
+
+.otp-input.error {
+  border-color: var(--error);
+  animation: shake 0.4s var(--ease-out-expo);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* ── Step Indicator ───────────────────────────────────────────── */
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-default);
+  transition: all var(--transition-normal);
+}
+
+.step-dot.active {
+  width: 32px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+}
+
+.step-dot.completed {
+  background: var(--accent-cyan);
+}
+
+/* ── Alert / Toast ────────────────────────────────────────────── */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  line-height: 1.5;
+  animation: slideDown 0.3s var(--ease-out-expo);
+  margin-bottom: 20px;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.alert-info {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.alert-icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Dashboard ────────────────────────────────────────────────── */
+.dashboard-scene {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  position: relative;
+}
+
+.dashboard-scene::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--gradient-bg);
+  pointer-events: none;
+}
+
+/* ── Dashboard Layout ────────────────────────────────────────── */
+.dashboard-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 80px;
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border-bottom: 1px solid var(--glass-border);
+  display: flex;
+  align-items: center;
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Region Selector */
+.region-selector-wrapper {
+  position: relative;
+}
+
+.region-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.region-btn:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-default);
+}
+
+.region-btn .chevron {
+  font-size: 16px;
+  transition: transform var(--transition-normal);
+  opacity: 0.6;
+}
+
+.region-btn .chevron.open {
+  transform: rotate(180deg);
+}
+
+.region-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 220px;
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 8px;
+  z-index: 110;
+}
+
+.dropdown-header {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  padding: 12px 14px 8px;
+}
+
+.dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: none;
+  background: none;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+.dropdown-item.active {
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+}
+
+.dropdown-item .emoji {
+  font-size: 18px;
+}
+
+.active-dot {
+  margin-left: auto;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-cyan);
+}
+
+.nav-profile-btn, .logout-icon-btn {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+}
+
+.nav-profile-btn:hover, .logout-icon-btn:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+}
+
+/* Main Content */
+.dashboard-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-header {
+  margin-bottom: 48px;
+}
+
+.greeting {
+  font-family: var(--font-heading);
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.welcome-sub {
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* Nutrition Cards */
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+@media (max-width: 900px) {
+  .nutrition-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.calorie-hero {
+  background: var(--gradient-card);
+  position: relative;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.card-flare {
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, var(--accent-cyan-glow), transparent 70%);
+  z-index: 0;
+}
+
+.card-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.calorie-value {
+  font-family: var(--font-heading);
+  font-size: 56px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  line-height: 1;
+  margin-bottom: 4px;
+  position: relative;
+}
+
+.fire-icon {
+  color: var(--accent-amber);
+  filter: drop-shadow(0 0 12px rgba(245, 158, 11, 0.4));
+}
+
+.card-unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  position: relative;
+}
+
+.goal-tag {
+  align-self: flex-start;
+  margin-top: 24px;
+  padding: 6px 16px;
+  background: rgba(240, 244, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+  position: relative;
+}
+
+.macro-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .macro-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.macro-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transition: all var(--transition-normal);
+}
+
+.macro-icon-wrapper {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.macro-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 2px;
+}
+
+.macro-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.macro-v {
+  font-size: 28px;
+  font-weight: 800;
+  font-family: var(--font-heading);
+}
+
+.macro-u {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.macro-progress-bg {
+  width: 100%;
+  height: 6px;
+  background: rgba(240, 244, 255, 0.05);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.macro-progress-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+}
+
+/* ── Health Insights (BMI) Row ────────────────────────────── */
+.health-insights-row {
+  margin-bottom: 32px;
+}
+
+.bmi-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  transition: all var(--transition-normal);
+}
+
+@media (max-width: 768px) {
+  .bmi-strip {
+    flex-direction: column;
+    gap: 32px;
+    align-items: flex-start;
+  }
+}
+
+.bmi-info {
+  flex: 1;
+}
+
+.bmi-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.bmi-val-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.bmi-value {
+  font-family: var(--font-heading);
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.bmi-tag {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid transparent;
+}
+
+.bmi-visual-meter {
+  flex: 2;
+  position: relative;
+  width: 100%;
+  padding-bottom: 24px; /* Space for labels */
+}
+
+.meter-segments {
+  width: 100%;
+  height: 10px;
+  display: flex;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: rgba(240, 244, 255, 0.05);
+}
+
+.segment { height: 100%; }
+.segment.under { width: 14%; background: var(--accent-amber); opacity: 0.6; }
+.segment.normal { width: 26%; background: var(--success); opacity: 0.6; }
+.segment.over { width: 20%; background: var(--accent-pink); opacity: 0.6; }
+.segment.obese { width: 40%; background: var(--error); opacity: 0.5; }
+
+.meter-labels {
+  position: absolute;
+  top: 18px;
+  width: 100%;
+  height: 20px;
+}
+
+.meter-labels span {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  font-family: var(--font-heading);
+}
+
+.meter-pointer {
+  position: absolute;
+  top: -6px;
+  width: 3px;
+  height: 22px;
+  background: var(--text-primary);
+  border-radius: var(--radius-full);
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+  z-index: 5;
+}
+
+.meter-pointer::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--text-primary);
+}
+
+
+/* Diet Section */
+.diet-section {
+  margin-top: 24px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.view-all {
+  background: none;
+  border: none;
+  color: var(--accent-cyan);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.diet-placeholder {
+  background: var(--bg-card);
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-xl);
+  padding: 64px 24px;
+  text-align: center;
+  transition: all var(--transition-normal);
+}
+
+.placeholder-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.diet-placeholder h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.diet-placeholder p {
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin: 0 auto 24px;
+}
+
+.placeholder-tags {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.tag {
+  padding: 6px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* Background Decor */
+.dashboard-decor-1 {
+  position: fixed;
+  top: 10%;
+  right: -5%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(45, 212, 191, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-decor-2 {
+  position: fixed;
+  bottom: -10%;
+  left: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* ── Profile Setup ────────────────────────────────────────────── */
+.setup-progress {
+  width: 100%;
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+
+.setup-progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width 0.5s var(--ease-out-expo);
+}
+
+.setup-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.setup-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+/* Segmented buttons for gender, goals, etc. */
+.segmented-group {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.segmented-group.cols-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.segmented-group.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.segmented-btn {
+  padding: 14px 16px;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: center;
+}
+
+.segmented-btn:hover {
+  border-color: var(--border-default);
+  background: var(--bg-card-hover);
+}
+
+.segmented-btn.active {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 0 2px var(--accent-cyan-dim);
+}
+
+.segmented-btn .emoji {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+
+/* Range slider */
+.slider-wrapper {
+  margin-bottom: 24px;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.slider-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(45, 212, 191, 0.4);
+  transition: transform var(--transition-fast);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+/* ── Count-down timer ─────────────────────────────────────────── */
+.countdown {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-top: 16px;
+}
+
+.countdown-time {
+  font-weight: 700;
+  color: var(--accent-cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Success Animation ────────────────────────────────────────── */
+.success-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.1);
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: successPop 0.5s var(--ease-spring);
+}
+
+.success-icon svg {
+  width: 40px;
+  height: 40px;
+  color: var(--success);
+}
+
+@keyframes successPop {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ── Page transitions (Framer Motion helpers) ─────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.page-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit {
+  opacity: 0;
+  transform: translateY(-12px);
+}
+
+/* ── Responsive ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 20px;
+  }
+
+  .brand-logo {
+    font-size: 28px;
+  }
+
+  .otp-input {
+    width: 44px;
+    height: 56px;
+    font-size: 20px;
+  }
+
+  .otp-container {
+    gap: 6px;
+  }
+
+  .segmented-group.cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Utility ──────────────────────────────────────────────────── */
+.text-center { text-align: center; }
+.text-gradient {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 16px; }
+.mt-lg { margin-top: 24px; }
+.mb-sm { margin-bottom: 8px; }
+.mb-md { margin-bottom: 16px; }
+.mb-lg { margin-bottom: 24px; }
+.w-full { width: 100%; }
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Regional Recommendations Grid ───────────────────────────── */
+.recommendations-container {
+  margin-top: 24px;
+}
+
+.meals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.meal-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.meal-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(45, 212, 191, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.meal-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  background: var(--bg-card-hover);
+  border-color: var(--border-active);
+  box-shadow: var(--shadow-lg), var(--shadow-glow-cyan);
+}
+
+.meal-badge {
+  align-self: flex-start;
+  padding: 4px 10px;
+  background: var(--accent-cyan-dim);
+  border: 1px solid var(--accent-cyan-glow);
+  color: var(--accent-cyan);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.meal-name {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.meal-macros-mini {
+  display: flex;
+  gap: 12px;
+}
+
+.mini-macro {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mini-macro span {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--bg-primary);
+  background: var(--text-tertiary);
+}
+
+.mini-macro:nth-child(1) span { background: var(--accent-cyan); }
+.mini-macro:nth-child(2) span { background: var(--accent-purple); }
+.mini-macro:nth-child(3) span { background: var(--accent-pink); }
+
+.agent-hint {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  padding: 12px;
+  background: rgba(240, 244, 255, 0.03);
+  border-left: 2px solid var(--accent-purple);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  margin: 0;
+  font-style: italic;
+}
+
+.agent-hint .sparkle {
+  color: var(--accent-purple);
+}
+
+.meal-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ingredient-count {
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.grocery-btn {
+  background: none;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.grocery-btn:hover {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+  border-color: var(--text-primary);
+}
+
+/* Shimmer Loading State */
+.meals-loading {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.shimmer-card {
+  height: 240px;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, 
+    transparent, 
+    rgba(240, 244, 255, 0.05), 
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ── Full Day Daily Plan ────────────────────────────────────── */
+.meals-grid-daily {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.meal-card-professional {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.meal-card-professional:hover {
+  border-color: var(--accent-cyan);
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.slot-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.slot-icon {
+  font-size: 16px;
+}
+
+.slot-target {
+  margin-left: auto;
+  color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+}
+
+.meal-name-prof {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.meal-macros-mini {
+  display: flex;
+  gap: 12px;
+}
+
+.mini-macro {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mini-macro span {
+  font-weight: 800;
+  color: var(--text-tertiary);
+}
+
+.agent-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  font-style: italic;
+}
+
+.meal-footer-prof {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cal-breakdown {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+}
+
+.actual-cal {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.slash {
+  color: var(--text-tertiary);
+  font-size: 14px;
+  margin: 0 2px;
+}
+
+.target-cal {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.unit {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  margin-left: 2px;
+}
+
+/* ── Region Unsupported Card ────────────────────────────────── */
+.region-unsupported-card {
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 48px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.unsupported-icon {
+  font-size: 48px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 0 10px var(--accent-cyan-dim));
+}
+
+.unsupported-content h3 {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.unsupported-content p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-bottom: 24px;
+}
+
+.unsupported-hint {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  display: inline-block;
+}
+
+.unsupported-hint b {
+  color: var(--accent-cyan);
+}
+
+/* ── Menu & Sidebar ───────────────────────────────────────── */
+.menu-trigger {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.menu-trigger:hover {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.sidebar-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border-subtle);
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 32px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-header h3 {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: var(--text-primary);
+}
+
+.sidebar-nav-list {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  width: 100%;
+}
+
+.sidebar-item:hover {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: var(--accent-cyan-dim);
+  color: var(--accent-cyan);
+}
+
+.sidebar-footer {
+  padding: 24px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-secondary);
+  color: var(--error);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sidebar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--error);
+}
+
+@media (max-width: 768px) {
+  .meals-grid-daily {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-panel {
+    width: 280px;
+  }
+}
+
+/* ── AI NutriAgent (ChatBot) ──────────────────────────────────── */
+.chatbot-trigger {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--gradient-button);
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-glow-button);
+  z-index: 1000;
+  transition: transform 0.3s var(--ease-spring);
+}
+
+.chatbot-trigger:hover {
+  transform: scale(1.1) translateY(-4px);
+}
+
+.chatbot-window {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 380px;
+  height: 520px;
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  z-index: 1001;
+  overflow: hidden;
+}
+
+.chatbot-header {
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chatbot-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bot-avatar {
+  font-size: 20px;
+}
+
+.chatbot-title h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.chatbot-close {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 4px;
+  transition: color var(--transition-fast);
+}
+
+.chatbot-close:hover {
+  color: var(--error);
+}
+
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-bubble-wrapper {
+  display: flex;
+  width: 100%;
+}
+
+.chat-bubble-wrapper.user {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.chat-bubble.assistant {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-bottom-left-radius: 2px;
+  border: 1px solid var(--border-subtle);
+}
+
+.chat-bubble.user {
+  background: var(--accent-cyan);
+  color: #0a0e1a;
+  font-weight: 500;
+  border-bottom-right-radius: 2px;
+}
+
+.chatbot-input-area {
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.chatbot-input-area input {
+  flex: 1;
+  background: var(--bg-input);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  padding: 10px 16px;
+  color: var(--text-primary);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.chatbot-input-area input:focus {
+  border-color: var(--accent-cyan);
+}
+
+.chatbot-input-area button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  border: none;
+  color: #0a0e1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.chatbot-input-area button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chatbot-input-area button:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+/* ── AI Badges & Score ────────────────────────────────────────── */
+.ai-match-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid var(--accent-cyan-dim);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(4px);
+}
+
+.scale-info {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--accent-amber);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+/* ── Recipe Modal ─────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.recipe-modal {
+  width: 100%;
+  max-width: 700px;
+  max-height: 85vh;
+  background: var(--bg-secondary);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.recipe-header {
+  padding: 32px;
+  background: var(--gradient-card);
+  position: relative;
+}
+
+.recipe-header h2 {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.recipe-meta {
+  display: flex;
+  gap: 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.recipe-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px;
+}
+
+.recipe-section {
+  margin-bottom: 24px;
+}
+
+.recipe-section h4 {
+  color: var(--accent-cyan);
+  font-size: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ingredient-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.ingredient-item {
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+}
+
+.instruction-step {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.recipe-footer {
+  padding: 24px 32px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ── Professional Goal Dashboard ──────────────────────────────── */
+.goal-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+  padding: 32px;
+  background: var(--glass-bg-heavy);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-md);
+}
+
+.goal-header-main {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 16px;
+}
+
+.goal-header-main h3 {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-cyan);
+}
+
+.macro-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.macro-stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+}
+
+.macro-stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.macro-stat-value .unit {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+/* ── Refined Meal Cards (Professional 2.0) ─────────────────────── */
+.meal-card-professional {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.meal-card-professional:hover {
+  transform: translateY(-5px);
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.meal-card-professional::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-cyan);
+  opacity: 0.5;
+}
+
+.meal-slot-label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--accent-purple);
+  margin-bottom: 8px;
+}
+
+.meal-title-prof {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  line-height: 1.3;
+}
+
+.macro-meter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.macro-meter-item {
+  width: 100%;
+}
+
+.macro-meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.macro-progress-bg {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.macro-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1s var(--ease-out-expo);
+}
+
+.ai-reasoning-box {
+  background: rgba(45, 212, 191, 0.05);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin: 16px 0;
+  border-left: 2px solid var(--accent-cyan);
+}
+
+.ai-reasoning-text {
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.recipe-link-btn {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.recipe-link-btn:hover {
+  background: var(--accent-cyan);
+  color: #0a0e1a;
+  border-color: var(--accent-cyan);
+}
+
+/* ── Meal Header & Product Tag ──────────────────────────────── */
+.meal-header-group {
+  margin-bottom: 20px;
+}
+
+.core-product-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-cyan);
+  margin-top: -8px;
+}
+
+.core-product-tag .dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+/* ── Universal Responsiveness Overhaul ───────────────────────── */
+
+@media (max-width: 1200px) {
+  .goal-dashboard {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 24px;
+  }
+}
+
+@media (max-width: 850px) {
+  .chatbot-window {
+    width: calc(100vw - 48px);
+    right: 24px;
+    height: 60vh;
+    bottom: 96px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-nav .nav-container {
+    padding: 0 20px;
+  }
+
+  .brand-logo {
+    font-size: 20px;
+  }
+
+  .welcome-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .greeting {
+    font-size: 28px;
+  }
+
+  .meals-grid-professional {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .recipe-modal {
+    max-height: 95vh;
+    border-radius: 0;
+    max-width: 100%;
+  }
+
+  .recipe-header {
+    padding: 24px;
+  }
+
+  .recipe-content {
+    padding: 24px;
+  }
+  
+  .ingredient-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 580px) {
+  .goal-dashboard {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .macro-stat-value {
+    font-size: 22px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .view-all {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .meal-card-professional {
+    padding: 20px;
+  }
+  
+  .chatbot-trigger {
+    width: 50px;
+    height: 50px;
+    bottom: 16px;
+    right: 16px;
+  }
+  
+  .chatbot-window {
+    width: calc(100vw - 32px);
+    right: 16px;
+    bottom: 80px;
+  }
+}
+
+/* Fix for Sidebar inconsistency */
+@media (max-width: 768px) {
+  .sidebar-panel {
+    width: 100% !important;
+    max-width: 300px;
+  }
+  
+  .sidebar-content {
+    padding: 24px 20px;
+  }
+}
+
+/* ── About Page ──────────────────────────────────────────────── */
+.about-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: var(--accent-cyan-dim);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+}
+
+.about-glass-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.about-glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.2), transparent);
+}
+
+.about-mission-icon-row {
+  margin-bottom: 20px;
+}
+
+.about-mission-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--accent-cyan-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+}
+
+.about-section-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+
+.about-section-text {
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.about-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.about-feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  transition: all var(--transition-normal);
+  cursor: default;
+}
+
+.about-feature-card:hover {
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-md);
+}
+
+.about-feature-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.about-feature-title {
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.about-feature-desc {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.about-tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.about-tech-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  cursor: default;
+  min-width: 120px;
+}
+
+.about-tech-chip:hover {
+  border-color: var(--border-active);
+  background: var(--accent-cyan-dim);
+}
+
+.about-tech-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.about-tech-role {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-weight: 500;
+}
+
+.about-footer {
+  text-align: center;
+  padding: 32px 0;
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.about-version {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+/* ── Settings Page ───────────────────────────────────────────── */
+.settings-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(240, 244, 255, 0.08), transparent);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.settings-card-header h2 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.settings-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 540px) {
+  .settings-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-info-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.settings-info-value {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+}
+
+.settings-form .form-group {
+  margin-bottom: 18px;
+}
+
+@media (max-width: 600px) {
+  .about-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-glass-panel {
+    padding: 28px 20px;
+  }
+
+  .settings-card {
+    padding: 24px 20px;
+  }
+}
+
+/* ── Mission Control Dashboard ────────────────────────────────── */
+.mission-control-hero {
+  grid-column: 1 / -1;
+  background: var(--bg-card);
+  padding: 40px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-control-hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100%;
+  background: radial-gradient(circle at 100% 50%, var(--accent-cyan-dim), transparent 70%);
+  pointer-events: none;
+}
+
+.mission-content {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  position: relative;
+  z-index: 10;
+}
+
+.energy-meter-box {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  flex-shrink: 0;
+}
+
+.energy-ring {
+  transform: rotate(-90deg);
+  width: 100%;
+  height: 100%;
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-width: 8;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: var(--accent-cyan);
+  stroke-width: 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 12px var(--accent-cyan-glow));
+}
+
+.energy-stats {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.energy-value {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.energy-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  letter-spacing: 1.5px;
+  margin-top: 4px;
+}
+
+.mission-details {
+  flex: 1;
+}
+
+.protocol-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent-cyan);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.mission-details h3 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.mission-details p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 450px;
+}
+
+.btn-protocol-sync {
+  margin-top: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 12px 24px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.btn-protocol-sync:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.mission-secondary-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.featured-meal-card, .protocol-checklist-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.featured-meal-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle at 100% 0%, var(--accent-purple-dim), transparent 70%);
+  pointer-events: none;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.header-icon {
+  font-size: 20px;
+  color: var(--accent-cyan);
+}
+
+.featured-meal-content {
+  position: relative;
+  z-index: 10;
+}
+
+.meal-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: var(--accent-purple-dim);
+  border: 1px solid var(--accent-purple-glow);
+  color: var(--accent-purple);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: 0.5px;
+}
+
+.featured-meal-content h4 {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.meal-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.meal-stats .dot {
+  width: 4px;
+  height: 4px;
+  background: var(--border-default);
+  border-radius: 50%;
+}
+
+.btn-view-recipe {
+  width: 100%;
+  background: var(--gradient-button);
+  border: none;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  color: var(--bg-primary);
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  box-shadow: var(--shadow-glow-button);
+}
+
+.btn-view-recipe:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 10px 40px rgba(45, 212, 191, 0.3);
+}
+
+.protocol-checklist-card .checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  transition: all 0.3s var(--ease-out-expo);
+  cursor: pointer;
+}
+
+.checklist-item:hover {
+  color: var(--text-primary);
+  transform: translateX(4px);
+}
+
+.checklist-item.done {
+  opacity: 0.5;
+}
+
+.checklist-item.done span {
+  text-decoration: line-through;
+}
+
+.check-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1.5px solid var(--border-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--accent-cyan);
+  transition: all 0.3s var(--ease-spring);
+  background: var(--bg-input);
+}
+
+.checklist-item.done .check-box {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: var(--bg-primary);
+  transform: scale(1.1);
+}
+
+.completion-count {
+  background: var(--bg-tertiary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+}
+
+@media (max-width: 1100px) {
+  .mission-content { flex-direction: column; gap: 40px; text-align: center; }
+  .mission-details p { margin: 0 auto; }
+  .btn-protocol-sync { margin: 24px auto 0; }
+  .mission-secondary-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Auth Video Background ────────────────────────────────────── */
+.auth-video-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.auth-video-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  filter: blur(10px) brightness(0.6);
+}
+
+.auth-video-bg .video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent, var(--bg-primary) 85%);
+}
+
+/* ── Cinematic Diet Plan ────────────────────────────────────── */
+.cinematic-diet-main {
+  padding-bottom: 100px;
+}
+
+.cinematic-header {
+  position: relative;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 4%;
+  margin: 20px 0 40px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+}
+
+.cinematic-header .header-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cinematic-header .header-bg video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(12px) brightness(0.4);
+}
+
+.cinematic-header .header-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, var(--bg-primary), transparent 70%);
+}
+
+.cinematic-header .header-content {
+  position: relative;
+  z-index: 10;
+}
+
+.cinematic-header .greeting {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.diet-goal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 48px;
+}
+
+.diet-goal-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.diet-goal-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.goal-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: var(--accent-cyan);
+}
+
+.goal-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  letter-spacing: 1.5px;
+  margin-bottom: 4px;
+}
+
+.goal-value {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.goal-value span {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+/* ── Regional Focus ─────────────────────────────────────────── */
+.regional-focus-section {
+  width: 100%;
+}
+
+.region-cards-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 10px 4px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-cyan-dim) transparent;
+}
+
+.region-cards-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.region-cards-scroll::-webkit-scrollbar-thumb {
+  background: var(--accent-cyan-dim);
+  border-radius: 4px;
+}
+
+.region-focus-card {
+  flex: 0 0 200px;
+  padding: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.region-focus-card:hover {
+  border-color: var(--border-default);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-md);
+}
+
+.region-focus-card.active {
+  border-color: var(--accent-cyan);
+  background: var(--accent-cyan-dim);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.region-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.region-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.region-status {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.region-focus-card.active .region-status {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.active-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at top right, var(--accent-cyan-glow), transparent 70%);
+  opacity: 0.5;
+}
+
+/* ── Settings Info Grid (Editing) ───────────────────────────── */
+.settings-info-grid.editing {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.settings-info-grid.editing .form-group {
+  margin-bottom: 0;
+}
+
+/* ── Professional Meal Plan Grid ─────────────────────────── */
+.meals-grid-professional {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.meal-card-professional {
+  background: var(--bg-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s var(--ease-out-expo);
+  display: flex;
+  flex-direction: column;
+}
+
+.meal-card-professional:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-cyan);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+.meal-card-professional::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple));
+  opacity: 0.6;
+}
+
+.meal-slot-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.meal-header-group {
+  margin-bottom: 24px;
+}
+
+.meal-title-prof {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.core-product-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(45, 212, 191, 0.1);
+  border: 1px solid rgba(45, 212, 191, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.core-product-tag .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+.macro-meter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.macro-meter-item {
+  width: 100%;
+}
+
+.macro-meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.ai-reasoning-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.ai-reasoning-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+}
+
+.recipe-link-btn {
+  margin-top: auto;
+  width: 100%;
+  padding: 14px;
+  background: rgba(45, 212, 191, 0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.recipe-link-btn:hover {
+  background: var(--accent-cyan);
+  color: var(--bg-primary);
+  border-color: var(--accent-cyan);
+  box-shadow: var(--shadow-glow-cyan);
+}
+
+/* ── Water Intake Web Styles ─────────────────────────────────── */
+.health-insights-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 900px) {
+  .health-insights-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.water-card-web {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.water-card-web:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-active);
+  background: var(--bg-card-hover);
+}
+
+.water-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.water-info-col {
+  flex: 1;
+}
+
+.water-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.water-main-value {
+  font-family: var(--font-heading);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.water-unit {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.water-status-text {
+  font-size: 12px;
+  color: var(--accent-cyan);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.water-progress-circle-outer {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 3px solid rgba(45, 212, 191, 0.1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(10, 14, 26, 0.3);
+}
+
+.water-progress-circle-inner {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.6) 0%, rgba(168, 85, 247, 0.6) 100%);
+  transition: height 0.6s var(--ease-out-expo);
+  box-shadow: 0 0 15px rgba(45, 212, 191, 0.3);
+}
+
+.water-progress-percent {
+  position: relative;
+  z-index: 10;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.water-quick-add-row {
+  display: flex;
+  gap: 10px;
+}
+
+.water-quick-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px;
+  background: rgba(240, 244, 255, 0.03);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.water-quick-btn:hover:not(:disabled) {
+  background: var(--accent-cyan-dim);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.water-quick-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.water-logs-section {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 12px;
+}
+
+.water-logs-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  margin-bottom: 8px;
+}
+
+.water-log-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.water-log-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-primary);
+}
+
+.water-log-text {
+  font-weight: 500;
+}
+
+.water-log-time {
+  color: var(--text-tertiary);
+}
+
+/* ── Glycemic Index (GI) Badges ──────────────────────────────── */
+.gi-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  gap: 6px;
+  margin-bottom: 16px;
+  margin-top: -8px;
+  align-self: flex-start;
+}
+
+.gi-badge.gi-low {
+  background: rgba(16, 185, 129, 0.1);
+  color: #6ee7b7;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+
+.gi-badge.gi-medium {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.gi-badge.gi-high {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.gi-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: gi-pulse 2s infinite;
+}
+
+.gi-badge.gi-low .gi-dot { background-color: #34d399; }
+.gi-badge.gi-medium .gi-dot { background-color: #fbbf24; }
+.gi-badge.gi-high .gi-dot { background-color: #f87171; }
+
+@keyframes gi-pulse {
+  0% { transform: scale(0.95); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.5; }
+}
+

@@ -26,7 +26,7 @@ class MealAgent:
                 self.client = OpenAI(
                     base_url="https://integrate.api.nvidia.com/v1",
                     api_key=self.api_key,
-                    max_retries=2 # Increased retries for better stability
+                    max_retries=1 # Reduced retries to avoid exceeding gunicorn's 30s timeout
                 )
             except Exception as e:
                 print(f"[AI AGENT ERROR] Initialization Failed: {e}")
