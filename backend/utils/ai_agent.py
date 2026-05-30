@@ -14,19 +14,20 @@ class MealAgent:
     def __init__(self):
         self.api_key = os.getenv("NVIDIA_API_KEY")
         self.client = None
-        # Switched to 3.3-70b as 3.1-8b was experiencing timeout issues
-        self.model = "meta/llama-3.3-70b-instruct"
+        # 70B for complex reasoning (insights), 8B for simple structured tasks (recipes, chat)
+        # 8B has much higher rate limits on NVIDIA free tier
+        self.model_heavy = "meta/llama-3.3-70b-instruct"
+        self.model_fast  = "meta/llama-3.1-8b-instruct"
         
         if self.api_key:
             try:
-                # Masked API Key logging for debugging (only showing prefix)
                 masked_key = f"{self.api_key[:10]}..." if len(self.api_key) > 10 else "Invalid"
                 print(f"[AI AGENT] Initializing with key: {masked_key}")
                 
                 self.client = OpenAI(
                     base_url="https://integrate.api.nvidia.com/v1",
                     api_key=self.api_key,
-                    max_retries=1 # Reduced retries to avoid exceeding gunicorn's 30s timeout
+                    max_retries=0  # No retries — polling handles retry at a higher level
                 )
             except Exception as e:
                 print(f"[AI AGENT ERROR] Initialization Failed: {e}")
@@ -79,14 +80,14 @@ class MealAgent:
         try:
             print(f"[AI AGENT] Generating insights for {len(daily_plan)} meals...")
             response = self.client.chat.completions.create(
-                model=self.model,
+                model=self.model_heavy,  # 70B for nuanced nutritional reasoning
                 messages=[
                     {"role": "system", "content": "You are a JSON generator. Output pure JSON."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.5,
                 max_tokens=400,
-                timeout=10.0 # Strict timeout
+                timeout=20.0
             )
 
             import json
@@ -118,16 +119,16 @@ class MealAgent:
         """
 
         try:
-            print(f"[AI AGENT] Generating recipe for {dish_name}...")
+            print(f"[AI AGENT] Generating recipe for {dish_name} (fast model)...")
             response = self.client.chat.completions.create(
-                model=self.model,
+                model=self.model_fast,  # 8B — higher rate limits, fast structured JSON
                 messages=[
                     {"role": "system", "content": "You are a backend JSON generator. Output ONLY pure JSON."},
                     {"role": "user", "content": prompt}
                 ],
                 temperature=0.5,
                 max_tokens=600,
-                timeout=15.0 # Strict timeout
+                timeout=20.0
             )
             import json
             recipe_text = response.choices[0].message.content.strip()
@@ -156,13 +157,13 @@ class MealAgent:
         messages.append({"role": "user", "content": user_message})
 
         try:
-            print(f"[AI AGENT] Processing chat message...")
+            print(f"[AI AGENT] Processing chat message (fast model)...")
             response = self.client.chat.completions.create(
-                model=self.model,
+                model=self.model_fast,  # 8B — higher rate limits, sufficient for chat
                 messages=messages,
                 temperature=0.7,
                 max_tokens=400,
-                timeout=12.0 # Strict timeout
+                timeout=20.0
             )
             return response.choices[0].message.content.strip()
         except Exception as e:
