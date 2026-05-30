@@ -204,8 +204,18 @@ export const getRecommendations = async (forceRefresh = false) => {
 };
 
 export const getRecipe = async (dishName) => {
-  const response = await authApi.get(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`);
-  return response.data;
+  const maxPolls = 10; // 10 × 4s = 40s max wait
+  for (let i = 0; i < maxPolls; i++) {
+    const response = await authApi.get(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`);
+    const data = response.data;
+    if (data.status === 'generating') {
+      // Recipe is being built in background — wait and poll again
+      await new Promise((resolve) => setTimeout(resolve, 4000));
+      continue;
+    }
+    return data; // Has { recipe: {...} } — ready!
+  }
+  throw new Error('Recipe generation timed out. Please try again.');
 };
 
 export const chatWithAgent = async (message, history = []) => {

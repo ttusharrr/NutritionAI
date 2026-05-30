@@ -337,10 +337,21 @@ class AuthAPI {
 
 
   /**
-   * Fetch a dynamically generated AI recipe for a specific dish
+   * Fetch a dynamically generated AI recipe for a specific dish.
+   * Polls the backend every 4s if recipe is still being generated (202 status).
    */
   async getRecipe(dishName) {
-    return this.request(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`, { method: 'GET' });
+    const maxPolls = 10; // 10 × 4s = 40s max wait
+    for (let i = 0; i < maxPolls; i++) {
+      const data = await this.request(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`, { method: 'GET' });
+      if (data.status === 'generating') {
+        // Recipe is being built in background — wait and poll again
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        continue;
+      }
+      return data; // Has { recipe: {...} } — ready!
+    }
+    throw new Error('Recipe generation timed out. Please try again.');
   }
   /**
    * Send a message to the AI Chatbot.

@@ -52,6 +52,32 @@ def generate_insights_async(app, db, user_id, profile, daily_plan, profile_hash,
         except Exception as e:
             print(f"[AI AGENT ASYNC ERROR] Background reasoning failed: {e}")
 
+def generate_recipe_async(app, db, dish_name, cache_key):
+    """Background thread: call NVIDIA API and save recipe to MongoDB cache."""
+    with app.app_context():
+        try:
+            ai_agent = MealAgent()
+            recipe_data = ai_agent.generate_recipe(dish_name)
+            db.recipe_cache.update_one(
+                {"cache_key": cache_key},
+                {"$set": {
+                    "cache_key": cache_key,
+                    "dish_name": dish_name,
+                    "recipe": recipe_data,
+                    "status": "ready",
+                    "cached_at": datetime.now(timezone.utc)
+                }},
+                upsert=True
+            )
+            print(f"[RECIPE CACHE SAVED] Recipe for '{dish_name}' cached successfully.")
+        except Exception as e:
+            db.recipe_cache.update_one(
+                {"cache_key": cache_key},
+                {"$set": {"status": "error", "error": str(e)}},
+                upsert=True
+            )
+            print(f"[RECIPE ASYNC ERROR] Failed to generate recipe for '{dish_name}': {e}")
+
 @nutrition_bp.route('/recommend', methods=['GET'])
 @jwt_required()
 def recommend_meals():
@@ -265,19 +291,53 @@ def get_jk_recipes():
 @nutrition_bp.route('/recipe', methods=['GET'])
 @jwt_required()
 def get_ai_recipe():
-    """Generate a recipe dynamically using the AI Agent."""
-    from flask import request
+    """Generate a recipe using async background thread + MongoDB cache.
+    Returns immediately with cached result or 'generating' status.
+    Frontend should poll again after a few seconds if status is 'generating'.
+    """
     dish_name = request.args.get('dish')
     if not dish_name:
         return jsonify({"error": "Dish name is required"}), 400
-        
-    ai_agent = MealAgent()
-    recipe_data = ai_agent.generate_recipe(dish_name)
-    
-    if "error" in recipe_data:
-        return jsonify(recipe_data), 500
-        
-    return jsonify({"recipe": recipe_data}), 200
+
+    db = current_app.config['db']
+    import hashlib
+    cache_key = hashlib.md5(dish_name.lower().strip().encode()).hexdigest()
+
+    # Check MongoDB recipe cache first
+    cached = db.recipe_cache.find_one({"cache_key": cache_key})
+
+    if cached:
+        if cached.get('status') == 'ready':
+            recipe = cached.get('recipe', {})
+            if "error" in recipe:
+                # Clear bad cache and regenerate
+                db.recipe_cache.delete_one({"cache_key": cache_key})
+            else:
+                print(f"[RECIPE CACHE HIT] Serving cached recipe for '{dish_name}'")
+                return jsonify({"recipe": recipe, "cached": True}), 200
+        elif cached.get('status') == 'generating':
+            # Already being generated in background
+            return jsonify({"status": "generating", "message": "Recipe is being prepared. Please try again in a few seconds."}), 202
+        elif cached.get('status') == 'error':
+            # Previous attempt failed — retry
+            db.recipe_cache.delete_one({"cache_key": cache_key})
+
+    # Mark as generating and spawn background thread
+    db.recipe_cache.update_one(
+        {"cache_key": cache_key},
+        {"$set": {"cache_key": cache_key, "dish_name": dish_name, "status": "generating", "cached_at": datetime.now(timezone.utc)}},
+        upsert=True
+    )
+
+    app = current_app._get_current_object()
+    threading.Thread(
+        target=generate_recipe_async,
+        args=(app, db, dish_name, cache_key),
+        daemon=True
+    ).start()
+
+    print(f"[RECIPE] Spawned background thread for '{dish_name}', returning 202.")
+    return jsonify({"status": "generating", "message": "Recipe is being prepared. Please try again in a few seconds."}), 202
 
 @nutrition_bp.route('/chat', methods=['POST'])
 @jwt_required()
