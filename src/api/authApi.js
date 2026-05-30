@@ -339,13 +339,19 @@ class AuthAPI {
   /**
    * Fetch a dynamically generated AI recipe for a specific dish.
    * Polls the backend every 4s if recipe is still being generated (202 status).
+   * Surfaces backend error message on 503 (rate limit / AI failure).
    */
   async getRecipe(dishName) {
     const maxPolls = 10; // 10 × 4s = 40s max wait
     for (let i = 0; i < maxPolls; i++) {
-      const data = await this.request(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`, { method: 'GET' });
+      let data;
+      try {
+        data = await this.request(`/nutrition/recipe?dish=${encodeURIComponent(dishName)}`, { method: 'GET' });
+      } catch (err) {
+        // 503 = AI service failed (rate limit etc.) — surface the message
+        throw new Error(err.data?.error || err.message || 'Recipe generation failed. Please try again.');
+      }
       if (data.status === 'generating') {
-        // Recipe is being built in background — wait and poll again
         await new Promise((resolve) => setTimeout(resolve, 4000));
         continue;
       }

@@ -58,6 +58,11 @@ def generate_recipe_async(app, db, dish_name, cache_key):
         try:
             ai_agent = MealAgent()
             recipe_data = ai_agent.generate_recipe(dish_name)
+
+            # If the agent itself returned an error dict, treat as failure
+            if isinstance(recipe_data, dict) and "error" in recipe_data:
+                raise Exception(recipe_data["error"])
+
             db.recipe_cache.update_one(
                 {"cache_key": cache_key},
                 {"$set": {
@@ -71,12 +76,20 @@ def generate_recipe_async(app, db, dish_name, cache_key):
             )
             print(f"[RECIPE CACHE SAVED] Recipe for '{dish_name}' cached successfully.")
         except Exception as e:
+            err_str = str(e)
+            is_rate_limit = '429' in err_str
+            print(f"[RECIPE ASYNC {'RATE LIMIT' if is_rate_limit else 'ERROR'}] '{dish_name}': {err_str}")
+            # Save as 'failed' — frontend will show error, NOT retry endlessly
             db.recipe_cache.update_one(
                 {"cache_key": cache_key},
-                {"$set": {"status": "error", "error": str(e)}},
+                {"$set": {
+                    "status": "failed",
+                    "error": "AI service is busy or rate limited. Please try again in a minute." if is_rate_limit else "Failed to generate recipe. Please try again.",
+                    "cached_at": datetime.now(timezone.utc)
+                }},
                 upsert=True
             )
-            print(f"[RECIPE ASYNC ERROR] Failed to generate recipe for '{dish_name}': {e}")
+
 
 @nutrition_bp.route('/recommend', methods=['GET'])
 @jwt_required()
@@ -292,8 +305,8 @@ def get_jk_recipes():
 @jwt_required()
 def get_ai_recipe():
     """Generate a recipe using async background thread + MongoDB cache.
-    Returns immediately with cached result or 'generating' status.
-    Frontend should poll again after a few seconds if status is 'generating'.
+    Returns immediately with cached result, 'generating' (202), or error (503).
+    Frontend polls again after a few seconds if status is 'generating'.
     """
     dish_name = request.args.get('dish')
     if not dish_name:
@@ -307,20 +320,17 @@ def get_ai_recipe():
     cached = db.recipe_cache.find_one({"cache_key": cache_key})
 
     if cached:
-        if cached.get('status') == 'ready':
-            recipe = cached.get('recipe', {})
-            if "error" in recipe:
-                # Clear bad cache and regenerate
-                db.recipe_cache.delete_one({"cache_key": cache_key})
-            else:
-                print(f"[RECIPE CACHE HIT] Serving cached recipe for '{dish_name}'")
-                return jsonify({"recipe": recipe, "cached": True}), 200
-        elif cached.get('status') == 'generating':
-            # Already being generated in background
+        status = cached.get('status')
+        if status == 'ready':
+            print(f"[RECIPE CACHE HIT] Serving cached recipe for '{dish_name}'")
+            return jsonify({"recipe": cached.get('recipe', {}), "cached": True}), 200
+        elif status == 'generating':
             return jsonify({"status": "generating", "message": "Recipe is being prepared. Please try again in a few seconds."}), 202
-        elif cached.get('status') == 'error':
-            # Previous attempt failed — retry
+        elif status in ('failed', 'error'):
+            # Permanent failure — return error to frontend, clear cache so user can retry later
+            error_msg = cached.get('error', 'Recipe generation failed. Please try again.')
             db.recipe_cache.delete_one({"cache_key": cache_key})
+            return jsonify({"error": error_msg}), 503
 
     # Mark as generating and spawn background thread
     db.recipe_cache.update_one(
