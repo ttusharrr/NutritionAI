@@ -221,6 +221,7 @@ def create_app():
     limiter.limit("20 per minute")(auth_bp)
 
     @app.route("/", methods=["GET"])
+    @limiter.exempt
     def index():
         return jsonify({
             "message": "NutriAI API is running!",
@@ -230,6 +231,7 @@ def create_app():
         }), 200
 
     @app.route("/api/health", methods=["GET"])
+    @limiter.exempt  # Render pings this every 5s (~720/hr) — must be exempt
     def health():
         # Quick DB ping to verify actual health
         try:
@@ -237,7 +239,7 @@ def create_app():
             db_status = "connected"
         except Exception:
             db_status = "disconnected"
-        
+
         return jsonify({
             "status": "healthy",
             "service": "NutriAI Auth",
