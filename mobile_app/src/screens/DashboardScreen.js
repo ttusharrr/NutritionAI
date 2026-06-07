@@ -28,8 +28,13 @@ export default function DashboardScreen({ navigation, isTab }) {
 
   const loadData = useCallback(async (forceRefresh = false) => {
     const shouldForce = forceRefresh === true;
+    
+    // 1. Try to load cached data from AsyncStorage first for instant render
     try {
+      const cachedRecs = await AsyncStorage.getItem('cached_recommendations');
+      const cachedWater = await AsyncStorage.getItem('cached_water_data');
       const userStr = await AsyncStorage.getItem('user');
+      
       if (userStr) {
         const userData = JSON.parse(userStr);
         setUser(userData);
@@ -38,12 +43,29 @@ export default function DashboardScreen({ navigation, isTab }) {
           return;
         }
       }
+
+      if (cachedRecs && !shouldForce) {
+        setData(JSON.parse(cachedRecs));
+        setLoading(false); // Instant load!
+      }
+      if (cachedWater && !shouldForce) {
+        setWaterData(JSON.parse(cachedWater));
+      }
+    } catch (cacheErr) {
+      console.warn('Error reading from local cache:', cacheErr);
+    }
+
+    // 2. Fetch fresh data from backend in background/foreground
+    try {
       const response = await getRecommendations(shouldForce);
       setData(response);
+      await AsyncStorage.setItem('cached_recommendations', JSON.stringify(response));
+
       try {
         const waterRes = await getTodayWater();
         if (waterRes) {
           setWaterData(waterRes);
+          await AsyncStorage.setItem('cached_water_data', JSON.stringify(waterRes));
         }
       } catch (waterErr) {
         console.error('Error loading water log:', waterErr);

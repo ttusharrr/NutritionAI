@@ -6,7 +6,8 @@ import {
   ScrollView, 
   TouchableOpacity, 
   SafeAreaView,
-  Animated
+  Animated,
+  TextInput
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
@@ -15,12 +16,79 @@ import { setupProfile } from '../api/authApi';
 import { PremiumBackground } from '../components/AuthComponents';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const PremiumNumericSelector = ({ label, value, unit, onChange, min, max, color }) => {
+  const handleDecrement = () => {
+    if (value > min) {
+      onChange(value - 1);
+    }
+  };
+
+  const handleIncrement = () => {
+    if (value < max) {
+      onChange(value + 1);
+    }
+  };
+
+  const handleTextChange = (text) => {
+    const numericValue = parseInt(text.replace(/[^0-9]/g, '')) || 0;
+    onChange(numericValue);
+  };
+
+  const handleBlur = () => {
+    if (value < min) onChange(min);
+    if (value > max) onChange(max);
+  };
+
+  return (
+    <View style={styles.selectorContainer}>
+      <Text style={styles.selectorLabel}>{label}</Text>
+      
+      <View style={styles.selectorControlsRow}>
+        <TouchableOpacity 
+          style={[styles.selectorBtn, { borderColor: color || COLORS.primary }]} 
+          onPress={handleDecrement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="remove" size={24} color={color || COLORS.primary} />
+        </TouchableOpacity>
+
+        <View style={styles.selectorValueWrapper}>
+          <TextInput
+            style={[styles.selectorInput, { color: color || COLORS.primary }]}
+            value={value.toString()}
+            onChangeText={handleTextChange}
+            onBlur={handleBlur}
+            keyboardType="number-pad"
+            maxLength={3}
+            selectTextOnFocus
+          />
+          <Text style={styles.selectorUnit}>{unit}</Text>
+        </View>
+
+        <TouchableOpacity 
+          style={[styles.selectorBtn, { borderColor: color || COLORS.primary }]} 
+          onPress={handleIncrement}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="add" size={24} color={color || COLORS.primary} />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.selectorRange}>
+        <Text style={styles.selectorRangeText}>Min: {min} {unit}</Text>
+        <Text style={styles.selectorRangeText}>Max: {max} {unit}</Text>
+      </View>
+    </View>
+  );
+};
+
 const STEPS = [
   { key: 'gender', title: "What's your gender?", subtitle: 'This helps us personalize your nutrition plan.' },
   { key: 'age', title: 'How old are you?', subtitle: 'Age affects your metabolic rate.' },
   { key: 'measurements', title: 'Your measurements', subtitle: 'Weight and height for accurate calculations.' },
   { key: 'activity', title: 'Activity level', subtitle: 'How active are you on a typical day?' },
   { key: 'dietary_type', title: 'Dietary preference', subtitle: 'What kind of food do you prefer?' },
+  { key: 'health', title: 'Health & Allergies', subtitle: 'Any medical conditions or food allergies?' },
   { key: 'goal', title: 'Your dietary goal', subtitle: 'What would you like to achieve?' },
 ];
 
@@ -37,6 +105,8 @@ export default function ProfileSetupScreen({ navigation }) {
     dietary_type: 'Both',
     dietary_goal: '',
     region: 'Punjab',
+    diseases: [],
+    allergies: '',
   });
 
   const progress = ((step + 1) / STEPS.length) * 100;
@@ -113,83 +183,38 @@ export default function ProfileSetupScreen({ navigation }) {
 
       case 'age':
         return (
-          <View style={styles.sliderSection}>
-            <View style={styles.sliderHeader}>
-              <Text style={styles.sliderLabel}>Age</Text>
-              <View style={styles.sliderValueBadge}>
-                <Text style={styles.sliderValue}>{profile.age}</Text>
-                <Text style={styles.sliderUnit}>years</Text>
-              </View>
-            </View>
-            <Slider
-              style={styles.slider}
-              minimumValue={13}
-              maximumValue={100}
-              step={1}
-              value={profile.age}
-              onValueChange={(val) => setProfile({ ...profile, age: val })}
-              minimumTrackTintColor={COLORS.primary}
-              maximumTrackTintColor="rgba(255,255,255,0.08)"
-              thumbTintColor={COLORS.primary}
-            />
-            <View style={styles.sliderRange}>
-              <Text style={styles.sliderRangeText}>13</Text>
-              <Text style={styles.sliderRangeText}>100</Text>
-            </View>
-          </View>
+          <PremiumNumericSelector
+            label="Age"
+            value={profile.age}
+            unit="years"
+            onChange={(val) => setProfile({ ...profile, age: val })}
+            min={13}
+            max={100}
+            color={COLORS.primary}
+          />
         );
 
       case 'measurements':
         return (
           <>
-            <View style={styles.sliderSection}>
-              <View style={styles.sliderHeader}>
-                <Text style={styles.sliderLabel}>Weight</Text>
-                <View style={styles.sliderValueBadge}>
-                  <Text style={styles.sliderValue}>{profile.weight}</Text>
-                  <Text style={styles.sliderUnit}>kg</Text>
-                </View>
-              </View>
-              <Slider
-                style={styles.slider}
-                minimumValue={30}
-                maximumValue={200}
-                step={1}
-                value={profile.weight}
-                onValueChange={(val) => setProfile({ ...profile, weight: val })}
-                minimumTrackTintColor={COLORS.primary}
-                maximumTrackTintColor="rgba(255,255,255,0.08)"
-                thumbTintColor={COLORS.primary}
-              />
-              <View style={styles.sliderRange}>
-                <Text style={styles.sliderRangeText}>30 kg</Text>
-                <Text style={styles.sliderRangeText}>200 kg</Text>
-              </View>
-            </View>
-            <View style={[styles.sliderSection, { marginTop: 24 }]}>
-              <View style={styles.sliderHeader}>
-                <Text style={styles.sliderLabel}>Height</Text>
-                <View style={styles.sliderValueBadge}>
-                  <Text style={styles.sliderValue}>{profile.height}</Text>
-                  <Text style={styles.sliderUnit}>cm</Text>
-                </View>
-              </View>
-              <Slider
-                style={styles.slider}
-                minimumValue={100}
-                maximumValue={220}
-                step={1}
-                value={profile.height}
-                onValueChange={(val) => setProfile({ ...profile, height: val })}
-                minimumTrackTintColor={COLORS.secondary}
-                maximumTrackTintColor="rgba(255,255,255,0.08)"
-                thumbTintColor={COLORS.secondary}
-              />
-              <View style={styles.sliderRange}>
-                <Text style={styles.sliderRangeText}>100 cm</Text>
-                <Text style={styles.sliderRangeText}>220 cm</Text>
-              </View>
-            </View>
+            <PremiumNumericSelector
+              label="Weight"
+              value={profile.weight}
+              unit="kg"
+              onChange={(val) => setProfile({ ...profile, weight: val })}
+              min={30}
+              max={200}
+              color={COLORS.primary}
+            />
+            <PremiumNumericSelector
+              label="Height"
+              value={profile.height}
+              unit="cm"
+              onChange={(val) => setProfile({ ...profile, height: val })}
+              min={100}
+              max={220}
+              color={COLORS.secondary}
+            />
           </>
         );
 
@@ -242,6 +267,68 @@ export default function ProfileSetupScreen({ navigation }) {
                 </Text>
               </TouchableOpacity>
             ))}
+          </View>
+        );
+
+      case 'health':
+        return (
+          <View style={styles.healthSection}>
+            <Text style={styles.fieldLabel}>Medical Conditions</Text>
+            <View style={styles.chipRow}>
+              {[
+                { id: 'BP',           label: 'Blood Pressure' },
+                { id: 'Diabetes',     label: 'Diabetes' },
+                { id: 'Cholesterol',  label: 'Cholesterol' },
+                { id: 'Thyroid',      label: 'Thyroid' },
+                { id: 'Heart',        label: 'Heart Disease' },
+                { id: 'Kidney',       label: 'Kidney Issue' },
+                { id: 'None',         label: 'None' },
+              ].map((d) => {
+                const isActive = profile.diseases.includes(d.id);
+                return (
+                  <TouchableOpacity
+                    key={d.id}
+                    style={[
+                      styles.chip,
+                      isActive && (d.id !== 'None' ? styles.chipDangerActive : styles.chipActive),
+                    ]}
+                    onPress={() => {
+                      let list = [...profile.diseases];
+                      if (d.id === 'None') {
+                        list = ['None'];
+                      } else {
+                        list = list.filter((item) => item !== 'None');
+                        if (list.includes(d.id)) {
+                          list = list.filter((item) => item !== d.id);
+                        } else {
+                          list.push(d.id);
+                        }
+                      }
+                      setProfile({ ...profile, diseases: list });
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.chipText,
+                        isActive && (d.id !== 'None' ? styles.chipDangerText : styles.chipActiveText),
+                      ]}
+                    >
+                      {d.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+
+            <Text style={[styles.fieldLabel, { marginTop: 24 }]}>Food Allergies (Optional)</Text>
+            <TextInput
+              style={styles.setupInput}
+              value={profile.allergies}
+              onChangeText={(text) => setProfile({ ...profile, allergies: text })}
+              placeholder="e.g. Peanuts, Milk, Gluten"
+              placeholderTextColor={COLORS.textTertiary}
+              autoCapitalize="none"
+            />
           </View>
         );
 
@@ -584,5 +671,117 @@ const styles = StyleSheet.create({
     color: COLORS.textTertiary,
     fontSize: 13,
     fontWeight: '500',
+  },
+  /* Premium Selector styles */
+  selectorContainer: {
+    backgroundColor: COLORS.surface,
+    borderWidth: 1.5,
+    borderColor: COLORS.border,
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: SPACING.md,
+  },
+  selectorLabel: {
+    color: COLORS.textSecondary,
+    fontSize: 13,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: SPACING.md,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  selectorControlsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 12,
+  },
+  selectorBtn: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  selectorValueWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 120,
+  },
+  selectorInput: {
+    fontSize: 42,
+    fontWeight: '900',
+    textAlign: 'center',
+    padding: 0,
+    margin: 0,
+  },
+  selectorUnit: {
+    color: COLORS.textTertiary,
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 2,
+  },
+  selectorRange: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 255, 255, 0.05)',
+    paddingTop: 12,
+  },
+  selectorRangeText: {
+    color: COLORS.textTertiary,
+    fontSize: 11,
+  },
+  /* Health Step styles */
+  healthSection: {
+    marginBottom: 32,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 8,
+  },
+  chip: {
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 20,
+  },
+  chipActive: {
+    borderColor: COLORS.primary,
+    backgroundColor: 'rgba(45,212,191,0.1)',
+  },
+  chipDangerActive: {
+    borderColor: '#f97316',
+    backgroundColor: 'rgba(249,115,22,0.1)',
+  },
+  chipText: {
+    color: COLORS.textSecondary,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  chipActiveText: {
+    color: COLORS.primary,
+    fontWeight: '700',
+  },
+  chipDangerText: {
+    color: '#f97316',
+    fontWeight: '700',
+  },
+  setupInput: {
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: 12,
+    padding: 14,
+    color: COLORS.text,
+    fontSize: 14,
+    marginTop: 8,
   },
 });

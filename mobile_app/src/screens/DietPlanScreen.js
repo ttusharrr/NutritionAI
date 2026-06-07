@@ -44,13 +44,29 @@ export default function DietPlanScreen({ navigation, isTab }) {
 
   const loadData = useCallback(async (forceRefresh = false) => {
     const shouldForce = forceRefresh === true;
+    
+    // 1. Try to load cached data from AsyncStorage first for instant render
     try {
+      const cachedRecs = await AsyncStorage.getItem('cached_recommendations');
       const userStr = await AsyncStorage.getItem('user');
+      
       if (userStr) {
         setUser(JSON.parse(userStr));
       }
+      
+      if (cachedRecs && !shouldForce) {
+        setData(JSON.parse(cachedRecs));
+        setLoading(false); // Instant load!
+      }
+    } catch (cacheErr) {
+      console.warn('Error reading from local cache:', cacheErr);
+    }
+
+    // 2. Fetch fresh data from backend
+    try {
       const response = await getRecommendations(shouldForce);
       setData(response);
+      await AsyncStorage.setItem('cached_recommendations', JSON.stringify(response));
     } catch (err) {
       console.error('Error loading diet plan:', err);
     } finally {
