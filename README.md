@@ -1,4 +1,4 @@
-# NutriAI — Personalized Nutrition & Regional Meal Recommendation Engine
+# Nutri AI: AI - Based Personalized Nutrition Recommendation System
 
 NutriAI is a state-of-the-art, AI-driven personalized nutrition application. Designed as a cross-platform solution, it consists of a responsive React + Vite web frontend, an Expo (React Native) mobile application, and a high-performance Flask backend. 
 
